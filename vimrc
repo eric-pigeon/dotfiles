@@ -46,27 +46,39 @@ NeoBundle 'scrooloose/nerdtree' "{{{
 	let NERDTreeShowLineNumbers=1
 	let NERDTreeChDirMode=0
 	let NERDTreeShowBookmarks=1
-	let NERDTreeIgnore=['\.git','\.hg']
+	let NERDTreeIgnore=['\.git','\.hg','\.pyc$']
 	nnoremap <Leader>nt :NERDTreeToggle<CR>
 	nnoremap <Leader>no :NERDTreeFind<CR>
 "let NERDTreeBookmarksFile=s:get_cache_dir('NERDTreeBookmarks')
 " }}}
+" Unite {{{
 NeoBundle 'Shougo/unite.vim' "{{{
+NeoBundleLazy 'Shougo/neomru.vim', {'autoload':{'unite_sources': ['file_mru', 'directory_mru']}}   " Allows unite to create a list of mru files
+
+	let g:unite_source_history_yank_enable = 1                " let unite search yanks
+	call unite#filters#matcher_default#use(['matcher_fuzzy']) " use fuzzy search by default
+	call unite#filters#sorter_default#use(['sorter_rank'])
+	call unite#custom#profile('default', 'context', {
+		\ 'start_insert': 1,
+		\ 'direction': 'botright'
+		\ })
 	nmap <space> [unite]
 	nnoremap [unite] <nop>
 
 	nnoremap <silent> [unite]<space> :<C-u>Unite -toggle -auto-resize -buffer-name=mixed file_rec/async:! buffer file_mru bookmark<cr><c-u>
-	nnoremap <silent> [unite]f :<C-u>Unite -toggle -auto-resize -buffer-name=files file_rec/async:!<cr><c-u>
+	"nnoremap <silent> [unite]f :<C-u>Unite -toggle -auto-resize -buffer-name=files file_rec/async:!<cr><c-u>
+	nnoremap <silent> [unite]f :<C-u>Unite -toggle -auto-resize -buffer-name=files file_rec/async:!<cr>
 	nnoremap <silent> [unite]y :<C-u>Unite -buffer-name=yanks history/yank<cr>
 	nnoremap <silent> [unite]l :<C-u>Unite -auto-resize -buffer-name=line line<cr>
 	nnoremap <silent> [unite]b :<C-u>Unite -auto-resize -buffer-name=buffers buffer<cr>
 	nnoremap <silent> [unite]m :<C-u>Unite -auto-resize -buffer-name=mappings mapping<cr>
 	nnoremap <silent> [unite]s :<C-u>Unite -quick-match buffer<cr>
-"}}}
+" }}}
+NeoBundleLazy 'Shougo/neomru.vim', {'autoload':{'unite_sources': ['file_mru', 'directory_mru']}}   " Allows unite to create a list of mru files
+" }}}
 " Unite sources
 NeoBundleLazy 'ujihisa/unite-colorscheme', {'autoload': {'unite_sources': 'colorscheme'}}          " Allows unite to auto switch between colorschemes
 NeoBundleLazy 'osyo-manga/unite-fold', {'autoload': {'unite_sources': 'fold'}}                     " Allows unite to get a list of folds in the current buffer
-NeoBundleLazy 'Shougo/neomru.vim', {'autoload':{'unite_sources': ['file_mru', 'directory_mru']}}   " Allows unite to create a list of mru files
 NeoBundle 'kopischke/unite-spell-suggest'                                                          " Allows spell check to use the unite plugin for finding suggestions
 NeoBundle 'Shougo/neocomplete.vim'                                                                 " Auto completion framework. Requires that vim be compiled with lua support
 NeoBundle 'Raimondi/delimitMate'                                                                   " Auto close quotes, parens, brackets, etc
@@ -320,7 +332,7 @@ set foldtext=MyFoldText()
 " FileType Specific ------------------------------------------------------------ {{{
 au FileType c,cpp,java,php,js set cindent
 " Ruby {{{
-au BufNewFile,BufRead *.rb,*.rbw,*.gem,*.gemspec set filetype=ruby
+au BufNewFile,BufRead *.rb,*.rbw,*.gem,*.gemspec set filetype=ruby foldmethod=syntax
 " Rakefile
 au BufNewFile,BufRead [rR]akefile,*.rake         set filetype=ruby
 " IRB config
