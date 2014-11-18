@@ -20,7 +20,7 @@ local -a prompt_left_lines # Array parameters
 
 
 zstyle ":pr_jrock:" mode full
-zstyle ':pr_jrock:*' hooks pwd usr vcs venv npm jobs prompt
+zstyle ':pr_jrock:*' hooks pwd usr vcs venv npm jobs prompt rbenv
 zstyle ':pr_jrock:*' pwd "%~"
 
 # Set vcs_info options
@@ -96,6 +96,12 @@ function +pr-mode-full() {
         "${blue} v${gray}(${pr_com[venv]}${gray})${reset}"
     )
 
+    # If we are using a version of ruby with rbenv display ruby version on the info line
+    [[ -n ${pr_com[v_rbenv]} ]] && infoline[1]=(
+        ${infoline[1]}
+        "${blue} v${gray}(${pr_com[v_rbenv]}${gray})${reset}"
+    )
+
     # The prompt was not taking up the full width of the terminal when in a virtualenv
     # If we are in a virtualenv then we add a one character shim to the width of the filler
     venv_shim=0
@@ -167,6 +173,18 @@ function +pr-venv() {
     )
 
     pr_com[venv]=${(j::)v_venv}
+}
+
+# Show rbenv information
+function +pr-rbenv() {
+    local -a v_rbenv
+
+    v_rbenv=$(rbenv version-name)
+    if [[ ${v_rbenv} == "system" ]]; then
+      v_rbenv=""
+    fi
+
+    pr_com[v_rbenv]=${(j::)v_rbenv}
 }
 
 # Show npm information
