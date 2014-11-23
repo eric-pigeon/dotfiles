@@ -12,6 +12,11 @@ if [[ $answer = "Y" ]] ; then
 	ln -s ~/dotfiles/vim ~/.vim
 	ln -s ~/dotfiles/vimrc ~/.vimrc
 	ln -s ~/dotfiles/tmux.conf ~/.tmux.conf
+
+	# create vim temp folders
+	mkdir -p ~/.vim/tmp/swap
+	mkdir -p ~/.vim/tmp/undo
+	mkdir -p ~/.vim/tmp/backup
 	# }}}
 
 	echo -n "Choose your shell (bash/zsh) => "; read answer
