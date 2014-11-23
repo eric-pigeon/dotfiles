@@ -1,8 +1,9 @@
 " vim: foldmethod=marker
 " Preamle ---------------------------------------------------------------------- {{{
-" Use Vim settings, rather than vi sesstings
-" This must be first, because it changes other options as a side effect.
-set nocompatible
+if has('vim_starting')
+	set nocompatible
+	set rtp+=$HOME/.vim/bundle/neobundle.vim/
+endif
 " }}}
 " NeoBundle auto-installation and setup ---------------------------------------- {{{
 " Install and configure NeoBundle {{{
@@ -16,11 +17,7 @@ if !filereadable(neobundle_readme)
     let iCanHazNeoBundle=0
 endif
 
-" Call NeoBundle
-if has('vim_starting')
-    set rtp+=$HOME/.vim/bundle/neobundle.vim/
-endif
-call neobundle#rc(expand($HOME.'/.vim/bundle/'))
+call neobundle#begin(expand($HOME.'/.vim/bundle/'))
 
 " NeoBundle rules NeoBundle (needed!)
 NeoBundle 'Shougo/neobundle.vim'
@@ -53,30 +50,11 @@ NeoBundle 'scrooloose/nerdtree' "{{{
 " }}}
 " Unite {{{
 NeoBundle 'Shougo/unite.vim' "{{{
-NeoBundleLazy 'Shougo/neomru.vim', {'autoload':{'unite_sources': ['file_mru', 'directory_mru']}}   " Allows unite to create a list of mru files
-
-	let g:unite_source_history_yank_enable = 1                " let unite search yanks
-	call unite#filters#matcher_default#use(['matcher_fuzzy']) " use fuzzy search by default
-	call unite#filters#sorter_default#use(['sorter_rank'])
-	call unite#custom#profile('default', 'context', {
-		\ 'start_insert': 1,
-		\ 'direction': 'botright'
-		\ })
-	nmap <space> [unite]
-	nnoremap [unite] <nop>
-
-	nnoremap <silent> [unite]<space> :<C-u>Unite -toggle -auto-resize -buffer-name=mixed file_rec/async:! buffer file_mru bookmark<cr><c-u>
-	"nnoremap <silent> [unite]f :<C-u>Unite -toggle -auto-resize -buffer-name=files file_rec/async:!<cr><c-u>
-	nnoremap <silent> [unite]f :<C-u>Unite -toggle -auto-resize -buffer-name=files file_rec/async:!<cr>
-	nnoremap <silent> [unite]y :<C-u>Unite -buffer-name=yanks history/yank<cr>
-	nnoremap <silent> [unite]l :<C-u>Unite -auto-resize -buffer-name=line line<cr>
-	nnoremap <silent> [unite]b :<C-u>Unite -auto-resize -buffer-name=buffers buffer<cr>
-	nnoremap <silent> [unite]m :<C-u>Unite -auto-resize -buffer-name=mappings mapping<cr>
-	nnoremap <silent> [unite]s :<C-u>Unite -quick-match buffer<cr>
-" }}}
+NeoBundleLazy 'Kocha/vim-unite-tig'
+NeoBundleLazy 'Shougo/unite-outline'
 NeoBundleLazy 'Shougo/neomru.vim', {'autoload':{'unite_sources': ['file_mru', 'directory_mru']}}   " Allows unite to create a list of mru files
 " }}}
-" Unite sources
+" }}}
 NeoBundleLazy 'ujihisa/unite-colorscheme', {'autoload': {'unite_sources': 'colorscheme'}}          " Allows unite to auto switch between colorschemes
 NeoBundleLazy 'osyo-manga/unite-fold', {'autoload': {'unite_sources': 'fold'}}                     " Allows unite to get a list of folds in the current buffer
 NeoBundle 'kopischke/unite-spell-suggest'                                                          " Allows spell check to use the unite plugin for finding suggestions
@@ -130,7 +108,7 @@ NeoBundleLazy 'tpope/vim-markdown', {'autoload':{'filetypes':['markdown']}}     
 " }}}
 " }}}
 " Auto install the plugins {{{
-
+call neobundle#end()
 " First-time plugins installation
 if iCanHazNeoBundle == 0
     echo "Installing Bundles, please ignore key map error messages"
@@ -141,6 +119,25 @@ endif
 " Check if all of the plugins are already installed, in other case ask if we want to install them
 NeoBundleCheck
 " }}}
+
+	let g:unite_source_history_yank_enable = 1                " let unite search yanks
+	call unite#filters#matcher_default#use(['matcher_fuzzy']) " use fuzzy search by default
+	call unite#filters#sorter_default#use(['sorter_rank'])
+	call unite#custom#profile('default', 'context', {
+		\ 'start_insert': 1,
+		\ 'direction': 'botright'
+		\ })
+	nmap <space> [unite]
+	nnoremap [unite] <nop>
+
+	nnoremap <silent> [unite]<space> :<C-u>Unite -toggle -auto-resize -buffer-name=mixed file_rec/async:! buffer file_mru bookmark<cr><c-u>
+	nnoremap <silent> [unite]f :<C-u>Unite -toggle -auto-resize -buffer-name=files file_rec/async:!<cr>
+	nnoremap <silent> [unite]y :<C-u>Unite -buffer-name=yanks history/yank<cr>
+	nnoremap <silent> [unite]l :<C-u>Unite -auto-resize -buffer-name=line line<cr>
+	nnoremap <silent> [unite]b :<C-u>Unite -auto-resize -buffer-name=buffers buffer<cr>
+	nnoremap <silent> [unite]m :<C-u>Unite -auto-resize -buffer-name=mappings mapping<cr>
+	nnoremap <silent> [unite]s :<C-u>Unite -quick-match buffer<cr>
+	nnoremap <silent> [unite]t :<C-u>Unite -start-insert tig<CR>
 " }}}
 " Basic Settings --------------------------------------------------------------- {{{
 " Enable file type detection.
