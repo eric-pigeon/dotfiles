@@ -9,6 +9,13 @@ fi
 antigen bundle hchbaw/opp.zsh opp.plugin.zsh
 antigen use oh-my-zsh
 
+#bundles from the default repo (robbyrussell's oh-my-zsh).
+antigen bundle git
+antigen bundle ruby
+
+# Syntax highlighting bundle.
+antigen bundle zsh-users/zsh-syntax-highlighting
+
 antigen apply
 # }}}
 
@@ -131,6 +138,10 @@ export WORKON_HOME=$HOME/.virtualenvs
 export KEYTIMEOUT=1
 # }}}
 # }}}
+
+if [ -n "$VIRTUAL_ENV" ]; then
+	."$VIRTUAL_ENV/bin/activate"
+fi
 
 # Aliases {{{
 alias rm="rm -i"
