@@ -3,3 +3,4 @@ vim/bundle/
 vim/tmp/
 vim/.netrwhist
 zsh/antigen/
+tmux/plugins/
