@@ -43,5 +43,4 @@ setw -g window-status-content-attr bold
 # -------------
 set -g status-left ''
 set -g status-right-length 150
-set -g status-right " #[fg=colour160] ♥ #[fg=colour69]#(bash ~/.tmux/scripts/remaining_battery.sh) | #(ifconfig | egrep '192|10.12.12' | cut -d ' ' -f 2) | %H:%M "
-set -g status-utf8 on
+set -g status-right "#{battery_icon} #[fg=colour69]#{battery_percentage} (#{battery_remain}) | #(ifconfig | egrep '192|10.12.12' | cut -d ' ' -f 2) | %H:%M "

@@ -25,18 +25,21 @@ NeoBundle 'Shougo/neobundle.vim'
 " Bundles {{{
 " core {{{
 " Vimproc to asynchronously run commands (NeoBundle, Unite)
+NeoBundle 'Shougo/vimproc.vim', {
+\ 'build' : {
+\     'windows' : 'tools\\update-dll-mingw',
+\     'cygwin' : 'make -f make_cygwin.mak',
+\     'mac' : 'make -f make_mac.mak',
+\     'linux' : 'make',
+\     'unix' : 'gmake',
+\    },
+\ }
+" }}}
 NeoBundle 'bling/vim-airline' "{{{
 	let g:airline#extensions#tabline#enabled = 1
 	let g:airline#extensions#tabline#left_sep=' '
 	let g:airline#extensions#tabline#left_alt_sep='¦'
 ""}}}
-NeoBundle 'Shougo/vimproc', {
-      \ 'build' : {
-      \     'mac' : 'make -f make_mac.mak',
-      \     'unix' : 'make -f make_unix.mak',
-      \    },
-      \ }
-" }}}
 NeoBundle 'scrooloose/nerdtree' "{{{
 	let NERDTreeShowHidden=1
 	let NERDTreeQuitOnOpen=0
@@ -55,6 +58,10 @@ NeoBundleLazy 'Shougo/unite-outline'
 NeoBundleLazy 'Shougo/neomru.vim', {'autoload':{'unite_sources': ['file_mru', 'directory_mru']}}   " Allows unite to create a list of mru files
 " }}}
 " }}}
+" Swift {{{
+NeoBundleLazy 'Keithbsmiley/swift.vim', {'autoload': {'filetypes': ['swift']}}
+" }}}
+NeoBundleLazy 'evanmiller/nginx-vim-syntax'
 NeoBundleLazy 'ujihisa/unite-colorscheme', {'autoload': {'unite_sources': 'colorscheme'}}          " Allows unite to auto switch between colorschemes
 NeoBundleLazy 'osyo-manga/unite-fold', {'autoload': {'unite_sources': 'fold'}}                     " Allows unite to get a list of folds in the current buffer
 NeoBundle 'kopischke/unite-spell-suggest'                                                          " Allows spell check to use the unite plugin for finding suggestions
@@ -92,6 +99,14 @@ NeoBundle 'altercation/vim-colors-solarized'
 NeoBundle '~/dotfiles/vim/my-plugins/nerd-search', {'type': 'nosync'}                              " Search in a specific directory from within nerdtree
 NeoBundle '~/dotfiles/vim/my-plugins/vim-grep-quickfix', {'type': 'nosync'}                        " Add grep functionality to the quickfix buffer
 NeoBundle '~/dotfiles/vim/my-plugins/vim-wiki-links', {'type': 'nosync'}                           " Add the ability to link between wiki (markdown) files
+" Ruby {{{
+NeoBundle 'vim-ruby/vim-ruby', {'autoload':{'filetypes':['ruby']}}
+NeoBundle 'thoughtbot/vim-rspec', {'autoload':{'filetypes':['ruby']}}
+" }}}
+" Erlang {{{
+NeoBundleLazy 'jimenezrick/vimerl', {'autoload':{'filetypes':['erlang']}}
+NeoBundleLazy 'vim-erlang/vim-dialyzer', {'autoload':{'filetypes':['erlang']}}
+" }}}
 " Python Plugins {{{
 NeoBundleLazy 'tmhedberg/SimpylFold', {'autoload':{'filetypes':['python']}}                        " Fold Python source code
 NeoBundleLazy 'davidhalter/jedi-vim', {'autoload':{'filetypes':['python']}}                        " Python autocompletion
@@ -137,7 +152,7 @@ NeoBundleCheck
 	nnoremap <silent> [unite]b :<C-u>Unite -auto-resize -buffer-name=buffers buffer<cr>
 	nnoremap <silent> [unite]m :<C-u>Unite -auto-resize -buffer-name=mappings mapping<cr>
 	nnoremap <silent> [unite]s :<C-u>Unite -quick-match buffer<cr>
-	nnoremap <silent> [unite]t :<C-u>Unite -start-insert tig<CR>
+	nnoremap <silent> [unite]t :<C-u>Unite -no-split tig<CR>
 " }}}
 " Basic Settings --------------------------------------------------------------- {{{
 " Enable file type detection.
@@ -210,7 +225,7 @@ augroup end
 " Tabs ------------------------------------------------------------------------- {{{
 set tabstop=2                                     " set tab size
 set shiftwidth=2                                  " set how man columns text gets indented with indent operations
-set noexpandtab                                   " dont auto convert tabs into spaces
+set expandtab                                     " dont auto convert tabs into spaces
 " }}}
 " Backups/Swap Files/Undo File ------------------------------------------------- {{{
 set nobackup                                      " don't make a backup before overwritting a file.
@@ -328,7 +343,26 @@ set foldtext=MyFoldText()
 " }}}
 " FileType Specific ------------------------------------------------------------ {{{
 au FileType c,cpp,java,php,js set cindent
+autocmd BufNewFile,BufRead *.swift setfiletype swift
+autocmd BufRead * call s:Swift()
+function! s:Swift()
+  if !empty(&filetype)
+    return
+  endif
+
+  let line = getline(1)
+  if line =~ "^#!.*swift"
+    setfiletype swift
+  endif
+endfunction
+augroup ft_swift
+	au!
+		au FileType swift setlocal expandtab
+augroup END
 " Ruby {{{
+autocmd FileType ruby,eruby let g:rubycomplete_buffer_loading = 1 
+autocmd FileType ruby,eruby let g:rubycomplete_classes_in_global = 1
+autocmd FileType ruby,eruby let g:rubycomplete_rails = 1
 au BufNewFile,BufRead *.rb,*.rbw,*.gem,*.gemspec set filetype=ruby foldmethod=syntax
 " Rakefile
 au BufNewFile,BufRead [rR]akefile,*.rake         set filetype=ruby
@@ -349,6 +383,14 @@ au BufNewFile,BufRead *.erb,*.rhtml              set filetype=eruby
 augroup ft_php
 	au!
 		au FileType php setlocal foldmethod=marker
+augroup END
+" }}}
+" conf {{{
+augroup ft_conf
+	au!
+		au FileType conf setlocal expandtab
+		au FileType conf setlocal tabstop=4
+		au FileType conf setlocal shiftwidth=4
 augroup END
 " }}}
 " Javascript/Json {{{
