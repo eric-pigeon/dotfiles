@@ -12,6 +12,7 @@ if [[ $answer = "Y" ]] ; then
 	ln -s ~/dotfiles/vim ~/.vim
 	ln -s ~/dotfiles/vimrc ~/.vimrc
 	ln -s ~/dotfiles/tmux.conf ~/.tmux.conf
+	ln -s ~/dotfiles/ctags ~/.ctags
 
 	# create vim temp folders
 	mkdir -p ~/.vim/tmp/swap

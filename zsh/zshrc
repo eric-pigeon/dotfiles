@@ -17,6 +17,9 @@ antigen bundle ruby
 antigen bundle powder
 antigen bundle rbenv
 antigen bundle rails
+antigen bundle gem
+antigen bundle tmuxinator
+antigen bundle mvn
 
 # Syntax highlighting bundle.
 antigen bundle zsh-users/zsh-syntax-highlighting
