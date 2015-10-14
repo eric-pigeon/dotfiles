@@ -70,7 +70,6 @@ NeoBundle 'tell-k/vim-browsereload-mac'
 " Ruby {{{
 NeoBundle 'vim-ruby/vim-ruby',    {'autoload':{'filetypes':['ruby']}}
 NeoBundle 'thoughtbot/vim-rspec', {'autoload':{'filetypes':['ruby']}}
-"NeoBundle 'keith/rspec.vim',      {'autoload':{'filetypes':['ruby']}}
 NeoBundle 'jgdavey/tslime.vim',   {'autoload':{'filetypes':['ruby']}}
 NeoBundle 'bruno-/vim-ruby-fold'
 " }}}

@@ -46,6 +46,11 @@ call neobundle#end()
 NeoBundleCheck
 " }}}
 
+
+let g:unite_source_rec_async_command=
+  \ ['ag', '--nocolor', '--nogroup', '--ignore', '".hg"', '--ignore', '".svn"',
+  \ '--ignore', '".git"', '--ignore', '".bzr"', '--hidden', '-g', '']
+call unite#custom#source('file_rec/async', 'ignore_pattern', '\.sass-cache/\|tmp/')
 call unite#filters#matcher_default#use(['matcher_fuzzy']) " use fuzzy search by default
 call unite#filters#sorter_default#use(['sorter_rank'])
 call unite#custom#profile('default', 'context', {
@@ -338,4 +343,4 @@ else
 endif
 " }}}
 
-set tags+=gems.tags
+"set tags+=gems.tags
