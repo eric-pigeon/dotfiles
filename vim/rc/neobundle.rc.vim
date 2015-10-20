@@ -34,8 +34,10 @@ NeoBundleLazy 'Keithbsmiley/swift.vim', {'autoload': {'filetypes': ['swift']}}
 NeoBundleLazy 'evanmiller/nginx-vim-syntax'
 NeoBundleLazy 'ujihisa/unite-colorscheme', {'autoload': {'unite_sources': 'colorscheme'}}          " Allows unite to auto switch between colorschemes
 NeoBundleLazy 'osyo-manga/unite-fold', {'autoload': {'unite_sources': 'fold'}}                     " Allows unite to get a list of folds in the current buffer
-NeoBundle 'mileszs/ack.vim'
-NeoBundle 'vim-scripts/nerdtree-ack'
+" NeoBundle 'mileszs/ack.vim'
+" NeoBundle 'vim-scripts/nerdtree-ack'
+NeoBundle 'rking/ag.vim'
+NeoBundle 'taiansu/nerdtree-ag'
 NeoBundle 'kopischke/unite-spell-suggest'                                                          " Allows spell check to use the unite plugin for finding suggestions
 NeoBundle 'Shougo/neocomplete.vim'                                                                 " Auto completion framework. Requires that vim be compiled with lua support
 NeoBundle 'Raimondi/delimitMate'                                                                   " Auto close quotes, parens, brackets, etc

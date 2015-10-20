@@ -5,7 +5,7 @@ if neobundle#tap('unite.vim') " {{{
 
    nnoremap <silent> [unite]<space> :<C-u>Unite -toggle -auto-resize -buffer-name=mixed file_rec/async:! buffer file_mru bookmark<cr><c-u>
    nnoremap <silent> [unite]f :<C-u>Unite -toggle -auto-resize -buffer-name=files file_rec/async:!<cr>
-   "nnoremap <silent> [unite]f :<C-u>Unite -toggle -auto-resize -buffer-name=files file_rec/git<cr>
+   nnoremap <silent> [unite]z :<C-u>Unite fold<cr>
    nnoremap <silent> [unite]y :<C-u>Unite -buffer-name=yanks history/yank<cr>
    nnoremap <silent> [unite]l :<C-u>Unite -auto-resize -buffer-name=line line<cr>
    nnoremap <silent> [unite]b :<C-u>Unite -auto-resize -buffer-name=buffers buffer<cr>
@@ -13,6 +13,7 @@ if neobundle#tap('unite.vim') " {{{
    nnoremap <silent> [unite]s :<C-u>Unite -quick-match buffer<cr>
    nnoremap <silent> [unite]t :<C-u>Unite -no-split tig<CR>
    nnoremap <silent> [unite]ta :<C-u>Unite -no-split tig -auto-preview<CR>
+   "nnoremap <silent> [unite]f :<C-u>Unite -toggle -auto-resize -buffer-name=files file_rec/git<cr>
 endif " }}}
 
 if neobundle#tap('vim-rspec') "{{{
