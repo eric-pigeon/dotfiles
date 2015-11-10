@@ -286,6 +286,7 @@ augroup END
 augroup ft_javascript
   au!
   " au BufNewFile,BufRead *.js set filetype=javascript syntax=jquery
+    au BufNewFile,BufRead *.js.erb set filetype=javascript
     au BufNewFile,BufRead *.json set filetype=javascript
     au FileType javascript call JavaScriptFold()
 augroup end
@@ -317,19 +318,6 @@ colorscheme harlem-nights
 " Plugin Settings -------------------------------------------------------------- {{{
 " Local vimrc {{{
 let g:localvimrc_ask=0                        " dont ask to source local vim rcs
-" }}}
-" Indent Line {{{
-nnoremap <Leader>ig :IndentLinesToggle<CR>
-let g:indentLine_enabled = 0
-let g:indentLine_char = '¦' "'┊'
-let g:indentLine_color_term = 239
-let g:indentLine_bufNameExclude = ['_.*', 'NERD_tree.*', 'start*']
-let g:indentLine_fileTypeExclude = ['text']
-" }}}
-" Vim-sneak {{{
-nmap f <Plug>SneakForward
-nmap F <Plug>SneakBackward
-let g:sneak#streak = 1
 " }}}
 " }}}
 

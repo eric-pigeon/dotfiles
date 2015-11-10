@@ -1,3 +1,7 @@
+" vim: foldmethod=marker
+
+let g:NERDTreeWinSize = 40
+
 if neobundle#tap('unite.vim') " {{{
 
   nnoremap [unite] <nop>
@@ -28,4 +32,19 @@ endif " }}}
 if neobundle#tap('vim-easy-align') " {{{
   vmap <Enter> <Plug>(EasyAlign)
   nmap ga <Plug>(EasyAlign)
+endif " }}}
+
+if neobundle#tap('vim-sneak') " {{{
+  nmap f <Plug>SneakForward
+  nmap F <Plug>SneakBackward
+  let g:sneak#streak = 1
+endif " }}}
+
+if neobundle#tap('indentLine') " {{{
+  nnoremap <Leader>ig :IndentLinesToggle<CR>
+  let g:indentLine_enabled = 0
+  let g:indentLine_char = '¦' "'┊'
+  let g:indentLine_color_term = 239
+  let g:indentLine_bufNameExclude = ['_.*', 'NERD_tree.*', 'start*']
+  let g:indentLine_fileTypeExclude = ['text']
 endif " }}}
