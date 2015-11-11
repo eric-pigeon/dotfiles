@@ -46,7 +46,6 @@ call neobundle#end()
 NeoBundleCheck
 " }}}
 
-
 let g:unite_source_rec_async_command=
   \ ['ag', '--nocolor', '--nogroup', '--ignore', '".hg"', '--ignore', '".svn"',
   \ '--ignore', '".git"', '--ignore', '".bzr"', '--hidden', '-g', '']
@@ -61,7 +60,6 @@ call unite#custom#profile('default', 'context', {
 " }}}
 
 call s:source_rc('functions.rc.vim')
-
 
 " Basic Settings --------------------------------------------------------------- {{{
 " Enable file type detection.
@@ -90,27 +88,22 @@ set number
 set relativenumber                                " display relative line numbers
 set ruler                                         " show the cursor position all the time
 set cursorline                                    " highlight current line
-hi CursorLine cterm=NONE ctermfg=NONE ctermbg=235 guibg=#222222
-autocmd WinEnter * setlocal cursorline            " Show current line highlight when entering a window
-autocmd WinLeave * setlocal nocursorline          " Remove current line highlight when leaving a window
-" This unsets the last search pattern register by hitting return
 set title                                         " change terminals title
 set visualbell                                    " no beeping.
 set laststatus=2                                  " show the status line all the time
 set background=dark
-au FocusLost * :wa                                " Automatically save files when they lose focus
-au VimResized * :wincmd =                         " Resize splits when the window is resized
 set pastetoggle=<f2>
 set list
-" set listchars=tab:▸\ ,eol:¬,extends:❯,precedes:❮
-" set listchars=tab:│┈ ,eol:¬,extends:❯,precedes:❮
 set listchars=tab:┊\ ,eol:¬,extends:❯,precedes:❮
-
+au WinEnter * setlocal cursorline            " Show current line highlight when entering a window
+au WinLeave * setlocal nocursorline          " Remove current line highlight when leaving a window
+au FocusLost * :wa                                " Automatically save files when they lose focus
+au VimResized * :wincmd =                         " Resize splits when the window is resized
 " }}}
 
 " WildMenu Completion ---------------------------------------------------------- {{{
 set wildmenu                                      " enhanced command line completion.
-set wildmode=list:longest,list:full                " complete files like a shell.
+set wildmode=list:longest,list:full               " complete files like a shell.
 set wildignore+=.hg,.git,.svn                     " Version control
 set wildignore+=*.aux,*.out,*.toc                 " LaTeX intermediate files
 set wildignore+=*.jpg,*.bmp,*.gif,*.png,*.jpeg    " binary images
@@ -163,7 +156,8 @@ set sidescroll=1
 set sidescrolloff=10
 set virtualedit+=block
 " Highlight current word matches
-autocmd CursorMoved * silent! exe printf('match SpellLocal /\<%s\>/', expand('<cword>'))
+autocmd CursorMoved * if getfsize(@%) < 1000000 | silent! exe printf('match SpellLocal /\<%s\>/', expand('<cword>')) | endif
+hi CursorLine cterm=NONE ctermfg=NONE ctermbg=235 guibg=#222222
 " }}}
 
 " DiffOrig --------------------------------------------------------------------- {{{
@@ -180,7 +174,6 @@ endif
 " toggle relative / normal line numbers
 nnoremap <silent><C-n> :set relativenumber!<cr>
 map <leader>jt  <Esc>:%!json_xs -f json -t json-pretty<CR>
-nnoremap <Leader>ud :GundoToggle<CR>
 " Tabs ------------------------------------------------------------------------- {{{
 map <Leader>tt :tabnew<cr>
 map <Leader>te :tabedit
@@ -248,6 +241,8 @@ augroup ft_swift
   au!
     au FileType swift setlocal expandtab
 augroup END
+au BufNewFile,BufRead *.wsdl set filetype=xml
+autocmd BufWritePre *.rb :%s/\s\+$//e
 " Ruby {{{
 autocmd FileType ruby,eruby let g:rubycomplete_buffer_loading = 1
 autocmd FileType ruby,eruby let g:rubycomplete_classes_in_global = 1
@@ -313,13 +308,12 @@ augroup END
 
 " Color Scheme ----------------------------------------------------------------- {{{
 colorscheme harlem-nights
+"let g:solarized_termtrans = 1
+"let g:solarized_termcolors=256
+"colorscheme solarized
 " }}}
-
-" Plugin Settings -------------------------------------------------------------- {{{
-" Local vimrc {{{
-let g:localvimrc_ask=0                        " dont ask to source local vim rcs
-" }}}
-" }}}
+"let g:xml_syntax_folding=1
+au FileType xml setlocal foldmethod=syntax
 
 " Environments (GUI/Consoloe) -------------------------------------------------- {{{
 if has('gui_running')

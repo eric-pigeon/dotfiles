@@ -18,7 +18,6 @@ set -g pane-base-index 1
 # -------------
 set -g status-utf8 on
 set -g status-justify left
-#set -g status-bg black
 set -g status-bg colour234
 set -g status-fg white
 set -g status-interval 4
@@ -34,13 +33,10 @@ setw -g window-status-current-attr bold
 setw -g window-status-bg black
 setw -g window-status-fg blue
 setw -g window-status-attr default
-#setw -g window-status-content-bg black
-#setw -g window-status-content-fg blue
-#setw -g window-status-content-attr bold
 
 # -------------
 # Info on left (no session display)
 # -------------
-set -g status-left ''
+set -g status-left '#[fg=colour69]#S '
 set -g status-right-length 150
 set -g status-right "#{battery_icon} #[fg=colour69]#{battery_percentage} (#{battery_remain}) | #(ifconfig | egrep '192|10.12.12' | cut -d ' ' -f 2) | %H:%M "

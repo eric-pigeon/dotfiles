@@ -6,7 +6,6 @@ if [[ -f ~/dotfiles/zsh/antigen/antigen.zsh ]]; then
 	source ~/dotfiles/zsh/antigen/antigen.zsh
 fi
 
-antigen bundle hchbaw/opp.zsh opp.plugin.zsh
 antigen use oh-my-zsh
 
 antigen bundle https://github.com/technomancy/leiningen zsh_completion.zsh
@@ -18,7 +17,6 @@ antigen bundle powder
 antigen bundle rails
 antigen bundle gem
 antigen bundle tmuxinator
-antigen bundle mvn
 
 # Syntax highlighting bundle.
 antigen bundle zsh-users/zsh-syntax-highlighting
@@ -153,6 +151,7 @@ fi
 # Aliases {{{
 alias rm="rm -i"
 alias l="ls -CF"
+alias less="less -S"
 # }}}
 
 # Functions {{{
@@ -178,6 +177,10 @@ cd() {
 # }}}
 
 # /usr/local/opt/erlang/lib/erlang/man
+
+if [ -f ~/.env ]; then
+  source ~/.env
+fi
 
 # rbenv {{{
 eval "$(rbenv init -)"

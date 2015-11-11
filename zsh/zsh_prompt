@@ -6,7 +6,7 @@ autoload -Uz vcs_info
 local reset white gray green red yellow blue cyan magenta black
 reset="%{${reset_color}%}"
 white="%{$fg[white]%}"
-gray="%{$fg_bold[black]%}"
+gray="%{$FG[238]%}"
 green="%{$fg_bold[green]%}"
 red="%{$fg[red]%}"
 yellow="%{$fg[yellow]%}"
@@ -216,7 +216,7 @@ function +pr-prompt() {
     # Add the print working directory logic
     zstyle -g i_pwd ":pr_jrock:*" pwd
     v_pwd+=( ${gray}\( )
-    [[ -w $PWD ]] && v_pwd+=( ${green} ) || v_pwd+=( ${yellow} )
+    [[ -w $PWD ]] && v_pwd+=( ${blue} ) || v_pwd+=( ${yellow} )
     v_pwd+=( ${i_pwd} )
     v_pwd+=( ${gray}\) )
     v_pwd+=( ${reset} )
