@@ -1,6 +1,6 @@
 " vim: foldmethod=marker
 
-if neobundle#tap('nerdtree') " {{{
+if dein#tap('nerdtree') " {{{
   let g:NERDTreeWinSize = 40
   let g:NERDTreeShowHidden=1
   let g:NERDTreeQuitOnOpen=0
@@ -13,7 +13,7 @@ if neobundle#tap('nerdtree') " {{{
   nnoremap <Leader>no :NERDTreeFind<CR>
 endif " }}}
 
-if neobundle#tap('unite.vim') " {{{
+if dein#tap('unite.vim') " {{{
 
   nnoremap [unite] <nop>
   nmap <space> [unite]
@@ -30,30 +30,30 @@ if neobundle#tap('unite.vim') " {{{
    "nnoremap <silent> [unite]f :<C-u>Unite -toggle -auto-resize -buffer-name=files file_rec/git<cr>
 endif " }}}
 
-if neobundle#tap('vim-rspec') "{{{
+if dein#tap('vim-rspec') "{{{
   map <Leader>rt :call RunCurrentSpecFile()<CR>
   map <Leader>rs :call RunNearestSpec()<CR>
   map <Leader>rl :call RunLastSpec()<CR>
   map <Leader>ra :call RunAllSpecs()<CR>
 
-  if neobundle#tap('tslime.vim') "{{{
+  if dein#tap('tslime.vim') "{{{
     let g:rspec_command = 'call Send_to_Tmux("bundle exec rspec {spec}\n")'
     let g:tslime_always_current_session = 1
   endif " }}}
 endif " }}}
 
-if neobundle#tap('vim-easy-align') " {{{
+if dein#tap('vim-easy-align') " {{{
   vmap <Enter> <Plug>(EasyAlign)
   nmap ga <Plug>(EasyAlign)
 endif " }}}
 
-if neobundle#tap('vim-sneak') " {{{
+if dein#tap('vim-sneak') " {{{
   nmap f <Plug>SneakForward
   nmap F <Plug>SneakBackward
   let g:sneak#streak = 1
 endif " }}}
 
-if neobundle#tap('indentLine') " {{{
+if dein#tap('indentLine') " {{{
   nnoremap <Leader>ig :IndentLinesToggle<CR>
   let g:indentLine_enabled = 0
   let g:indentLine_char = '¦' "'┊'
@@ -62,11 +62,11 @@ if neobundle#tap('indentLine') " {{{
   let g:indentLine_fileTypeExclude = ['text']
 endif " }}}
 
-if neobundle#tap('gundo') " {{{
+if dein#tap('gundo') " {{{
   nnoremap <Leader>ud :GundoToggle<CR>
 endif " }}}
 
-if neobundle#tap('vim-airline') " {{{
+if dein#tap('vim-airline') " {{{
   let g:airline#extensions#tabline#enabled = 1
   let g:airline#extensions#tabline#left_sep=' '
   let g:airline#extensions#tabline#left_alt_sep='¦'

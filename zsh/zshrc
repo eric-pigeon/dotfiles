@@ -152,6 +152,7 @@ fi
 alias rm="rm -i"
 alias l="ls -CF"
 alias less="less -S"
+alias vim="nvim"
 # }}}
 
 # Functions {{{

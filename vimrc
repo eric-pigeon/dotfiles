@@ -4,47 +4,27 @@
 if has('vim_starting')
   set nocompatible
   set rtp+=$HOME/.vim/bundle/neobundle.vim/
+  set runtimepath^=$HOME/.dein/repos/github.com/Shougo/dein.vim
 endif
 " }}}
 
+" Function source_rc {{{
 function! s:source_rc(path)
   execute 'source' fnameescape(expand('~/.vim/rc/' . a:path))
 endfunction
+" }}}
 
-" NeoBundle auto-installation and setup ---------------------------------------- {{{
-
-" Install and configure NeoBundle {{{
-let neobundle_readme=expand($HOME.'/.vim/bundle/neobundle.vim/README.md')
-
-if !filereadable(neobundle_readme)
-  silent !curl https://raw.githubusercontent.com/Shougo/neobundle.vim/master/bin/install.sh | sh
+" Dein {{{
+call dein#begin(expand('~/.cache/dein'))
+call dein#add('Shougo/dein.vim')
+call s:source_rc('dein.rc.vim')
+if dein#check_install()
+  call dein#install()
 endif
-
-call neobundle#begin(expand($HOME.'/.vim/bundle/'))
-NeoBundleFetch 'Shougo/neobundle.vim'
+call dein#end()
 " }}}
-
-" Vimproc to asynchronously run commands (NeoBundle, Unite) {{{
-NeoBundle 'Shougo/vimproc.vim', {
-\ 'build' : {
-\     'windows' : 'tools\\update-dll-mingw',
-\     'cygwin' : 'make -f make_cygwin.mak',
-\     'mac' : 'make -f make_mac.mak',
-\     'linux' : 'make',
-\     'unix' : 'gmake',
-\    },
-\ }
-" }}}
-
-call s:source_rc('neobundle.rc.vim')
 
 call s:source_rc('plugins.rc.vim')
-
-" Auto install the plugins {{{
-call neobundle#end()
-" Check if all of the plugins are already installed, in other case ask if we want to install them
-NeoBundleCheck
-" }}}
 
 let g:unite_source_rec_async_command=
   \ ['ag', '--nocolor', '--nogroup', '--ignore', '".hg"', '--ignore', '".svn"',
@@ -57,17 +37,10 @@ call unite#custom#profile('default', 'context', {
   \ 'direction': 'botright'
   \ })
 
-" }}}
-
 call s:source_rc('functions.rc.vim')
 
 " Basic Settings --------------------------------------------------------------- {{{
-" Enable file type detection.
-" Use the default filetype settings, so that mail gets 'tw' set to 72,
-" 'cindent' is on in C files, etc.
-" Also load indent files, to automatically do language-dependent indenting.
-filetype plugin on
-filetype indent on
+filetype plugin indent on
 
 " Switch syntax highlighting on, when the terminal has colors
 if &t_Co > 2 || has("gui_running")
@@ -282,7 +255,7 @@ augroup ft_javascript
   au!
   " au BufNewFile,BufRead *.js set filetype=javascript syntax=jquery
     au BufNewFile,BufRead *.js.erb set filetype=javascript
-    au BufNewFile,BufRead *.json set filetype=javascript
+    "au BufNewFile,BufRead *.json set filetype=javascript
     au FileType javascript call JavaScriptFold()
 augroup end
 " }}}
@@ -312,17 +285,13 @@ colorscheme harlem-nights
 "let g:solarized_termcolors=256
 "colorscheme solarized
 " }}}
-"let g:xml_syntax_folding=1
 au FileType xml setlocal foldmethod=syntax
 
 " Environments (GUI/Consoloe) -------------------------------------------------- {{{
 if has('gui_running')
 else
-  " In many terminal emulators the mouse works just fine, thus enable it.
   if has('mouse')
     set mouse=a
   endif
 endif
 " }}}
-
-"set tags+=gems.tags
