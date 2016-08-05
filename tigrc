@@ -2,6 +2,8 @@ set pager-view = line-number:no,interval=5 text
 set diff-view = line-number:no,interval=5 text:yes,commit-title-overflow=no
 set status-view = line-number:no,interval=5 status:short file-name
 set tree-view = line-number:no,interval=5 mode author:full file-size date:default id:no file-name
+set status-show-untracked-files = true
+set status-show-untracked-dirs = true
 
 # vim: set expandtab sw=4 tabstop=4:
 # *color* 'area' 'fgcolor' 'bgcolor' '[attributes]'

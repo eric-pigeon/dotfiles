@@ -126,8 +126,8 @@ PATH="/usr/local/bin:$PATH"
 # }}}
 # Editor and display configurations {{{
 #-------------------------------------------------------------------------------
-export EDITOR='vim'
-export VISUAL='vim'
+export EDITOR='nvim'
+export VISUAL='nvim'
 export GIT_EDITOR=$EDITOR
 export LESS='-imJMWR'
 export PAGER="less $LESS"
@@ -153,6 +153,7 @@ alias rm="rm -i"
 alias l="ls -CF"
 alias less="less -S"
 alias vim="nvim"
+alias chrome="/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome"
 # }}}
 
 # Functions {{{
@@ -178,6 +179,10 @@ cd() {
 # }}}
 
 # /usr/local/opt/erlang/lib/erlang/man
+#
+autoload -U edit-command-line
+zle -N edit-command-line
+bindkey -M vicmd v edit-command-line
 
 if [ -f ~/.env ]; then
   source ~/.env
@@ -186,3 +191,7 @@ fi
 # rbenv {{{
 eval "$(rbenv init -)"
 # }}}
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion

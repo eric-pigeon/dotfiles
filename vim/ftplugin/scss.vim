@@ -1,5 +1,5 @@
 "===================================================================================
-"  DESCRIPTION:  Settings that load only for files with the .js extension
+"  DESCRIPTION:  Settings that load only for files with the .scss extension
 "===================================================================================
 "
 " Settings for proper indentation

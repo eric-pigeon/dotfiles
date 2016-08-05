@@ -16,7 +16,6 @@ set -g pane-base-index 1
 # -------------
 # status line
 # -------------
-set -g status-utf8 on
 set -g status-justify left
 set -g status-bg colour234
 set -g status-fg white

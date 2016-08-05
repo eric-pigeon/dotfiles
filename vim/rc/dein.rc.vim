@@ -14,7 +14,7 @@ call dein#add('Shougo/unite-outline')
 " Global {{{
 call dein#add('Shougo/neocomplete.vim')
 call dein#add('bkad/CamelCaseMotion', {
-      \ 'hook_source': camelcasemotion#CreateMotionMappings('<leader>')
+      \ 'hook_post_source': "call camelcasemotion#CreateMotionMappings('<leader>')"
       \ })
 call dein#add('Shougo/deoplete.nvim', {
       \ 'if': has('nvim'),
@@ -39,6 +39,10 @@ call dein#add('tell-k/vim-browsereload-mac')
 
 " Ruby {{{
 call dein#add('vim-ruby/vim-ruby', {
+      \ 'lazy': 1,
+      \ 'on_ft': 'ruby'
+      \ })
+call dein#add('tpope/vim-rails', {
       \ 'lazy': 1,
       \ 'on_ft': 'ruby'
       \ })
