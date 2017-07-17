@@ -1,14 +1,18 @@
 " vim: foldmethod=marker
 
+" Denite {{{
+call dein#add('Shougo/denite.nvim')
+" }}}
+
 call dein#add('Shougo/vimproc.vim', {'build': 'make'})
 " Unite {{{
-call dein#add('Shougo/unite.vim')
-call dein#add('kopischke/unite-spell-suggest') " Allows spell check to use the unite plugin for finding suggestions
-call dein#add('Shougo/neomru.vim')             " Allows unite to create a list of mru files
-call dein#add('ujihisa/unite-colorscheme')     " Allows unite to auto switch between colorschemes
-call dein#add('Kocha/vim-unite-tig')
-call dein#add('osyo-manga/unite-fold')
-call dein#add('Shougo/unite-outline')
+" call dein#add('Shougo/unite.vim')
+" call dein#add('kopischke/unite-spell-suggest') " Allows spell check to use the unite plugin for finding suggestions
+" call dein#add('Shougo/neomru.vim')             " Allows unite to create a list of mru files
+" call dein#add('ujihisa/unite-colorscheme')     " Allows unite to auto switch between colorschemes
+" call dein#add('Kocha/vim-unite-tig')
+" call dein#add('osyo-manga/unite-fold')
+" call dein#add('Shougo/unite-outline')
 " }}}
 
 " Global {{{

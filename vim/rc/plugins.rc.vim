@@ -30,6 +30,21 @@ if dein#tap('unite.vim') " {{{
    "nnoremap <silent> [unite]f :<C-u>Unite -toggle -auto-resize -buffer-name=files file_rec/git<cr>
 endif " }}}
 
+if dein#tap('denite.nvim') " {{{
+
+  nnoremap [denite] <nop>
+  nmap <space> [denite]
+
+   nnoremap <silent> [denite]<space> :<C-u>Denite -toggle -auto-resize -buffer-name=mixed file_rec/async:! buffer file_mru bookmark<cr><c-u>
+   nnoremap <silent> [denite]f       :<C-u>Denite file_rec<cr>
+   nnoremap <silent> [denite]z       :<C-u>Denite fold<cr>
+   nnoremap <silent> [denite]l       :<C-u>Denite -auto-resize -buffer-name=line line<cr>
+   nnoremap <silent> [denite]b       :<C-u>Denite -auto-resize -buffer-name=buffers buffer<cr>
+   nnoremap <silent> [denite]m       :<C-u>Denite -auto-resize -buffer-name=mappings mapping<cr>
+   nnoremap <silent> [denite]s       :<C-u>Denite -quick-match buffer<cr>
+   nnoremap <silent> [denite]g       :<C-u>Denite bundler<cr>
+endif " }}}
+
 if dein#tap('vim-rspec') "{{{
   map <Leader>rt :call RunCurrentSpecFile()<CR>
   map <Leader>rs :call RunNearestSpec()<CR>

@@ -36,18 +36,31 @@ endif
 
 call s:source_rc('plugins.rc.vim')
 
-let g:unite_source_rec_async_command=
+" let g:unite_source_rec_async_command=
+"   \ ['ag', '--nocolor', '--nogroup', '--ignore', '".hg"', '--ignore', '".svn"',
+"   \ '--ignore', '".git"', '--ignore', '".bzr"', '--hidden', '-g', '']
+" call unite#custom#source('file_rec/async', 'ignore_pattern', '\.sass-cache/\|tmp/')
+" call unite#filters#matcher_default#use(['matcher_fuzzy']) " use fuzzy search by default
+" call unite#filters#matcher_default#use(['matcher_regexp'])
+" call unite#filters#sorter_default#use(['sorter_rank'])
+" call unite#filters#sorter_default#use(['sorter_sorter_selecta'])
+" call unite#custom#profile('default', 'context', {
+"   \ 'start_insert': 1,
+"   \ 'direction': 'botright'
+"   \ })
+
+
+let g:denite_source_rec_async_command=
   \ ['ag', '--nocolor', '--nogroup', '--ignore', '".hg"', '--ignore', '".svn"',
   \ '--ignore', '".git"', '--ignore', '".bzr"', '--hidden', '-g', '']
-call unite#custom#source('file_rec/async', 'ignore_pattern', '\.sass-cache/\|tmp/')
-" call unite#filters#matcher_default#use(['matcher_fuzzy']) " use fuzzy search by default
-call unite#filters#matcher_default#use(['matcher_regexp'])
-"call unite#filters#sorter_default#use(['sorter_rank'])
-call unite#filters#sorter_default#use(['sorter_sorter_selecta'])
-call unite#custom#profile('default', 'context', {
-  \ 'start_insert': 1,
-  \ 'direction': 'botright'
-  \ })
+call denite#custom#source('file_rec/async', 'ignore_pattern', '\.sass-cache/\|tmp/')
+" call denite#custom#filter('file_rec/asyc', ['matcher_regexp'])
+
+" call denite#filters#sorter_default#use(['sorter_sorter_selecta'])
+" call denite#custom#profile('default', 'context', {
+"   \ 'start_insert': 1,
+"   \ 'direction': 'botright'
+"   \ })
 
 " fuck you shougo
 call camelcasemotion#CreateMotionMappings('<leader>')
