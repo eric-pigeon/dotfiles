@@ -144,9 +144,9 @@ export KEYTIMEOUT=1
 # }}}
 # }}}
 
-if [ -n "$VIRTUAL_ENV" ]; then
-	."$VIRTUAL_ENV/bin/activate"
-fi
+# if [ -n "$VIRTUAL_ENV" ]; then
+# 	."$VIRTUAL_ENV/bin/activate"
+# fi
 
 # Aliases {{{
 alias rm="rm -i"
@@ -158,23 +158,23 @@ alias chrome="/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome"
 
 # Functions {{{
 # Workon virtualenv {{{
-[[ -a /usr/local/bin/virtualenvwrapper.sh ]] && source /usr/local/bin/virtualenvwrapper.sh
-
-workon_virtualenv() {
-	if [[ -d .git ]]; then
-		VENV_CUR_DIR="${PWD##*/}"
-		if [[ -a ~/.virtualenvs/$VENV_CUR_DIR ]]; then
-			deactivate > /dev/null 2>&1
-			source ~/.virtualenvs/$VENV_CUR_DIR/bin/activate
-		fi
-	fi
-}
+# [[ -a /usr/local/bin/virtualenvwrapper.sh ]] && source /usr/local/bin/virtualenvwrapper.sh
+# 
+# workon_virtualenv() {
+# 	if [[ -d .git ]]; then
+# 		VENV_CUR_DIR="${PWD##*/}"
+# 		if [[ -a ~/.virtualenvs/$VENV_CUR_DIR ]]; then
+# 			deactivate > /dev/null 2>&1
+# 			source ~/.virtualenvs/$VENV_CUR_DIR/bin/activate
+# 		fi
+# 	fi
+# }
 # }}}
 # Run virtual environment functions on cd {{{
-cd() {
-	builtin cd "$@"
-	workon_virtualenv
-}
+# cd() {
+# 	builtin cd "$@"
+# 	workon_virtualenv
+# }
 # }}}
 # }}}
 
