@@ -4,16 +4,7 @@
 call dein#add('Shougo/denite.nvim')
 " }}}
 
-call dein#add('Shougo/vimproc.vim', {'build': 'make'})
-" Unite {{{
-" call dein#add('Shougo/unite.vim')
-" call dein#add('kopischke/unite-spell-suggest') " Allows spell check to use the unite plugin for finding suggestions
-" call dein#add('Shougo/neomru.vim')             " Allows unite to create a list of mru files
-" call dein#add('ujihisa/unite-colorscheme')     " Allows unite to auto switch between colorschemes
-" call dein#add('Kocha/vim-unite-tig')
-" call dein#add('osyo-manga/unite-fold')
-" call dein#add('Shougo/unite-outline')
-" }}}
+call dein#add('lifepillar/pgsql.vim')
 
 " Global {{{
 call dein#add('Shougo/neocomplete.vim')
@@ -39,6 +30,7 @@ call dein#add('majutsushi/tagbar')       " Display tags in a buffer ordered by c
 call dein#add('rking/ag.vim')
 call dein#add('Raimondi/delimitMate')    " Auto close quotes, parens, brackets, etc
 call dein#add('tell-k/vim-browsereload-mac')
+call dein#add('elmcast/elm-vim')
 " }}}
 
 " Ruby {{{
@@ -63,7 +55,7 @@ call dein#add('bruno-/vim-ruby-fold', {
       \ 'on_ft': 'ruby'
       \ })
 call dein#add('tpope/vim-bundler')
-call dein#add('sorah/unite-bundler')
+" call dein#add('sorah/unite-bundler')
 " }}}
 
 " NerdTree {{{
@@ -82,6 +74,10 @@ call dein#add('vim-erlang/vim-dialyzer', {'lazy': 1, 'on_ft': 'erlang'})
 
 " Elixir {{{
 call dein#add('elixir-lang/vim-elixir', {'lazy':1, 'on_ft': 'elixir'})
+" }}}
+
+" GO {{{
+call dein#add('fatih/vim-go', {'lazy':1, 'on_ft': 'go'})
 " }}}
 
 " Swift {{{
@@ -107,17 +103,6 @@ call dein#add('xxxpigeonxxx/vim-256-color-schemes') " A variety of terminal base
 call dein#add('altercation/vim-colors-solarized')
 " }}}
 
-" Global {{{
-"NeoBundle 'vim-scripts/UltiSnips'                                                                  " Ultimate solution for snippets
-"NeoBundle 'tpope/vim-commentary'                                                                   " Comment stuff out
-"NeoBundle 'tpope/vim-surround'                                                                     " Surround objects with all manor of things
-"NeoBundle 'justinmk/vim-sneak'                                                                     " Vim motion plugin
-"NeoBundle 'JarrodCTaylor/vim-shell-executor'                                                       " Execute any code from within vim buffers
-"NeoBundle 'mattn/emmet-vim/'                                                                       " Formally zen coding
-"NeoBundle 'osyo-manga/vim-over'                                                                    " Visual find and replace
-"NeoBundle 'wellle/targets.vim'                                                                     " Provide additional text objects
-"NeoBundle 'tpope/vim-fireplace'                                                                    " Clojure REPL support
-"NeoBundle 'thinca/vim-qfreplace'                                                                   " Easy replace in the quick fix buffer
-"NeoBundle 'guns/vim-sexp'                                                                          " Precision editing for S-expressions
-"NeoBundle 'tpope/vim-sexp-mappings-for-regular-people'                                             " Make sexp usable
-" }}}
+call dein#add('timburgess/extempore.vim')
+
+call dein#add('chr4/nginx.vim')

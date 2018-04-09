@@ -1,5 +1,7 @@
 " vim: foldmethod=marker
 
+let g:sql_type_default = 'pgsql'
+
 if dein#tap('nerdtree') " {{{
   let g:NERDTreeWinSize = 40
   let g:NERDTreeShowHidden=1
@@ -11,23 +13,6 @@ if dein#tap('nerdtree') " {{{
   "let NERDTreeBookmarksFile=s:get_cache_dir('NERDTreeBookmarks')
   nnoremap <Leader>nt :NERDTreeToggle<CR>
   nnoremap <Leader>no :NERDTreeFind<CR>
-endif " }}}
-
-if dein#tap('unite.vim') " {{{
-
-  nnoremap [unite] <nop>
-  nmap <space> [unite]
-
-   nnoremap <silent> [unite]<space> :<C-u>Unite -toggle -auto-resize -buffer-name=mixed file_rec/async:! buffer file_mru bookmark<cr><c-u>
-   nnoremap <silent> [unite]f :<C-u>Unite -toggle -auto-resize -buffer-name=files file_rec/async:!<cr>
-   nnoremap <silent> [unite]z :<C-u>Unite fold<cr>
-   "nnoremap <silent> [unite]y :<C-u>Unite -buffer-name=yanks history/yank<cr>
-   nnoremap <silent> [unite]l :<C-u>Unite -auto-resize -buffer-name=line line<cr>
-   nnoremap <silent> [unite]b :<C-u>Unite -auto-resize -buffer-name=buffers buffer<cr>
-   nnoremap <silent> [unite]m :<C-u>Unite -auto-resize -buffer-name=mappings mapping<cr>
-   nnoremap <silent> [unite]s :<C-u>Unite -quick-match buffer<cr>
-   nnoremap <silent> [unite]g :<C-u>Unite bundler<cr>
-   "nnoremap <silent> [unite]f :<C-u>Unite -toggle -auto-resize -buffer-name=files file_rec/git<cr>
 endif " }}}
 
 if dein#tap('denite.nvim') " {{{

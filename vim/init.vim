@@ -1,1 +1,1 @@
-/Users/epigeon/.vimrc
+vimrc

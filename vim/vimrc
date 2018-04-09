@@ -1,3 +1,9 @@
+" Note: Skip initialization for vim-tiny or vim-small.
+if 1
+  execute 'source' fnamemodify(expand('<sfile>'), ':h').'/config/main.vim'
+endif
+" vim:set et sw=2
+
 " vim: foldmethod=marker
 
 " Preamle ---------------------------------------------------------------------- {{{
@@ -36,31 +42,32 @@ endif
 
 call s:source_rc('plugins.rc.vim')
 
-" let g:unite_source_rec_async_command=
-"   \ ['ag', '--nocolor', '--nogroup', '--ignore', '".hg"', '--ignore', '".svn"',
-"   \ '--ignore', '".git"', '--ignore', '".bzr"', '--hidden', '-g', '']
-" call unite#custom#source('file_rec/async', 'ignore_pattern', '\.sass-cache/\|tmp/')
-" call unite#filters#matcher_default#use(['matcher_fuzzy']) " use fuzzy search by default
-" call unite#filters#matcher_default#use(['matcher_regexp'])
-" call unite#filters#sorter_default#use(['sorter_rank'])
-" call unite#filters#sorter_default#use(['sorter_sorter_selecta'])
-" call unite#custom#profile('default', 'context', {
-"   \ 'start_insert': 1,
-"   \ 'direction': 'botright'
-"   \ })
-
+let g:pigeonvim_wildignore
+      \ = '*/tmp/*,*.so,*.swp,*.zip,*.class,tags,*.jpg,
+      \*.ttf,*.TTF,*.png,*/target/*,
+      \.git,.svn,.hg,.DS_Store,*.svg'
 
 let g:denite_source_rec_async_command=
   \ ['ag', '--nocolor', '--nogroup', '--ignore', '".hg"', '--ignore', '".svn"',
   \ '--ignore', '".git"', '--ignore', '".bzr"', '--hidden', '-g', '']
-call denite#custom#source('file_rec/async', 'ignore_pattern', '\.sass-cache/\|tmp/')
-" call denite#custom#filter('file_rec/asyc', ['matcher_regexp'])
 
-" call denite#filters#sorter_default#use(['sorter_sorter_selecta'])
-" call denite#custom#profile('default', 'context', {
-"   \ 'start_insert': 1,
-"   \ 'direction': 'botright'
-"   \ })
+call denite#custom#var('file_rec', 'command',
+      \ ['ag' , '--nocolor', '--nogroup', '-g', '']
+      \ + zvim#util#Generate_ignore(g:pigeonvim_wildignore, 'ag')
+      \ )
+
+call denite#custom#map(
+      \ 'insert',
+      \ '<Down>',
+      \ '<denite:move_to_next_line>',
+      \ 'noremap'
+      \)
+call denite#custom#map(
+      \ 'insert',
+      \ '<Up>',
+      \ '<denite:move_to_previous_line>',
+      \ 'noremap'
+      \)
 
 " fuck you shougo
 call camelcasemotion#CreateMotionMappings('<leader>')

@@ -2,9 +2,7 @@
 # vim: set foldlevel=0 foldmethod=marker:
 
 #  antigen {{{
-if [[ -f ~/dotfiles/zsh/antigen/antigen.zsh ]]; then
-	source ~/dotfiles/zsh/antigen/antigen.zsh
-fi
+source /usr/local/share/antigen/antigen.zsh
 
 antigen use oh-my-zsh
 
@@ -122,7 +120,7 @@ export GREP_OPTIONS='--color=auto'
 # }}}
 # Use the correct ctags {{{
 #-------------------------------------------------------------------------------
-PATH="/usr/local/bin:$PATH"
+PATH="/usr/local/cloudera/bin:/usr/local/cloudera-hive/bin:/usr/local/sbin:/usr/local/bin:$PATH"
 # }}}
 # Editor and display configurations {{{
 #-------------------------------------------------------------------------------
@@ -145,7 +143,7 @@ export KEYTIMEOUT=1
 # }}}
 
 # if [ -n "$VIRTUAL_ENV" ]; then
-# 	."$VIRTUAL_ENV/bin/activate"
+#   ."$VIRTUAL_ENV/bin/activate"
 # fi
 
 # Aliases {{{
@@ -154,26 +152,28 @@ alias l="ls -CF"
 alias less="less -S"
 alias vim="nvim"
 alias chrome="/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome"
+alias hstart="/usr/local/cloudera/sbin/start-dfs.sh;/usr/local/cloudera/sbin/start-yarn.sh"
+alias hstop="/usr/local/cloudera/sbin/stop-yarn.sh;/usr/local/cloudera/sbin/stop-dfs.sh"
 # }}}
 
 # Functions {{{
 # Workon virtualenv {{{
 # [[ -a /usr/local/bin/virtualenvwrapper.sh ]] && source /usr/local/bin/virtualenvwrapper.sh
-# 
+#
 # workon_virtualenv() {
-# 	if [[ -d .git ]]; then
-# 		VENV_CUR_DIR="${PWD##*/}"
-# 		if [[ -a ~/.virtualenvs/$VENV_CUR_DIR ]]; then
-# 			deactivate > /dev/null 2>&1
-# 			source ~/.virtualenvs/$VENV_CUR_DIR/bin/activate
-# 		fi
-# 	fi
+#   if [[ -d .git ]]; then
+#     VENV_CUR_DIR="${PWD##*/}"
+#     if [[ -a ~/.virtualenvs/$VENV_CUR_DIR ]]; then
+#       deactivate > /dev/null 2>&1
+#       source ~/.virtualenvs/$VENV_CUR_DIR/bin/activate
+#     fi
+#   fi
 # }
 # }}}
 # Run virtual environment functions on cd {{{
 # cd() {
-# 	builtin cd "$@"
-# 	workon_virtualenv
+#   builtin cd "$@"
+#   workon_virtualenv
 # }
 # }}}
 # }}}
