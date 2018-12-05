@@ -103,6 +103,6 @@ call dein#add('xxxpigeonxxx/vim-256-color-schemes') " A variety of terminal base
 call dein#add('altercation/vim-colors-solarized')
 " }}}
 
-call dein#add('timburgess/extempore.vim')
+" call dein#add('timburgess/extempore.vim')
 
 call dein#add('chr4/nginx.vim')
