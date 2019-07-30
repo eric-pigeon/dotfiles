@@ -11,7 +11,6 @@ antigen bundle https://github.com/technomancy/leiningen zsh_completion.zsh
 #bundles from the default repo (robbyrussell's oh-my-zsh).
 antigen bundle git
 antigen bundle ruby
-antigen bundle powder
 antigen bundle rails
 antigen bundle gem
 antigen bundle tmuxinator
@@ -120,7 +119,8 @@ export GREP_OPTIONS='--color=auto'
 # }}}
 # Use the correct ctags {{{
 #-------------------------------------------------------------------------------
-PATH="/usr/local/cloudera/bin:/usr/local/cloudera-hive/bin:/usr/local/sbin:/usr/local/bin:$PATH"
+# PATH="/usr/local/cloudera/bin:/usr/local/cloudera-hive/bin:/usr/local/sbin:/usr/local/bin:$PATH"
+# PATH="/usr/local/cloudera/bin:/usr/local/cloudera-hive/bin:/usr/local/sbin:/usr/local/bin:$PATH"
 # }}}
 # Editor and display configurations {{{
 #-------------------------------------------------------------------------------
@@ -192,6 +192,46 @@ fi
 eval "$(rbenv init -)"
 # }}}
 
+#export http_proxy=http://localhost:3128
+#export https_proxy=http://localhost:3128
+#export HTTP_PROXY=http://localhost:3128
+#export HTTPS_PROXY=http://localhost:3128
+#export NO_PROXY=localhost,127.0.0.1,0.0.0.0
+#export no_proxy=localhost,127.0.0.1,0.0.0.0
+export GOPATH=$HOME/go
+
+wlssh () {
+  clientid="$1"
+  clientenv="$2"
+  ip="${@:3}"
+  if [[ -z $clientid || -z $clientenv || -z $ip ]]
+  then
+          echo 'usage: wlssh <clientid> <envname> <ip>'
+          return
+  fi
+  ssh-add -D
+  ssh-add -K ~/.ssh/id_rsa
+  ssh-add ~/.ssh/$1-$2-provisioning.pem
+  ssh -AJ vpn_$clientid\_$clientenv ubuntu@$ip
+}
+
+wlcssh () {
+  clientid="$1"
+  clientenv="$2"
+  ips="${@:3}"
+  if [[ -z $clientid || -z $clientenv || -z $ips ]]
+  then
+          echo 'usage: wlcssh <clientid> <envname> <ips>'
+          return
+  fi
+  ssh-add -D
+  ssh-add -K ~/.ssh/id_rsa
+  ssh-add ~/.ssh/$clientid-$clientenv-provisioning.pem
+  eval "csshX -l ubuntu --ssh_args \"-J openvpnas@vpn.$clientenv.$clientid.weblinc.com -o StrictHostKeyChecking=no\" $ips"
+}
+
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh

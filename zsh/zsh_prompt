@@ -4,9 +4,10 @@ autoload -Uz vcs_info
 
 # Make the colors easier to reference
 local reset white gray green red yellow blue cyan magenta black
-reset="%{${reset_color}%}"
+reset="%{$reset_color%}"
 white="%{$fg[white]%}"
-gray="%{$FG[238]%}"
+# gray="%{$fg[gray]%}"
+gray="%{$fg[white]%}"
 green="%{$fg_bold[green]%}"
 red="%{$fg[red]%}"
 yellow="%{$fg[yellow]%}"
@@ -17,7 +18,6 @@ black="%{$fg[black]%}"
 
 local -A pr_com            # Associative array
 local -a prompt_left_lines # Array parameters
-
 
 zstyle ":pr_jrock:" mode full
 zstyle ':pr_jrock:*' hooks pwd usr vcs venv npm jobs prompt rbenv
@@ -38,6 +38,9 @@ zstyle ':vcs_info:(git*):*' check-for-changes true                        # We w
 zstyle ':vcs_info:(git*)' actionformats "(%b|${red}%a${gray}%m)"
 zstyle ':vcs_info:(git*)' formats "(%b%m)"
 zstyle ':vcs_info:git*+set-message:*' hooks git-statuses git-st
+
+zstyle ':zsh-kubectl-prompt:' preprompt '<'
+zstyle ':zsh-kubectl-prompt:' postprompt '>'
 
 # Run all the prompt hook functions
 # (stolen, wholesale, from the excellent hook system in vcs_info)
@@ -99,7 +102,12 @@ function +pr-mode-full() {
     # If we are using a version of ruby with rbenv display ruby version on the info line
     [[ -n ${pr_com[v_rbenv]} ]] && infoline[1]=(
         ${infoline[1]}
-        "${blue} v${gray}(${pr_com[v_rbenv]}${gray})${reset}"
+        "${blue} v${reset}${gray}(${pr_com[v_rbenv]}${gray})${reset}"
+    )
+
+    infoline[1]=(
+        ${infoline[1]}
+        "$ZSH_KUBECTL_PROMPT"
     )
 
     # The prompt was not taking up the full width of the terminal when in a virtualenv
@@ -147,7 +155,6 @@ function +pr-mode-full() {
     # And we set the value for the prompt_left_lines
     prompt_left_lines=( ${lines[@]} )
 }
-
 
 # Show info collected from vcs_info
 function +pr-vcs() {
@@ -284,7 +291,6 @@ function +vi-git-statuses() {
         hook_com[misc]+=" ${gray}${stashes}${gray}"
     fi
 }
-
 
 # --------------------------
 # Finally we execute the above prompt functions
