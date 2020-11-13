@@ -29,6 +29,7 @@ Plug 'Yggdroot/indentLine'
 Plug 'mileszs/ack.vim'
 Plug 'janko/vim-test'
 Plug 'jgdavey/tslime.vim'
+Plug 'towolf/vim-helm'
 " }}}
 
 " Git {{{
@@ -71,6 +72,14 @@ Plug 'drewtempelmeyer/palenight.vim'
 
 " Elixir {{{
 Plug 'elixir-editors/vim-elixir'
+" }}}
+
+" graphQl {{{
+Plug 'jparise/vim-graphql'
+" }}}
+
+" mustache {{{
+Plug 'mustache/vim-mustache-handlebars'
 " }}}
 
 call plug#end()

@@ -226,6 +226,9 @@ augroup END
 " }}}
 
 " Color Scheme ----------------------------------------------------------------- {{{
+if (has("termguicolors"))
+  set termguicolors
+endif
 " colorscheme harlem-nights
 colorscheme palenight
 "let g:solarized_termtrans = 1
@@ -251,3 +254,8 @@ function! <SID>SynStack()
   endif
   echo map(synstack(line('.'), col('.')), 'synIDattr(v:val, "name")')
 endfunc
+
+let g:ale_fixers = { 'java': ['google_java_format']}
+let g:ale_java_javac_sourcepath = [
+    \ 'target/generated-sources'
+  \ ]
