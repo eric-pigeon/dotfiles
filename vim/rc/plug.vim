@@ -10,15 +10,6 @@ Plug 'autozimu/LanguageClient-neovim', {
     \ }
 Plug '/usr/local/opt/fzf'
 Plug '/Users/epigeon/Documents/Projects/Vim/fzf.vim'
-Plug 'ycm-core/YouCompleteMe', { 'do': './install.py' }
-"let g:deoplete#enable_at_startup = 1
-"if has('nvim')
-"  Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-"else
-"  Plug 'Shougo/deoplete.nvim'
-"  Plug 'roxma/nvim-yarp'
-"  Plug 'roxma/vim-hug-neovim-rpc'
-"endif
 Plug 'Konfekt/FastFold'
 Plug 'bling/vim-airline'
 Plug 'dense-analysis/ale'
@@ -30,6 +21,11 @@ Plug 'mileszs/ack.vim'
 Plug 'janko/vim-test'
 Plug 'jgdavey/tslime.vim'
 Plug 'towolf/vim-helm'
+" }}}
+
+" Code Completion {{{
+" Plug 'ycm-core/YouCompleteMe', { 'do': './install.py' }
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
 " }}}
 
 " Git {{{

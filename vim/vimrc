@@ -4,7 +4,6 @@ if &compatible
   set nocompatible
 endif
 
-let g:airline_theme = "palenight"
 
 " Function source_rc {{{
 function! s:source_rc(path)
@@ -172,60 +171,8 @@ set foldtext=MyFoldText()
 
 " }}}
 
-" FileType Specific ------------------------------------------------------------ {{{
-au FileType c,cpp,java,php,js set cindent
-autocmd BufNewFile,BufRead *.swift setfiletype swift
-autocmd BufRead * call s:Swift()
-function! s:Swift()
-  if !empty(&filetype)
-    return
-  endif
-
-  let line = getline(1)
-  if line =~ "^#!.*swift"
-    setfiletype swift
-  endif
-endfunction
-augroup ft_swift
-  au!
-    au FileType swift setlocal expandtab
-augroup END
-" conf {{{
-augroup ft_conf
-  au!
-    au FileType conf setlocal expandtab
-    au FileType conf setlocal tabstop=4
-    au FileType conf setlocal shiftwidth=4
-augroup END
-" }}}
-" Javascript/Json {{{
-augroup ft_javascript
-  au!
-    au BufNewFile,BufRead *.js.erb set filetype=javascript
-    " au FileType javascript call JavaScriptFold()
-augroup end
-" }}}
-" Yacc {{{
-augroup ft_yacc
-  au!
-    au BufNewfile,BufRead *ypp set filetype=yacc
-augroup end
-" }}}
-" Bash {{{
-augroup ft_bash
-  au!
-    au FileType sh setlocal foldmethod=marker
-augroup END
-" }}}
-" tmux {{{
-augroup ft_tmux
-  au!
-    au FileType tmux setlocal foldmethod=marker
-augroup END
-" }}}
-" }}}
-
 " Color Scheme ----------------------------------------------------------------- {{{
+let g:airline_theme = "palenight"
 if (has("termguicolors"))
   set termguicolors
 endif
@@ -247,6 +194,7 @@ endif
 
 au VimLeave * set guicursor=a:hor20-Cursor/lCursor-blinkon1
 
+" {{{
 nmap <leader>sp :call <SID>SynStack()<CR>
 function! <SID>SynStack()
   if !exists("*synstack")
@@ -254,8 +202,4 @@ function! <SID>SynStack()
   endif
   echo map(synstack(line('.'), col('.')), 'synIDattr(v:val, "name")')
 endfunc
-
-let g:ale_fixers = { 'java': ['google_java_format']}
-let g:ale_java_javac_sourcepath = [
-    \ 'target/generated-sources'
-  \ ]
+" }}}
