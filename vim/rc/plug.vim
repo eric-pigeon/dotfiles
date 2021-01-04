@@ -4,10 +4,6 @@ call plug#begin('/Users/epigeon/.cache/vim-plugged')
 
 " Global {{{
 Plug 'bkad/CamelCaseMotion'
-Plug 'autozimu/LanguageClient-neovim', {
-    \ 'branch': 'next',
-    \ 'do': 'bash install.sh',
-    \ }
 Plug '/usr/local/opt/fzf'
 Plug '/Users/epigeon/Documents/Projects/Vim/fzf.vim'
 Plug 'Konfekt/FastFold'
@@ -76,6 +72,14 @@ Plug 'jparise/vim-graphql'
 
 " mustache {{{
 Plug 'mustache/vim-mustache-handlebars'
+" }}}
+
+" toml {{{
+Plug 'cespare/vim-toml'
+" }}}
+
+" rust {{{
+Plug 'rust-lang/rust.vim'
 " }}}
 
 call plug#end()

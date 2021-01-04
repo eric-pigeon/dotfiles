@@ -1,46 +1,43 @@
 #!/bin/zsh
 # vim: set foldlevel=0 foldmethod=marker:
 
-#  antigen {{{
-source /usr/local/share/antigen/antigen.zsh
+# zplugin {{{
+export ZPLUG_HOME=/usr/local/opt/zplug
+source $ZPLUG_HOME/init.zsh
 
-antigen use oh-my-zsh
+zplug "plugins/git", from:oh-my-zsh
+zplug "plugins/ruby", from:oh-my-zsh
+zplug "plugins/rails", from:oh-my-zsh
+zplug "plugins/gem", from:oh-my-zsh
+zplug "plugins/tmuxinator", from:oh-my-zsh
+zplug "plugins/docker", from:oh-my-zsh
+zplug "plugins/docker-compose", from:oh-my-zsh
 
-antigen bundle https://github.com/technomancy/leiningen zsh_completion.zsh
+zplug zsh-users/zsh-syntax-highlighting
+zplug zsh-users/zsh-completions
 
-#bundles from the default repo (robbyrussell's oh-my-zsh).
-antigen bundle git
-antigen bundle ruby
-antigen bundle rails
-antigen bundle gem
-antigen bundle tmuxinator
+zplug chrissicool/zsh-256color
 
-# Syntax highlighting bundle.
-antigen bundle zsh-users/zsh-syntax-highlighting
+# k8s prompt
+zplug superbrothers/zsh-kubectl-prompt
 
-antigen apply
+zplug load
 # }}}
+fpath+=~/.zfunc
+fpath+=~/.oh-my-zsh/completions
 
 # Source the prompt {{{
-#-------------------------------------------------------------------------------
 if [[ ! -n "$ZSHRUN" ]]; then
     source $HOME/dotfiles/zsh/zsh_prompt
 fi
-# Precmd functions local array variable <<2
-#-------------------------------------------------------------------------------
-local -a precmd_functions
-# >>2
-# Precmd functions <<2
-#------------------------------------------------------------------------------
-# Run precmd functions so we get our pimped out prompt
-#------------------------------------------------------------------------------
-precmd_functions=( precmd_prompt )
-# >>2
+add-zsh-hook precmd precmd_prompt
 # }}}
 
 # General Settings {{{
 # Autoload tab completion {{{
 #-------------------------------------------------------------------------------
+autoload bashcompinit
+bashcompinit
 autoload -U compinit
 compinit -C
 # }}}
@@ -142,10 +139,6 @@ export KEYTIMEOUT=1
 # }}}
 # }}}
 
-# if [ -n "$VIRTUAL_ENV" ]; then
-#   ."$VIRTUAL_ENV/bin/activate"
-# fi
-
 # Aliases {{{
 alias rm="rm -i"
 alias l="ls -CF"
@@ -154,84 +147,50 @@ alias vim="nvim"
 alias chrome="/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome"
 alias hstart="/usr/local/cloudera/sbin/start-dfs.sh;/usr/local/cloudera/sbin/start-yarn.sh"
 alias hstop="/usr/local/cloudera/sbin/stop-yarn.sh;/usr/local/cloudera/sbin/stop-dfs.sh"
+alias fix='echo -e "\033c"'
+alias kc="kubectl"
+alias kcgpa="kubectl get pods --all-namespaces"
 # }}}
 
-# Functions {{{
-# Workon virtualenv {{{
-# [[ -a /usr/local/bin/virtualenvwrapper.sh ]] && source /usr/local/bin/virtualenvwrapper.sh
-#
-# workon_virtualenv() {
-#   if [[ -d .git ]]; then
-#     VENV_CUR_DIR="${PWD##*/}"
-#     if [[ -a ~/.virtualenvs/$VENV_CUR_DIR ]]; then
-#       deactivate > /dev/null 2>&1
-#       source ~/.virtualenvs/$VENV_CUR_DIR/bin/activate
-#     fi
-#   fi
-# }
-# }}}
-# Run virtual environment functions on cd {{{
-# cd() {
-#   builtin cd "$@"
-#   workon_virtualenv
-# }
-# }}}
-# }}}
-
-# /usr/local/opt/erlang/lib/erlang/man
-#
 autoload -U edit-command-line
 zle -N edit-command-line
 bindkey -M vicmd v edit-command-line
 
+# environment varaibles {{{
 if [ -f ~/.env ]; then
   source ~/.env
 fi
+# }}}
 
 # rbenv {{{
 eval "$(rbenv init -)"
 # }}}
 
-#export http_proxy=http://localhost:3128
-#export https_proxy=http://localhost:3128
-#export HTTP_PROXY=http://localhost:3128
-#export HTTPS_PROXY=http://localhost:3128
-#export NO_PROXY=localhost,127.0.0.1,0.0.0.0
-#export no_proxy=localhost,127.0.0.1,0.0.0.0
 export GOPATH=$HOME/go
 
-wlssh () {
-  clientid="$1"
-  clientenv="$2"
-  ip="${@:3}"
-  if [[ -z $clientid || -z $clientenv || -z $ip ]]
-  then
-          echo 'usage: wlssh <clientid> <envname> <ip>'
-          return
-  fi
-  ssh-add -D
-  ssh-add -K ~/.ssh/id_rsa
-  ssh-add ~/.ssh/$1-$2-provisioning.pem
-  ssh -AJ vpn_$clientid\_$clientenv ubuntu@$ip
-}
+PATH="~/Library/Python/3.8/bin:~/Library/Python/2.7/bin:~/go/bin:$(go env GOBIN):$PATH"
+# TODO
+export PATH="${PATH}:${HOME}/.krew/bin"
+# TODO
+export PATH=$PATH:/usr/local/kubebuilder/bin
+export PATH=$PATH:/usr/local/kubectx/bin
+export PATH=$PATH:~/.cargo/bin
 
-wlcssh () {
-  clientid="$1"
-  clientenv="$2"
-  ips="${@:3}"
-  if [[ -z $clientid || -z $clientenv || -z $ips ]]
-  then
-          echo 'usage: wlcssh <clientid> <envname> <ips>'
-          return
-  fi
-  ssh-add -D
-  ssh-add -K ~/.ssh/id_rsa
-  ssh-add ~/.ssh/$clientid-$clientenv-provisioning.pem
-  eval "csshX -l ubuntu --ssh_args \"-J openvpnas@vpn.$clientenv.$clientid.weblinc.com -o StrictHostKeyChecking=no\" $ips"
-}
-
+# Node version manager {{{
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+# }}}
+
+GPG_TTY=$(tty)
+export GPG_TTY
+
+source <(kubectl completion zsh)
+complete -F __start_kubectl kc
+
+# TODO fixes ctrl-e ctrl-a
+bindkey -e
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+eval "$(direnv hook zsh)"
