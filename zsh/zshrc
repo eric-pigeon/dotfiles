@@ -184,6 +184,7 @@ export NVM_DIR="$HOME/.nvm"
 
 GPG_TTY=$(tty)
 export GPG_TTY
+export CLICOLOR=1
 
 source <(kubectl completion zsh)
 complete -F __start_kubectl kc
