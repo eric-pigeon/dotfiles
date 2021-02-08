@@ -194,3 +194,4 @@ bindkey -e
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 eval "$(direnv hook zsh)"
+export PATH="/usr/local/sbin:$PATH"

@@ -37,6 +37,7 @@ Plug 'tyok/nerdtree-ack', { 'on': 'NERDTreeToggle' }
 Plug 'vim-ruby/vim-ruby'
 Plug 'tpope/vim-rails'
 Plug 'bruno-/vim-ruby-fold'
+Plug 'joker1007/vim-ruby-heredoc-syntax'
 " }}}
 
 " JSON {{{
@@ -66,10 +67,6 @@ Plug 'drewtempelmeyer/palenight.vim'
 Plug 'elixir-editors/vim-elixir'
 " }}}
 
-" graphQl {{{
-Plug 'jparise/vim-graphql'
-" }}}
-
 " mustache {{{
 Plug 'mustache/vim-mustache-handlebars'
 " }}}
@@ -80,6 +77,20 @@ Plug 'cespare/vim-toml'
 
 " rust {{{
 Plug 'rust-lang/rust.vim'
+" }}}
+
+" javascript/typescript/jsx/graphql {{{
+Plug 'pangloss/vim-javascript'    " JavaScript support
+Plug 'leafgarland/typescript-vim' " TypeScript syntax
+Plug 'maxmellon/vim-jsx-pretty'   " JS and JSX syntax
+Plug 'jparise/vim-graphql'        " GraphQL syntax
+" }}}
+
+" terraform {{{
+Plug 'hashivim/vim-terraform'
+let g:terraform_fmt_on_save=1
+let g:terraform_align=1
+let g:terraform_fold_sections=1
 " }}}
 
 call plug#end()
