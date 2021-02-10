@@ -1,37 +1,35 @@
 #!/bin/zsh
 # vim: set foldlevel=0 foldmethod=marker:
 
+# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
+# Initialization code that may require console input (password prompts, [y/n]
+# confirmations, etc.) must go above this block; everything else may go below.
+if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+fi
+
 # zplugin {{{
 export ZPLUG_HOME=/usr/local/opt/zplug
 source $ZPLUG_HOME/init.zsh
 
-zplug "plugins/git", from:oh-my-zsh
-zplug "plugins/ruby", from:oh-my-zsh
-zplug "plugins/rails", from:oh-my-zsh
-zplug "plugins/gem", from:oh-my-zsh
-zplug "plugins/tmuxinator", from:oh-my-zsh
-zplug "plugins/docker", from:oh-my-zsh
-zplug "plugins/docker-compose", from:oh-my-zsh
+# TODO zplug "plugins/ruby", from:oh-my-zsh
+# TODO zplug "plugins/rails", from:oh-my-zsh
+# TODO zplug "plugins/gem", from:oh-my-zsh
+# TODO zplug "plugins/tmuxinator", from:oh-my-zsh
+# TODO zplug "plugins/docker", from:oh-my-zsh
+# TODO zplug "plugins/docker-compose", from:oh-my-zsh
 
-zplug zsh-users/zsh-syntax-highlighting
-zplug zsh-users/zsh-completions
+# TODO zplug zsh-users/zsh-syntax-highlighting
+# TODO zplug zsh-users/zsh-completions
 
 zplug chrissicool/zsh-256color
-
-# k8s prompt
-zplug superbrothers/zsh-kubectl-prompt
+zplug romkatv/powerlevel10k, as:theme, depth:1
 
 zplug load
 # }}}
+
 fpath+=~/.zfunc
 fpath+=~/.oh-my-zsh/completions
-
-# Source the prompt {{{
-if [[ ! -n "$ZSHRUN" ]]; then
-    source $HOME/dotfiles/zsh/zsh_prompt
-fi
-add-zsh-hook precmd precmd_prompt
-# }}}
 
 # General Settings {{{
 # Autoload tab completion {{{
@@ -64,37 +62,37 @@ setopt  noclobber
 # completion is attempted. The effect is to make the alias a distinct command
 # for completion purposes.
 setopt  complete_aliases
-# Treat the #, ~ and ^ characters as part of patterns for filename
-# generation, etc.  (An initial unquoted `~' always produces named directory
-# expansion.)
-setopt  extended_glob
-# If a new command line being added to the history list duplicates an older one,
-# the older command is removed from the list (even if it is not the previous event).
-setopt  hist_ignore_all_dups
-#  Remove command lines from the history list when the first character on the line
-#  is a space, or when one of the expanded aliases contains a leading space.
-setopt  hist_ignore_space
-# This  option  both  imports new commands from the history file, and also
-# causes your typed commands to be appended to the history file
-setopt  share_history
-setopt  noflowcontrol
-# When listing files that are possible completions, show the type of each file
-# with a trailing identifying mark.
-setopt  list_types
-# Append a trailing / to all directory names resulting from filename
-# generation (globbing).
-setopt  mark_dirs
-# Perform a path search even on command names with slashes in them.
-# Thus if /usr/local/bin is in the user's path, and he or she types
-# X11/xinit, the  command /usr/local/bin/X11/xinit will be executed
-# (assuming it exists).
-setopt  path_dirs
-# If set, `%' is treated specially in prompt expansion.
-setopt  prompt_percent
-# If set, parameter expansion, command substitution and arithmetic
-# expansion are performed in prompts.
-# Substitutions within prompts do not affect the command status.
-setopt  prompt_subst
+## TODO # Treat the #, ~ and ^ characters as part of patterns for filename
+## TODO # generation, etc.  (An initial unquoted `~' always produces named directory
+## TODO # expansion.)
+## TODO setopt  extended_glob
+## TODO # If a new command line being added to the history list duplicates an older one,
+## TODO # the older command is removed from the list (even if it is not the previous event).
+## TODO setopt  hist_ignore_all_dups
+## TODO #  Remove command lines from the history list when the first character on the line
+## TODO #  is a space, or when one of the expanded aliases contains a leading space.
+## TODO setopt  hist_ignore_space
+## TODO # This  option  both  imports new commands from the history file, and also
+## TODO # causes your typed commands to be appended to the history file
+## TODO setopt  share_history
+## TODO setopt  noflowcontrol
+## TODO # When listing files that are possible completions, show the type of each file
+## TODO # with a trailing identifying mark.
+## TODO setopt  list_types
+## TODO # Append a trailing / to all directory names resulting from filename
+## TODO # generation (globbing).
+## TODO setopt  mark_dirs
+## TODO # Perform a path search even on command names with slashes in them.
+## TODO # Thus if /usr/local/bin is in the user's path, and he or she types
+## TODO # X11/xinit, the  command /usr/local/bin/X11/xinit will be executed
+## TODO # (assuming it exists).
+## TODO setopt  path_dirs
+## TODO # If set, `%' is treated specially in prompt expansion.
+## TODO setopt  prompt_percent
+## TODO # If set, parameter expansion, command substitution and arithmetic
+## TODO # expansion are performed in prompts.
+## TODO # Substitutions within prompts do not affect the command status.
+## TODO setopt  prompt_subst
 # }}}
 # History settings {{{
 #-------------------------------------------------------------------------------
@@ -113,11 +111,6 @@ export LC_COLLATE=C
 # Set grepoptions {{{
 #-------------------------------------------------------------------------------
 export GREP_OPTIONS='--color=auto'
-# }}}
-# Use the correct ctags {{{
-#-------------------------------------------------------------------------------
-# PATH="/usr/local/cloudera/bin:/usr/local/cloudera-hive/bin:/usr/local/sbin:/usr/local/bin:$PATH"
-# PATH="/usr/local/cloudera/bin:/usr/local/cloudera-hive/bin:/usr/local/sbin:/usr/local/bin:$PATH"
 # }}}
 # Editor and display configurations {{{
 #-------------------------------------------------------------------------------
@@ -152,9 +145,11 @@ alias kc="kubectl"
 alias kcgpa="kubectl get pods --all-namespaces"
 # }}}
 
-autoload -U edit-command-line
-zle -N edit-command-line
-bindkey -M vicmd v edit-command-line
+bindkey -e
+# TODO 
+# autoload -U edit-command-line
+# zle -N edit-command-line
+# bindkey -M vicmd v edit-command-line
 
 # environment varaibles {{{
 if [ -f ~/.env ]; then
@@ -162,16 +157,11 @@ if [ -f ~/.env ]; then
 fi
 # }}}
 
-# rbenv {{{
-eval "$(rbenv init -)"
-# }}}
-
 export GOPATH=$HOME/go
 
-PATH="~/Library/Python/3.8/bin:~/Library/Python/2.7/bin:~/go/bin:$(go env GOBIN):$PATH"
 # TODO
+export PATH="~/Library/Python/3.8/bin:~/Library/Python/2.7/bin:~/go/bin:$(go env GOBIN):$PATH"
 export PATH="${PATH}:${HOME}/.krew/bin"
-# TODO
 export PATH=$PATH:/usr/local/kubebuilder/bin
 export PATH=$PATH:/usr/local/kubectx/bin
 export PATH=$PATH:~/.cargo/bin
@@ -182,17 +172,19 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 # }}}
 
+# rbenv {{{
+eval "$(rbenv init -)"
+# }}}
+
 GPG_TTY=$(tty)
 export GPG_TTY
 export CLICOLOR=1
-
-source <(kubectl completion zsh)
-complete -F __start_kubectl kc
-
-# TODO fixes ctrl-e ctrl-a
-bindkey -e
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 eval "$(direnv hook zsh)"
 export PATH="/usr/local/sbin:$PATH"
+
+# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
+[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+(( ! ${+functions[p10k]} )) || p10k finalize
