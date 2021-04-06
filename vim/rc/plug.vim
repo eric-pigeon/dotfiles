@@ -57,10 +57,11 @@ end
 " }}}
 
 " Color Schemes {{{
-Plug 'eric-pigeon/vim-256-color-schemes' " A variety of terminal based colorschemes
-Plug 'altercation/vim-colors-solarized'
-Plug 'arcticicestudio/nord-vim'
+" Plug 'eric-pigeon/vim-256-color-schemes' " A variety of terminal based colorschemes
+" Plug 'altercation/vim-colors-solarized'
+" Plug 'arcticicestudio/nord-vim'
 Plug 'drewtempelmeyer/palenight.vim'
+" Plug 'dracula/vim', { 'as': 'dracula' }
 " }}}
 
 " Elixir {{{
