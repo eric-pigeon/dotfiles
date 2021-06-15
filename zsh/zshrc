@@ -21,7 +21,7 @@ source $ZPLUG_HOME/init.zsh
 # TODO zplug "plugins/docker-compose", from:oh-my-zsh
 
 # TODO zplug zsh-users/zsh-syntax-highlighting
-# TODO zplug zsh-users/zsh-completions
+zplug zsh-users/zsh-completions
 
 zplug chrissicool/zsh-256color
 zplug romkatv/powerlevel10k, as:theme, depth:1

@@ -144,6 +144,9 @@ map <Leader>tm :tabmove
 set foldlevelstart=2
 set foldopen=insert,jump,mark,percent,tag,search
 
+set foldmethod=expr
+set foldexpr=nvim_treesitter#foldexpr()
+
 " tab to toggle foldes
 nnoremap <silent> <Tab> @=(foldlevel('.')?'za':"\<Tab>")<CR>
 " create fold with tab
@@ -208,3 +211,19 @@ endfunc
 " }}}
 
 hi Normal guibg=NONE ctermbg=NONE
+
+" TreeSitter ------------------------------------------------------------------- {{{
+lua <<EOF
+require'nvim-treesitter.configs'.setup {
+  ensure_installed = "maintained", -- one of "all", "maintained" (parsers with maintainers), or a list of languages
+  ignore_install = { }, -- List of parsers to ignore installing
+  highlight = {
+    enable = true,              -- false will disable the whole extension
+    disable = { },  -- list of language that will be disabled
+  },
+  indent = {
+    enable = true,
+  }
+}
+EOF
+" }}}

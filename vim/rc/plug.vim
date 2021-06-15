@@ -17,6 +17,7 @@ Plug 'mileszs/ack.vim'
 Plug 'janko/vim-test'
 Plug 'jgdavey/tslime.vim'
 Plug 'towolf/vim-helm'
+Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}  " We recommend updating the parsers on update
 " }}}
 
 " Code Completion {{{
