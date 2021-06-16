@@ -1,30 +1,5 @@
 " vim: foldmethod=marker
 
-" Ack.vim {{{
-if executable('ag')
-  let g:ackprg = 'ag --vimgrep'
-endif
-" }}}
-
-" Ale {{{
-let g:ale_fixers = { 'java': ['google_java_format']}
-let g:ale_java_javac_sourcepath = [
-    \ 'target/generated-sources'
-  \ ]
-" }}}
-
-" NerdTree {{{
-  let g:NERDTreeWinSize = 40
-  let g:NERDTreeShowHidden=1
-  let g:NERDTreeQuitOnOpen=0
-  let g:NERDTreeShowLineNumbers=1
-  let g:NERDTreeChDirMode=0
-  let g:NERDTreeShowBookmarks=1
-  let g:NERDTreeIgnore=['\.git','\.hg','\.pyc$']
-  nnoremap <Leader>nt :NERDTreeToggle<CR>
-  nnoremap <Leader>no :NERDTreeFind<CR>
-" }}}
-
 " FZF {{{
 nnoremap [fzf] <nop>
 nmap <space> [fzf]
@@ -152,19 +127,6 @@ endfu
 
 " }}}
 
-" test.vim {{{
-let test#strategy = "tslime"
-let g:test#preserve_screen = 1
-map <Leader>rt :TestFile<CR>
-map <Leader>rs :TestNearest<CR>
-map <Leader>rl :TestLast<CR>
-map <Leader>ra :TestSuite<CR>
-" }}}
-
-" tslime.vim {{{
-let g:tslime_always_current_session = 1
-" }}}
-
 " vim-easy-align {{{
 vmap <Enter> <Plug>(EasyAlign)
 nmap ga <Plug>(EasyAlign)
@@ -179,25 +141,12 @@ let g:indentLine_bufNameExclude = ['_.*', 'NERD_tree.*', 'start*']
 let g:indentLine_fileTypeExclude = ['text']
 " }}}
 
-" Gundo {{{
-nnoremap <Leader>ud :GundoToggle<CR>
-" }}}
-
 " vim-airline {{{
 let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#left_sep=' '
 let g:airline#extensions#tabline#left_alt_sep='¦'
 let g:airline#extensions#whitespace#skip_indent_check_ft =
    \  {'go': ['mixed-indent-file']}
-" }}}
-
-" vim-go {{{
-let g:go_fmt_command = "goimports"
-" }}}
-
-" rust {{{
-let g:rust_fold = 2
-let g:rustfmt_autosave = 1
 " }}}
 
 " coc {{{
@@ -341,22 +290,4 @@ command! -nargs=0 OR   :call     CocAction('runCommand', 'editor.action.organize
 " NOTE: Please see `:h coc-status` for integrations with external plugins that
 " provide custom statusline: lightline.vim, vim-airline.
 set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
-
-"" Mappings for CoCList
-"" Show all diagnostics.
-"nnoremap <silent><nowait> <space>a  :<C-u>CocList diagnostics<cr>
-"" Manage extensions.
-"nnoremap <silent><nowait> <space>e  :<C-u>CocList extensions<cr>
-"" Show commands.
-"nnoremap <silent><nowait> <space>c  :<C-u>CocList commands<cr>
-"" Find symbol of current document.
-"nnoremap <silent><nowait> <space>o  :<C-u>CocList outline<cr>
-"" Search workspace symbols.
-"nnoremap <silent><nowait> <space>s  :<C-u>CocList -I symbols<cr>
-"" Do default action for next item.
-"nnoremap <silent><nowait> <space>j  :<C-u>CocNext<CR>
-"" Do default action for previous item.
-"nnoremap <silent><nowait> <space>k  :<C-u>CocPrev<CR>
-"" Resume latest coc list.
-"nnoremap <silent><nowait> <space>p  :<C-u>CocListResume<CR>
 " }}}
