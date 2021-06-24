@@ -1,7 +1,8 @@
 .DS_STORE
+
 vim/bundle/
 vim/tmp/
 vim/.netrwhist
 tmux/resurrect/
-zsh/antigen/
 tmux/plugins/
+zsh/.zcompdump

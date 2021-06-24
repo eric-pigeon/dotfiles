@@ -23,7 +23,7 @@ local function t(str)
 end
 
 local function source_rc(path)
-  vim.cmd('source '..vim.fn.fnameescape(vim.fn.expand('~/.vim/rc/'..path)))
+  vim.cmd('source '..vim.fn.fnameescape(vim.fn.expand('~/.config/nvim/rc/'..path)))
 end
 
 require('plugins')
