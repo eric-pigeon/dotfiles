@@ -10,11 +10,12 @@
 # to the user's home directory starting with `~/`.
 import:
   - ~/.config/alacritty/alacritty-master/dracula.yml
+  - ~/.config/alacritty/xdg_env.yml
 
 # Any items in the `env` entry below will be added as
 # environment variables. Some entries may override variables
 # set by alacritty itself.
-#env:
+# env:
   # TERM variable
   #
   # This value is used to set the `$TERM` environment variable for

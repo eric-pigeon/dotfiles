@@ -12,7 +12,6 @@ fi
 export ZPLUG_HOME=/usr/local/opt/zplug
 source $ZPLUG_HOME/init.zsh
 
-
 # TODO zplug "plugins/ruby", from:oh-my-zsh
 # TODO zplug "plugins/rails", from:oh-my-zsh
 # TODO zplug "plugins/gem", from:oh-my-zsh
@@ -166,12 +165,6 @@ export PATH="${PATH}:${HOME}/.krew/bin"
 export PATH=$PATH:/usr/local/kubebuilder/bin
 export PATH=$PATH:/usr/local/kubectx/bin
 export PATH=$PATH:~/.cargo/bin
-
-# Node version manager {{{
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
-# }}}
 
 # rbenv {{{
 eval "$(rbenv init -)"
