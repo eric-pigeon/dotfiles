@@ -109,11 +109,11 @@ vim.cmd[[set nowritebackup]]
 vim.cmd[[set undofile]]
 vim.cmd[[set undoreload=10000]]
 -- keep swap files in one location
-vim.cmd[[set directory=$HOME/.vim/tmp/swap//]]
+vim.cmd[[set directory=$XDG_STATE_HOME/nvim/swap/]]
 -- undo files location
-vim.cmd[[set undodir=$HOME/.vim/tmp/undo//]]
+vim.cmd[[set undodir=$XDG_STATE_HOME/nvim/undo/]]
 --  backups location
-vim.cmd[[set backupdir=$HOME/.vim/tmp/backup//]]
+vim.cmd[[set backupdir=$XDG_STATE_HOME/nvim/backup/]]
 -- }}}
 
 -- Searching and Movement {{{
@@ -135,7 +135,7 @@ vim.o.virtualedit = "block"
 vim.cmd([[autocmd CursorMoved * if getfsize(@%) < 1000000 | silent! exe printf('match SpellLocal /\<%s\>/', expand('<cword>')) | endif]])
 vim.cmd([[hi CursorLine cterm=NONE ctermfg=NONE ctermbg=235 guibg=#222222]])
 -- }}}
---
+
 -- WildMenu Completion {{{
 -- enhanced command line completion.
 vim.o.wildmenu = true
