@@ -1,8 +1,6 @@
 .DS_STORE
 
-vim/bundle/
-vim/tmp/
-vim/.netrwhist
-tmux/resurrect/
+nvim/.netrwhist
+nvim/plugin/packer_compiled.vim
 tmux/plugins/
 zsh/.zcompdump
