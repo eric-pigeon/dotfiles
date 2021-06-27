@@ -171,7 +171,7 @@ GPG_TTY=$(tty)
 export GPG_TTY
 export CLICOLOR=1
 
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+[ -f ~/.config/zsh/.fzf.zsh ] && source ~/.config/zsh/.fzf.zsh
 
 eval "$(direnv hook zsh)"
 export PATH="/usr/local/sbin:$PATH"
