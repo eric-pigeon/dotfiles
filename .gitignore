@@ -1,5 +1,6 @@
 .DS_STORE
 
+alacritty/xdg_env.yml
 nvim/.netrwhist
 nvim/plugin/packer_compiled.vim
 tmux/plugins/
