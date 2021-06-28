@@ -6,7 +6,7 @@ require('packer').startup(function(use)
   use { 'wbthomason/packer.nvim', opt = true }
   use { 'bkad/CamelCaseMotion' }
   use { '/usr/local/opt/fzf' }
-  use { '/Users/epigeon/Documents/Projects/Vim/fzf.vim' }
+  use { 'eric-pigeon/fzf.vim' }
   use { 'bling/vim-airline' }
   use { 'dense-analysis/ale' }
   -- Simple easy to use alignment plugin
