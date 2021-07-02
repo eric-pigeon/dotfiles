@@ -5,8 +5,6 @@ require('packer').startup(function(use)
   -- Global {{{
   use { 'wbthomason/packer.nvim', opt = true }
   use { 'bkad/CamelCaseMotion' }
-  use { '/usr/local/opt/fzf' }
-  use { 'eric-pigeon/fzf.vim' }
   use { 'bling/vim-airline' }
  
   use { 'dense-analysis/ale' }
@@ -26,7 +24,7 @@ require('packer').startup(function(use)
   use { 'neovim/nvim-lspconfig' }
   -- use 'hrsh7th/nvim-compe'
   -- use 'ludovicchabant/vim-gutentags'
-  -- use {'nvim-telescope/telescope.nvim', requires = {{'nvim-lua/popup.nvim'}, {'nvim-lua/plenary.nvim'}} }
+  use {'nvim-telescope/telescope.nvim', requires = {{'nvim-lua/popup.nvim'}, {'nvim-lua/plenary.nvim'}} }
   -- use 'itchyny/lightline.vim'
   -- use { 'lukas-reineke/indent-blankline.nvim', branch="lua" }
   -- use 'lewis6991/gitsigns.nvim'
@@ -137,4 +135,39 @@ local servers = { 'pyright', 'tsserver', 'rust_analyzer' }
 for _, lsp in ipairs(servers) do
   nvim_lsp[lsp].setup { on_attach = on_attach }
 end
+-- }}}
+
+-- telescope.vim {{{
+require('telescope').setup {
+  defaults = {
+    results_title = false,
+    preview_title = false,
+    sorting_strategy = "ascending",
+    layout_config = {
+      preview_cutoff = 1, -- Preview should always show (unless previewer = false)
+      horizontal = {
+        prompt_position = "top",
+      },
+      width = 0.9,
+      height = 0.7,
+    },
+    border = true,
+    borderchars = {
+      "z",
+      -- { "─", "│", "─", "│", "╭", "╮", "╯", "╰"},
+      prompt = {"─", "│", " ", "│", "╭", "╮", "│", "│"},
+      results = {" ", "│", "─", "│", "│", "│", "╯", "╰"},
+      preview = { "─", "│", "─", "│", "╭", "╮", "╯", "╰"},
+    },
+    generic_sorter =  require'telescope.sorters'.get_fzy_sorter,
+    file_sorter =  require'telescope.sorters'.get_fzy_sorter,
+  }
+}
+vim.cmd([[au VimEnter * highlight TelescopeBorder guifg=#888888]])
+vim.api.nvim_set_keymap('n', '[telescope]', '<nop>', { noremap = true })
+vim.api.nvim_set_keymap('n', t'<space>', '[telescope]', {})
+vim.api.nvim_set_keymap('n', '[telescope]f', [[<cmd>lua require('telescope.builtin').find_files()<cr>]], { silent = true })
+vim.api.nvim_set_keymap('n', '[telescope]l', [[<cmd>lua require('telescope.builtin').current_buffer_fuzzy_find()<cr>]], { silent = true })
+vim.api.nvim_set_keymap('n', '[telescope]b', [[<cmd>lua require('telescope.builtin').buffers()<cr>]], { silent = true })
+vim.api.nvim_set_keymap('n', '[telescope]s', [[<cmd>lua require('telescope.builtin').live_grep()<cr>]], { noremap = true, silent = true})
 -- }}}
