@@ -3,5 +3,6 @@
 alacritty/xdg_env.yml
 nvim/.netrwhist
 nvim/plugin/packer_compiled.vim
+nvim/plugin/packer_compiled.lua
 tmux/plugins/
 zsh/.zcompdump

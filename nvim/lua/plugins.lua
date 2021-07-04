@@ -8,6 +8,7 @@ require('packer').startup(function(use)
   use { '/usr/local/opt/fzf' }
   use { 'eric-pigeon/fzf.vim' }
   use { 'bling/vim-airline' }
+ 
   use { 'dense-analysis/ale' }
   -- Simple easy to use alignment plugin
   use { 'junegunn/vim-easy-align' }
@@ -19,7 +20,7 @@ require('packer').startup(function(use)
   use { 'janko/vim-test' }
   use { 'jgdavey/tslime.vim' }
   -- all the language packs
-  use 'sheerun/vim-polyglot'
+  use { 'sheerun/vim-polyglot' }
   use { 'nvim-treesitter/nvim-treesitter', run = ':TSUpdate' }
   use { 'scr1pt0r/crease.vim' }
   use { 'neovim/nvim-lspconfig' }
@@ -32,12 +33,12 @@ require('packer').startup(function(use)
   -- }}}
 
   -- Git {{{
-  use 'tpope/vim-fugitive'
+  use { 'tpope/vim-fugitive' }
   -- }}}
 
   -- NerdTree {{{
-  use {'scrooloose/nerdtree', cmd =  'NERDTreeToggle' }
-  use {'tyok/nerdtree-ack', cmd = 'NERDTreeToggle' }
+  use { 'scrooloose/nerdtree', cmd = 'NERDTreeToggle' }
+  use { 'tyok/nerdtree-ack', cmd = 'NERDTreeToggle' }
   -- }}}
 
   -- Code Completion {{{
