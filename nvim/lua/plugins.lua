@@ -14,7 +14,6 @@ require('packer').startup(function(use)
   use { 'sjl/gundo.vim' }
   use { 'mhinz/vim-hugefile' }
   use { 'Yggdroot/indentLine' }
-  use { 'mileszs/ack.vim' }
   use { 'janko/vim-test' }
   use { 'jgdavey/tslime.vim' }
   -- all the language packs
@@ -51,12 +50,6 @@ require('packer').startup(function(use)
   -- Plug 'dracula/vim', { 'as': 'dracula' }
   -- }}}
 end)
--- }}}
-
---- Ack.vim {{{
-if vim.fn.executable('ag') == 1 then
-  vim.g.ackprg = 'ag --vimgrep'
-end
 -- }}}
 
 local function t(str)
