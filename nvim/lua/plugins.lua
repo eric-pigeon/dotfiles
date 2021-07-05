@@ -123,7 +123,13 @@ local on_attach = function(_client, bufnr)
 --   vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>q', '<cmd>lua vim.lsp.diagnostic.set_loclist()<CR>', opts)
 end
 
-local servers = { 'solargraph', 'pyright', 'tsserver', 'rust_analyzer' }
+local servers = {
+  'gopls', -- go
+  'pyright', -- python
+  'rust_analyzer', -- rust
+  'solargraph', -- ruby
+  'tsserver', -- typescript
+}
 
 for _, lsp in ipairs(servers) do
   nvim_lsp[lsp].setup { on_attach = on_attach }
