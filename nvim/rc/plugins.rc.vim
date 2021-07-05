@@ -1,10 +1,5 @@
 " vim: foldmethod=marker
 
-" vim-easy-align {{{
-vmap <Enter> <Plug>(EasyAlign)
-nmap ga <Plug>(EasyAlign)
-" }}}
-
 " indentLine {{{
 nnoremap <Leader>ig :IndentLinesToggle<CR>
 let g:indentLine_enabled = 0

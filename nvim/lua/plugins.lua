@@ -176,3 +176,7 @@ vim.g.lightline = {
   component_function = { gitbranch = 'fugitive#head', };
 }
 -- }}}
+
+-- easy align {{{
+vim.api.nvim_set_keymap('v', t'<Enter>', '<Plug>(EasyAlign)', { })
+-- }}}
