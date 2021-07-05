@@ -12,14 +12,9 @@ fi
 export ZPLUG_HOME=/usr/local/opt/zplug
 source $ZPLUG_HOME/init.zsh
 
-# TODO zplug "plugins/ruby", from:oh-my-zsh
-# TODO zplug "plugins/rails", from:oh-my-zsh
-# TODO zplug "plugins/gem", from:oh-my-zsh
-# TODO zplug "plugins/tmuxinator", from:oh-my-zsh
-# TODO zplug "plugins/docker", from:oh-my-zsh
-# TODO zplug "plugins/docker-compose", from:oh-my-zsh
+zplug "plugins/docker", from:oh-my-zsh
 
-# TODO zplug zsh-users/zsh-syntax-highlighting
+zplug zsh-users/zsh-syntax-highlighting
 zplug zsh-users/zsh-completions
 
 zplug chrissicool/zsh-256color
@@ -35,10 +30,13 @@ autoload bashcompinit
 bashcompinit
 autoload -U compinit
 compinit -C
+fpath+="${ZDOTDIR}/.zfunc"
 # }}}
 # Modify default zsh directory coloring on ls commands {{{
 #-------------------------------------------------------------------------------
 export LSCOLORS=gxfxcxdxbxegedabagacad
+export GPG_TTY=$TTY
+export CLICOLOR=1
 # }}}
 # Completion settings {{{
 #-------------------------------------------------------------------------------
@@ -46,6 +44,8 @@ zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}' 'r:|[._-]=* r:|=*' 'l:
 zstyle ':completion:*' list-colors "$LS_COLORS"
 zstyle -e ':completion:*:(ssh|scp|sshfs|ping|telnet|nc|rsync):*' hosts '
     reply=( ${=${${(M)${(f)"$(<~/.ssh/config)"}:#Host*}#Host }:#*\**} )'
+zstyle ':completion:*:*:docker:*' option-stacking yes
+zstyle ':completion:*:*:docker-*:*' option-stacking yes
 # }}}
 # Set the desired setup options man zshoptions {{{
 #-------------------------------------------------------------------------------
@@ -119,9 +119,6 @@ export PAGER="less $LESS"
 export MANPAGER=$PAGER
 export GIT_PAGER=$PAGER
 # }}}
-# Specify virtualenv directory {{{
-export WORKON_HOME=$HOME/.virtualenvs
-# }}}
 # Eliminate lag between transition from normal/insert mode {{{
 #-------------------------------------------------------------------------------
 # If this causes issue with other shell commands it can be raised default is 4
@@ -157,19 +154,18 @@ fi
 export GOPATH=$HOME/go
 
 # TODO
-export PATH="~/Library/Python/3.8/bin:~/Library/Python/2.7/bin:~/go/bin:$(go env GOBIN):$PATH"
+export PATH="~/Library/Python/3.9/bin:~/go/bin:$(go env GOBIN):$PATH"
 export PATH="${PATH}:${HOME}/.krew/bin"
 export PATH=$PATH:/usr/local/kubebuilder/bin
 export PATH=$PATH:/usr/local/kubectx/bin
 export PATH=$PATH:~/.cargo/bin
 
-# rbenv {{{
-eval "$(rbenv init -)"
+# ruby settings {{{
+if (( $+commands[rbenev] )); then
+  eval "$(rbenv init -)"
+fi
+export SOLARGRAPH_CACHE=${XDG_CACHE_HOME}
 # }}}
-
-GPG_TTY=$(tty)
-export GPG_TTY
-export CLICOLOR=1
 
 [ -f ~/.config/zsh/.fzf.zsh ] && source ~/.config/zsh/.fzf.zsh
 
