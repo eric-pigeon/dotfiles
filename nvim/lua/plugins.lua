@@ -5,8 +5,8 @@ require('packer').startup(function(use)
   -- Global {{{
   use { 'wbthomason/packer.nvim', opt = true }
   use { 'bkad/CamelCaseMotion' }
-  use { 'bling/vim-airline' }
- 
+  use { 'itchyny/lightline.vim' }
+
   use { 'dense-analysis/ale' }
   -- Simple easy to use alignment plugin
   use { 'junegunn/vim-easy-align' }
@@ -163,4 +163,16 @@ vim.api.nvim_set_keymap('n', '[telescope]f', [[<cmd>lua require('telescope.built
 vim.api.nvim_set_keymap('n', '[telescope]l', [[<cmd>lua require('telescope.builtin').current_buffer_fuzzy_find()<cr>]], { silent = true })
 vim.api.nvim_set_keymap('n', '[telescope]b', [[<cmd>lua require('telescope.builtin').buffers()<cr>]], { silent = true })
 vim.api.nvim_set_keymap('n', '[telescope]s', [[<cmd>lua require('telescope.builtin').live_grep()<cr>]], { noremap = true, silent = true})
+-- }}}
+
+-- lightline {{{
+vim.g.lightline = {
+  colorscheme = 'palenight';
+  active = {
+    left = {
+      { 'mode', 'paste' }, { 'gitbranch', 'readonly', 'filename', 'modified' }
+    }
+  };
+  component_function = { gitbranch = 'fugitive#head', };
+}
 -- }}}

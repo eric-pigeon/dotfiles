@@ -14,14 +14,6 @@ let g:indentLine_bufNameExclude = ['_.*', 'NERD_tree.*', 'start*']
 let g:indentLine_fileTypeExclude = ['text']
 " }}}
 
-" vim-airline {{{
-let g:airline#extensions#tabline#enabled = 1
-let g:airline#extensions#tabline#left_sep=' '
-let g:airline#extensions#tabline#left_alt_sep='¦'
-let g:airline#extensions#whitespace#skip_indent_check_ft =
-   \  {'go': ['mixed-indent-file']}
-" }}}
-
 " coc {{{
 " Give more space for displaying messages.
 " set cmdheight=2

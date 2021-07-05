@@ -218,7 +218,6 @@ vim.api.nvim_set_keymap('n', 'zM', 'zM:echo &foldlevel<cr>', { noremap = true })
 -- Color Scheme {{{
 -- Set colorscheme (order is important here)
 vim.o.termguicolors = true
-vim.g.airline_theme = "palenight"
 vim.cmd[[colorscheme palenight]]
 -- }}}
 
