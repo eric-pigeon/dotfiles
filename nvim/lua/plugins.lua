@@ -24,7 +24,7 @@ require('packer').startup(function(use)
   -- use 'hrsh7th/nvim-compe'
   -- use 'ludovicchabant/vim-gutentags'
   use {'nvim-telescope/telescope.nvim', requires = {{'nvim-lua/popup.nvim'}, {'nvim-lua/plenary.nvim'}} }
-  -- use 'itchyny/lightline.vim'
+  use {'nvim-telescope/telescope-fzf-native.nvim', run = 'make' }
   -- use { 'lukas-reineke/indent-blankline.nvim', branch="lua" }
   -- use 'lewis6991/gitsigns.nvim'
   -- }}}
@@ -160,8 +160,19 @@ require('telescope').setup {
     },
     generic_sorter =  require'telescope.sorters'.get_fzy_sorter,
     file_sorter =  require'telescope.sorters'.get_fzy_sorter,
+  },
+  extensions = {
+    fzf = {
+      fuzzy = true,                    -- false will only do exact matching
+      override_generic_sorter = false, -- override the generic sorter
+      override_file_sorter = true,     -- override the file sorter
+      case_mode = "smart_case",        -- or "ignore_case" or "respect_case"
+                                       -- the default case_mode is "smart_case"
+    }
   }
 }
+require('telescope').load_extension('fzf')
+
 vim.cmd([[au VimEnter * highlight TelescopeBorder guifg=#888888]])
 vim.api.nvim_set_keymap('n', '[telescope]', '<nop>', { noremap = true })
 vim.api.nvim_set_keymap('n', t'<space>', '[telescope]', {})
