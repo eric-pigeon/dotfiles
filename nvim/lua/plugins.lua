@@ -46,7 +46,7 @@ require('packer').startup(function(use)
   -- Plug 'eric-pigeon/vim-256-color-schemes' " A variety of terminal based colorschemes
   -- Plug 'altercation/vim-colors-solarized'
   -- Plug 'arcticicestudio/nord-vim'
-  use 'drewtempelmeyer/palenight.vim'
+  use { 'drewtempelmeyer/palenight.vim' }
   -- Plug 'dracula/vim', { 'as': 'dracula' }
   -- }}}
 end)

@@ -9,6 +9,7 @@ let g:indentLine_bufNameExclude = ['_.*', 'NERD_tree.*', 'start*']
 let g:indentLine_fileTypeExclude = ['text']
 " }}}
 
+
 " coc {{{
 " Give more space for displaying messages.
 " set cmdheight=2
