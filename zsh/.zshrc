@@ -161,7 +161,7 @@ export PATH=$PATH:/usr/local/kubectx/bin
 export PATH=$PATH:~/.cargo/bin
 
 # ruby settings {{{
-if (( $+commands[rbenev] )); then
+if (( $+commands[rbenv] )); then
   eval "$(rbenv init -)"
 fi
 export SOLARGRAPH_CACHE=${XDG_CACHE_HOME}
