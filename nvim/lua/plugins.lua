@@ -7,7 +7,6 @@ require('packer').startup(function(use)
   use { 'bkad/CamelCaseMotion' }
   use { 'itchyny/lightline.vim' }
 
-  use { 'dense-analysis/ale' }
   -- Simple easy to use alignment plugin
   use { 'junegunn/vim-easy-align' }
   -- Visual undo
@@ -55,11 +54,6 @@ end)
 local function t(str)
   return vim.api.nvim_replace_termcodes(str, true, true, true)
 end
-
--- Ale {{{
-vim.g.ale_fixers = { java = { 'google_java_format' } }
-vim.g.ale_java_javac_sourcepath = { 'target/generated-sources' }
--- }}}
 
 -- test.vim {{{
 vim.g['test#strategy'] = 'tslime'
@@ -134,6 +128,32 @@ local servers = {
 for _, lsp in ipairs(servers) do
   nvim_lsp[lsp].setup { on_attach = on_attach }
 end
+
+local sumneko_root_path = vim.fn.getenv("HOME").."/.local/bin/lua-language-server"
+nvim_lsp.sumneko_lua.setup {
+  cmd = {sumneko_root_path.."/bin/macOS/lua-language-server", "-E", sumneko_root_path.."/main.lua" };
+  on_attach = on_attach,
+  settings = {
+    Lua = {
+      runtime = {
+        version = 'LuaJIT',
+        path = vim.split(package.path, ';'),
+      },
+      diagnostics = {
+        globals = {'vim'},
+      },
+      workspace = {
+        library = {
+          [vim.fn.expand('$VIMRUNTIME/lua')] = true,
+          [vim.fn.expand('$VIMRUNTIME/lua/vim/lsp')] = true,
+        },
+      },
+    },
+  },
+}
+
+-- Map :Format to vim.lsp.buf.formatting()
+vim.cmd([[ command! Format execute 'lua vim.lsp.buf.formatting()' ]])
 -- }}}
 
 -- telescope.vim {{{
