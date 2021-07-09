@@ -20,7 +20,6 @@ require('packer').startup(function(use)
   use { 'nvim-treesitter/nvim-treesitter', run = ':TSUpdate' }
   use { 'scr1pt0r/crease.vim' }
   use { 'neovim/nvim-lspconfig' }
-  -- use 'hrsh7th/nvim-compe'
   -- use 'ludovicchabant/vim-gutentags'
   use {'nvim-telescope/telescope.nvim', requires = {{'nvim-lua/popup.nvim'}, {'nvim-lua/plenary.nvim'}} }
   use {'nvim-telescope/telescope-fzf-native.nvim', run = 'make' }
@@ -38,7 +37,7 @@ require('packer').startup(function(use)
   -- }}}
 
   -- Code Completion {{{
-  use { 'neoclide/coc.nvim', branch = 'release' }
+  use { 'hrsh7th/nvim-compe' }
   -- }}}
 
   -- Color Schemes {{{
@@ -216,4 +215,65 @@ vim.g.lightline = {
 
 -- easy align {{{
 vim.api.nvim_set_keymap('v', t'<Enter>', '<Plug>(EasyAlign)', { })
+-- }}}
+
+-- compe {{{
+require'compe'.setup {
+  enabled = true;
+  autocomplete = true;
+  debug = false;
+  min_length = 1;
+  preselect = 'enable';
+  throttle_time = 80;
+  source_timeout = 200;
+  incomplete_delay = 400;
+  max_abbr_width = 100;
+  max_kind_width = 100;
+  max_menu_width = 100;
+  documentation = true;
+
+  source = {
+    path = true;
+    buffer = true;
+    calc = true;
+    vsnip = false;
+    nvim_lsp = true;
+    nvim_lua = true;
+    spell = true;
+    tags = false;
+    snippets_nvim = true;
+    treesitter = true;
+  };
+}
+
+local check_back_space = function()
+    local col = vim.fn.col('.') - 1
+    if col == 0 or vim.fn.getline('.'):sub(col, col):match('%s') then
+        return true
+    else
+        return false
+    end
+end
+
+_G.tab_complete = function()
+  if vim.fn.pumvisible() == 1 then
+    return t "<C-n>"
+  elseif check_back_space() then
+    return t "<Tab>"
+  else
+    return vim.fn['compe#complete']()
+  end
+end
+_G.s_tab_complete = function()
+  if vim.fn.pumvisible() == 1 then
+    return t "<C-p>"
+  else
+    return t "<S-Tab>"
+  end
+end
+
+vim.api.nvim_set_keymap("i", "<Tab>", "v:lua.tab_complete()", {expr = true})
+vim.api.nvim_set_keymap("s", "<Tab>", "v:lua.tab_complete()", {expr = true})
+vim.api.nvim_set_keymap("i", "<S-Tab>", "v:lua.s_tab_complete()", {expr = true})
+vim.api.nvim_set_keymap("s", "<S-Tab>", "v:lua.s_tab_complete()", {expr = true})
 -- }}}
