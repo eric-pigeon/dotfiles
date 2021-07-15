@@ -207,12 +207,6 @@ vim.api.nvim_set_keymap('n', 'zm', 'zm:echo &foldlevel<cr>', { noremap = true })
 vim.api.nvim_set_keymap('n', 'zR', 'zR:echo &foldlevel<cr>', { noremap = true })
 vim.api.nvim_set_keymap('n', 'zM', 'zM:echo &foldlevel<cr>', { noremap = true })
 
--- TODO
--- _G.MyFoldText2 = function()
---   local line = vim.fn.getline('v:foldstart')
---   local nucolwidth = vim.api.nvim_get_vvar('fdc') + vim.api.nvim_get_vvar('number') * vim.api.nvim_get_vvar('numberwidth')
--- end
-
 -- }}}
 
 -- Color Scheme {{{
