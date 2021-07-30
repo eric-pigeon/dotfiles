@@ -93,7 +93,7 @@ setopt  complete_aliases
 # }}}
 # History settings {{{
 #-------------------------------------------------------------------------------
-HISTFILE=$HOME/.zsh_history
+HISTFILE=${XDG_STATE_HOME:-$HOME/.local/state}/zsh/history
 HISTFILESIZE=65536  # search this with `grep | sort -u`
 HISTSIZE=4096
 SAVEHIST=4096
