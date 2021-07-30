@@ -189,7 +189,6 @@ vim.api.nvim_exec([[
 -- }}}
 
 -- Folding {{{
-vim.o.foldlevelstart = 2
 vim.o.foldopen = "insert,jump,mark,percent,tag,search"
 vim.o.foldmethod = "expr"
 vim.o.foldexpr = "nvim_treesitter#foldexpr()"
