@@ -159,6 +159,7 @@ export PATH="${PATH}:${HOME}/.krew/bin"
 export PATH=$PATH:/usr/local/kubebuilder/bin
 export PATH=$PATH:/usr/local/kubectx/bin
 export PATH=$PATH:~/.cargo/bin
+export PATH=$PATH:/usr/local/opt/llvm/bin
 
 # ruby settings {{{
 if (( $+commands[rbenv] )); then
@@ -174,3 +175,5 @@ export PATH="/usr/local/sbin:$PATH"
 
 # To customize prompt, run `p10k configure` or edit ~/.config/zsh/.p10k.zsh.
 [[ ! -f ~/.config/zsh/.p10k.zsh ]] || source ~/.config/zsh/.p10k.zsh
+
+. /usr/local/opt/asdf/asdf.sh

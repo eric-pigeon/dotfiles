@@ -57,6 +57,7 @@ end
 -- test.vim {{{
 vim.g['test#strategy'] = 'tslime'
 vim.g['test#preserve_screen'] = 1
+vim.g['test#echo_command'] = 0
 vim.api.nvim_set_keymap('n', t'<Leader>'..'rt', ':TestFile'..t'<CR>', { noremap = true })
 vim.api.nvim_set_keymap('n', t'<Leader>'..'rs', ':TestNearest'..t'<CR>', { noremap = true })
 vim.api.nvim_set_keymap('n', t'<Leader>'..'rl', ':TestLast'..t'<CR>', { noremap = true })
@@ -117,6 +118,7 @@ local on_attach = function(_client, bufnr)
 end
 
 local servers = {
+  'clangd', -- c/c++/objective-c
   'gopls', -- go
   'pyright', -- python
   'rust_analyzer', -- rust
@@ -172,7 +174,6 @@ require('telescope').setup {
     border = true,
     borderchars = {
       "z",
-      -- { "─", "│", "─", "│", "╭", "╮", "╯", "╰"},
       prompt = {"─", "│", " ", "│", "╭", "╮", "│", "│"},
       results = {" ", "│", "─", "│", "│", "│", "╯", "╰"},
       preview = { "─", "│", "─", "│", "╭", "╮", "╯", "╰"},
