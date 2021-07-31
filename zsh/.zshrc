@@ -59,37 +59,37 @@ setopt  noclobber
 # completion is attempted. The effect is to make the alias a distinct command
 # for completion purposes.
 setopt  complete_aliases
-## TODO # Treat the #, ~ and ^ characters as part of patterns for filename
-## TODO # generation, etc.  (An initial unquoted `~' always produces named directory
-## TODO # expansion.)
-## TODO setopt  extended_glob
-## TODO # If a new command line being added to the history list duplicates an older one,
-## TODO # the older command is removed from the list (even if it is not the previous event).
-## TODO setopt  hist_ignore_all_dups
-## TODO #  Remove command lines from the history list when the first character on the line
-## TODO #  is a space, or when one of the expanded aliases contains a leading space.
-## TODO setopt  hist_ignore_space
-## TODO # This  option  both  imports new commands from the history file, and also
-## TODO # causes your typed commands to be appended to the history file
-## TODO setopt  share_history
-## TODO setopt  noflowcontrol
-## TODO # When listing files that are possible completions, show the type of each file
-## TODO # with a trailing identifying mark.
-## TODO setopt  list_types
-## TODO # Append a trailing / to all directory names resulting from filename
-## TODO # generation (globbing).
-## TODO setopt  mark_dirs
-## TODO # Perform a path search even on command names with slashes in them.
-## TODO # Thus if /usr/local/bin is in the user's path, and he or she types
-## TODO # X11/xinit, the  command /usr/local/bin/X11/xinit will be executed
-## TODO # (assuming it exists).
-## TODO setopt  path_dirs
-## TODO # If set, `%' is treated specially in prompt expansion.
-## TODO setopt  prompt_percent
-## TODO # If set, parameter expansion, command substitution and arithmetic
-## TODO # expansion are performed in prompts.
-## TODO # Substitutions within prompts do not affect the command status.
-## TODO setopt  prompt_subst
+# Treat the #, ~ and ^ characters as part of patterns for filename
+# generation, etc.  (An initial unquoted `~' always produces named directory
+# expansion.)
+setopt  extended_glob
+# If a new command line being added to the history list duplicates an older one,
+# the older command is removed from the list (even if it is not the previous event).
+setopt  hist_ignore_all_dups
+#  Remove command lines from the history list when the first character on the line
+#  is a space, or when one of the expanded aliases contains a leading space.
+setopt  hist_ignore_space
+# This  option  both  imports new commands from the history file, and also
+# causes your typed commands to be appended to the history file
+setopt  share_history
+setopt  noflowcontrol
+# When listing files that are possible completions, show the type of each file
+# with a trailing identifying mark.
+setopt  list_types
+# Append a trailing / to all directory names resulting from filename
+# generation (globbing).
+setopt  mark_dirs
+# Perform a path search even on command names with slashes in them.
+# Thus if /usr/local/bin is in the user's path, and he or she types
+# X11/xinit, the  command /usr/local/bin/X11/xinit will be executed
+# (assuming it exists).
+setopt  path_dirs
+# If set, `%' is treated specially in prompt expansion.
+setopt  prompt_percent
+# If set, parameter expansion, command substitution and arithmetic
+# expansion are performed in prompts.
+# Substitutions within prompts do not affect the command status.
+setopt  prompt_subst
 # }}}
 # History settings {{{
 #-------------------------------------------------------------------------------
@@ -140,10 +140,9 @@ alias kcgpa="kubectl get pods --all-namespaces"
 # }}}
 
 bindkey -e
-# TODO
-# autoload -U edit-command-line
-# zle -N edit-command-line
-# bindkey -M vicmd v edit-command-line
+autoload -U edit-command-line
+zle -N edit-command-line
+bindkey -M vicmd v edit-command-line
 
 # environment varaibles {{{
 if [ -f ~/.env ]; then
