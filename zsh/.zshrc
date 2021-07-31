@@ -134,8 +134,6 @@ alias l="ls -CF"
 alias less="less -S"
 alias vim="nvim"
 alias chrome="/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome"
-alias hstart="/usr/local/cloudera/sbin/start-dfs.sh;/usr/local/cloudera/sbin/start-yarn.sh"
-alias hstop="/usr/local/cloudera/sbin/stop-yarn.sh;/usr/local/cloudera/sbin/stop-dfs.sh"
 alias fix='echo -e "\033c"'
 alias kc="kubectl"
 alias kcgpa="kubectl get pods --all-namespaces"
@@ -157,7 +155,7 @@ fi
 # path {{{
 # TODO: clean this up
 export GOPATH=$HOME/go
-export PATH="~/Library/Python/3.9/bin:~/go/bin:$(go env GOBIN):$PATH"
+export PATH=$PATH:~/go/bin
 export PATH="${PATH}:${HOME}/.krew/bin"
 export PATH=$PATH:/usr/local/kubebuilder/bin
 export PATH=$PATH:/usr/local/kubectx/bin
