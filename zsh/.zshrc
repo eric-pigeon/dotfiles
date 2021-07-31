@@ -1,12 +1,14 @@
 #!/bin/zsh
 # vim: set foldlevel=0 foldmethod=marker:
 
+# p10k start {{{
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.config/zsh/.zshrc.
 # Initialization code that may require console input (password prompts, [y/n]
 # confirmations, etc.) must go above this block; everything else may go below.
 if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
+# }}}
 
 # zplugin {{{
 export ZPLUG_HOME=/usr/local/opt/zplug
@@ -132,17 +134,17 @@ alias l="ls -CF"
 alias less="less -S"
 alias vim="nvim"
 alias chrome="/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome"
-alias hstart="/usr/local/cloudera/sbin/start-dfs.sh;/usr/local/cloudera/sbin/start-yarn.sh"
-alias hstop="/usr/local/cloudera/sbin/stop-yarn.sh;/usr/local/cloudera/sbin/stop-dfs.sh"
 alias fix='echo -e "\033c"'
 alias kc="kubectl"
 alias kcgpa="kubectl get pods --all-namespaces"
 # }}}
 
+# edit command line {{{
 bindkey -e
 autoload -U edit-command-line
 zle -N edit-command-line
 bindkey -M vicmd v edit-command-line
+# }}}
 
 # environment varaibles {{{
 if [ -f ~/.env ]; then
@@ -150,15 +152,17 @@ if [ -f ~/.env ]; then
 fi
 # }}}
 
+# path {{{
+# TODO: clean this up
 export GOPATH=$HOME/go
-
-# TODO
-export PATH="~/Library/Python/3.9/bin:~/go/bin:$(go env GOBIN):$PATH"
+export PATH=$PATH:~/go/bin
 export PATH="${PATH}:${HOME}/.krew/bin"
 export PATH=$PATH:/usr/local/kubebuilder/bin
 export PATH=$PATH:/usr/local/kubectx/bin
 export PATH=$PATH:~/.cargo/bin
 export PATH=$PATH:/usr/local/opt/llvm/bin
+export PATH="/usr/local/sbin:$PATH"
+# }}}
 
 # ruby settings {{{
 if (( $+commands[rbenv] )); then
@@ -167,12 +171,19 @@ fi
 export SOLARGRAPH_CACHE=${XDG_CACHE_HOME}
 # }}}
 
+# fzf {{{
 [ -f ~/.config/zsh/.fzf.zsh ] && source ~/.config/zsh/.fzf.zsh
+# }}}
 
+# direnv {{{
 eval "$(direnv hook zsh)"
-export PATH="/usr/local/sbin:$PATH"
+# }}}
 
+# source p10k prompt {{{
 # To customize prompt, run `p10k configure` or edit ~/.config/zsh/.p10k.zsh.
 [[ ! -f ~/.config/zsh/.p10k.zsh ]] || source ~/.config/zsh/.p10k.zsh
+# }}}
 
+# asdf {{{
 . /usr/local/opt/asdf/asdf.sh
+# }}}
