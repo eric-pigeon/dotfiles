@@ -185,5 +185,7 @@ eval "$(direnv hook zsh)"
 # }}}
 
 # asdf {{{
+#
+export ASDF_CONFIG_FILE="${XDG_CONFIG_HOME}/asdf/asdfrc"
 . /usr/local/opt/asdf/asdf.sh
 # }}}
