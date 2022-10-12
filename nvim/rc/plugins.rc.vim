@@ -59,7 +59,7 @@ function! FoldTxt() abort " {{{
 	\ '',
 	\ 'g'
 	\ ))
-endfunction " }}}
+endfunction
 " }}}
 
 let g:fold_label = ' '
@@ -73,7 +73,9 @@ let g:foldtext_stop_words = [
       \ 'abort',
       \ ]
 
-let g:crease_foldtext = {  
+let g:crease_foldtext = {
       \ 'default': '%{CreaseIndent()}%{FoldTxt()} %{IsMod()} %{Cmmtd()} %= %{CountFoldText()}%l '.g:lines_label.' %f%f%f%f',
       \}
 " }}}
+
+autocmd BufWritePre *.js,*.jsx,*.mjs,*.ts,*.tsx,*.css,*.less,*.scss,*.json,*.graphql,*.vue PrettierAsync

@@ -1,5 +1,9 @@
 -- vim: foldmethod=marker
 
+-- disable netrw at the very start of your init.lua (strongly advised)
+vim.g.loaded = 1
+vim.g.loaded_netrwPlugin = 1
+
 -- Install packer {{{
 local execute = vim.api.nvim_command
 local install_path = vim.fn.stdpath('data')..'/site/pack/packer/opt/packer.nvim'
@@ -21,7 +25,7 @@ vim.api.nvim_exec([[
 local function t(str)
   return vim.api.nvim_replace_termcodes(str, true, true, true)
 end
-
+ 
 local function source_rc(path)
   vim.cmd('source '..vim.fn.fnameescape(vim.fn.expand('~/.config/nvim/rc/'..path)))
 end
