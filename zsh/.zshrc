@@ -15,6 +15,7 @@ export ZPLUG_HOME=/usr/local/opt/zplug
 source $ZPLUG_HOME/init.zsh
 
 zplug "plugins/docker", from:oh-my-zsh
+# zplug "plugins/asdf", from:oh-my-zsh
 
 zplug zsh-users/zsh-syntax-highlighting
 zplug zsh-users/zsh-completions
@@ -130,13 +131,15 @@ export KEYTIMEOUT=1
 
 # Aliases {{{
 alias rm="rm -i"
-alias l="ls -CF"
+alias l="l -CF"
 alias less="less -S"
 alias vim="nvim"
 alias chrome="/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome"
 alias fix='echo -e "\033c"'
 alias kc="kubectl"
 alias kcgpa="kubectl get pods --all-namespaces"
+alias ls="lsd"
+alias vnone="vim -u NONE -U NONE -N -i NONE"
 # }}}
 
 # edit command line {{{
@@ -162,11 +165,15 @@ export PATH=$PATH:/usr/local/kubectx/bin
 export PATH=$PATH:~/.cargo/bin
 export PATH=$PATH:/usr/local/opt/llvm/bin
 export PATH="/usr/local/sbin:$PATH"
+export PATH="/usr/local/opt/openjdk@8/bin:$PATH"
+export PATH="${HOME}/.local/bin:$PATH"
 # }}}
 
 # ruby settings {{{
 if (( $+commands[rbenv] )); then
-  eval "$(rbenv init -)"
+  export PATH="$HOME/.rbenv/bin:$PATH"
+  eval "$(rbenv init - --no-rehash)"
+  # eval "$(rbenv init -)"
 fi
 export SOLARGRAPH_CACHE=${XDG_CACHE_HOME}
 # }}}
@@ -176,7 +183,7 @@ export SOLARGRAPH_CACHE=${XDG_CACHE_HOME}
 # }}}
 
 # direnv {{{
-eval "$(direnv hook zsh)"
+# eval "$(direnv hook zsh)"
 # }}}
 
 # source p10k prompt {{{
@@ -185,7 +192,11 @@ eval "$(direnv hook zsh)"
 # }}}
 
 # asdf {{{
-#
 export ASDF_CONFIG_FILE="${XDG_CONFIG_HOME}/asdf/asdfrc"
-. /usr/local/opt/asdf/asdf.sh
+# . /usr/local/opt/asdf/asdf.sh
+# . /usr/local/opt/asdf/libexec/asdf.sh
+# }}}
+
+# kcx {{{
+# source "$(npm root -g)/kcx/bin/kcxcli.sh"
 # }}}
