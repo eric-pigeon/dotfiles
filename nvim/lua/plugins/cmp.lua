@@ -2,11 +2,16 @@ return {
   {
     "L3MON4D3/LuaSnip",
     dependencies = { "rafamadriz/friendly-snippets" },
+    opts = {
+      history = true,
+      delete_check_events = "TextChanged",
+      region_check_events = "CursorMoved",
+      store_selection_keys = "<C-x>",
+    },
     config = require "plugins.configs.luasnip",
   },
   {
     "hrsh7th/nvim-cmp",
-    commit = "a9c701fa7e12e9257b3162000e5288a75d280c28", -- https://github.com/hrsh7th/nvim-cmp/issues/1382
     dependencies = {
       "saadparwaiz1/cmp_luasnip",
       "hrsh7th/cmp-buffer",
@@ -46,8 +51,8 @@ return {
       end
       if not snip_status_ok then return end
       local border_opts = {
-        border = "single",
-        winhighlight = "Normal:Normal,FloatBorder:FloatBorder,CursorLine:Visual,Search:None",
+        border = "rounded",
+        winhighlight = "Normal:NormalFloat,FloatBorder:FloatBorder,CursorLine:PmenuSel,Search:None",
       }
 
       local function has_words_before()
