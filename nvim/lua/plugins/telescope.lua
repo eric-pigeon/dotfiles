@@ -10,6 +10,8 @@ return {
     return {
       defaults = {
         prompt_title = "",
+        prompt_prefix = get_icon("Selected", 1),
+        selection_caret = get_icon("Selected", 1),
         path_display = { "truncate" },
         results_title = false,
         preview_title = false,
