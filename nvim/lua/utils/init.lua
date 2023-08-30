@@ -1,39 +1,29 @@
 local M = {}
 
 --- Merge extended options with a default table of options
--- @param default the default table that you want to merge into
--- @param opts the new options that should be merged with the default table
--- @return the merged table
+---@param default? table The default table that you want to merge into
+---@param opts? table The new options that should be merged with the default table
+---@return table # The merged table
 function M.extend_tbl(default, opts)
   opts = opts or {}
   return default and vim.tbl_deep_extend("force", default, opts) or opts
 end
 
---- Open a URL under the cursor with the current operating system
--- @param path the path of the file to open with the system opener
-function M.system_open(path)
-  local cmd
-  if vim.fn.has "win32" == 1 and vim.fn.executable "explorer" == 1 then
-    cmd = "explorer"
-  elseif vim.fn.has "unix" == 1 and vim.fn.executable "xdg-open" == 1 then
-    cmd = "xdg-open"
-  elseif (vim.fn.has "mac" == 1 or vim.fn.has "unix" == 1) and vim.fn.executable "open" == 1 then
-    cmd = "open"
-  end
-  if not cmd then M.notify("Available system opening tool not found!", "error") end
-  vim.fn.jobstart({ cmd, path or vim.fn.expand "<cfile>" }, { detach = true })
-end
 
---- Get an icon from `lspkind` if it is available and return it
--- @param kind the kind of icon in `lspkind` to retrieve
--- @return the icon
-function M.get_icon(kind)
+--- Get an icon from the internal icons if it is available and return it
+---@param kind string The kind of icon in icons to retrieve
+---@param padding? integer Padding to add to the end of the icon
+---@param no_fallback? boolean Whether or not to disable fallback to text icon
+---@return string icon
+function M.get_icon(kind, padding, no_fallback)
+  if not vim.g.icons_enabled and no_fallback then return "" end
   local icon_pack = vim.g.icons_enabled and "icons" or "text_icons"
   if not M[icon_pack] then
     M.icons = require "icons.nerd_font"
     M.text_icons = require "icons.text"
   end
-  return M[icon_pack] and M[icon_pack][kind] or ""
+  local icon = M[icon_pack] and M[icon_pack][kind]
+  return icon and icon .. string.rep(" ", padding or 0) or ""
 end
 
 --- Get highlight properties for a given highlight name
@@ -50,6 +40,22 @@ function M.get_hlgroup(name, fallback)
   end
   return fallback
 end
+
+--- Open a URL under the cursor with the current operating system
+---@param path string The path of the file to open with the system opener
+function M.system_open(path)
+  local cmd
+  if vim.fn.has "win32" == 1 and vim.fn.executable "explorer" == 1 then
+    cmd = "explorer"
+  elseif vim.fn.has "unix" == 1 and vim.fn.executable "xdg-open" == 1 then
+    cmd = "xdg-open"
+  elseif (vim.fn.has "mac" == 1 or vim.fn.has "unix" == 1) and vim.fn.executable "open" == 1 then
+    cmd = "open"
+  end
+  if not cmd then M.notify("Available system opening tool not found!", "error") end
+  vim.fn.jobstart({ cmd, path or vim.fn.expand "<cfile>" }, { detach = true })
+end
+
 
 --- Trigger an AstroNvim user event
 -- @param event the event name
