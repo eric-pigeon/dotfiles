@@ -27,18 +27,35 @@ function M.get_icon(kind, padding, no_fallback)
 end
 
 --- Get highlight properties for a given highlight name
--- @param name highlight group name
--- @return table of highlight group properties
+---@param name string The highlight group name
+---@param fallback? table The fallback highlight properties
+---@return table properties # the highlight group properties
 function M.get_hlgroup(name, fallback)
   if vim.fn.hlexists(name) == 1 then
-    local hl = vim.api.nvim_get_hl_by_name(name, vim.o.termguicolors)
-    if not hl["foreground"] then hl["foreground"] = "NONE" end
-    if not hl["background"] then hl["background"] = "NONE" end
-    hl.fg, hl.bg, hl.sp = hl.foreground, hl.background, hl.special
-    hl.ctermfg, hl.ctermbg = hl.foreground, hl.background
+    local hl
+    if vim.api.nvim_get_hl then -- check for new neovim 0.9 API
+      hl = vim.api.nvim_get_hl(0, { name = name, link = false })
+      if not hl.fg then hl.fg = "NONE" end
+      if not hl.bg then hl.bg = "NONE" end
+    else
+      hl = vim.api.nvim_get_hl_by_name(name, vim.o.termguicolors)
+      if not hl.foreground then hl.foreground = "NONE" end
+      if not hl.background then hl.background = "NONE" end
+      hl.fg, hl.bg = hl.foreground, hl.background
+      hl.ctermfg, hl.ctermbg = hl.fg, hl.bg
+      hl.sp = hl.special
+    end
     return hl
   end
-  return fallback
+  return fallback or {}
+end
+
+--- Serve a notification with a title of AstroNvim
+---@param msg string The notification body
+---@param type? number The type of the notification (:help vim.log.levels)
+---@param opts? table The nvim-notify options to use (:help notify-options)
+function M.notify(msg, type, opts)
+  vim.schedule(function() vim.notify(msg, type, M.extend_tbl({ title = "AstroNvim" }, opts)) end)
 end
 
 --- Trigger an AstroNvim user event
@@ -56,16 +73,18 @@ end
 --- Open a URL under the cursor with the current operating system
 ---@param path string The path of the file to open with the system opener
 function M.system_open(path)
+  -- TODO: REMOVE WHEN DROPPING NEOVIM <0.10
+  if vim.ui.open then return vim.ui.open(path) end
   local cmd
   if vim.fn.has "win32" == 1 and vim.fn.executable "explorer" == 1 then
-    cmd = "explorer"
+    cmd = { "cmd.exe", "/K", "explorer" }
   elseif vim.fn.has "unix" == 1 and vim.fn.executable "xdg-open" == 1 then
-    cmd = "xdg-open"
+    cmd = { "xdg-open" }
   elseif (vim.fn.has "mac" == 1 or vim.fn.has "unix" == 1) and vim.fn.executable "open" == 1 then
-    cmd = "open"
+    cmd = { "open" }
   end
-  if not cmd then M.notify("Available system opening tool not found!", "error") end
-  vim.fn.jobstart({ cmd, path or vim.fn.expand "<cfile>" }, { detach = true })
+  if not cmd then M.notify("Available system opening tool not found!", vim.log.levels.ERROR) end
+  vim.fn.jobstart(vim.fn.extend(cmd, { path or vim.fn.expand "<cfile>" }), { detach = true })
 end
 
 
