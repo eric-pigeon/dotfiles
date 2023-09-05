@@ -16,6 +16,7 @@ local tbl_isempty = vim.tbl_isempty
 
 local utils = require "utils"
 local is_available = utils.is_available
+local extend_tbl = utils.extend_tbl
 
 local server_config = "lsp.config."
 local setup_handlers = {
@@ -42,14 +43,14 @@ M.setup_diagnostics = function(signs)
   }
   M.diagnostics = {
     -- diagnostics off
-    [0] = utils.extend_tbl(
+    [0] = extend_tbl(
       default_diagnostics,
       { underline = false, virtual_text = false, signs = false, update_in_insert = false }
     ),
     -- status only
-    utils.extend_tbl(default_diagnostics, { virtual_text = false, signs = false }),
+    extend_tbl(default_diagnostics, { virtual_text = false, signs = false }),
     -- virtual text off, signs on
-    utils.extend_tbl(default_diagnostics, { virtual_text = false }),
+    extend_tbl(default_diagnostics, { virtual_text = false }),
     -- all diagnostics on
     default_diagnostics,
   }
@@ -73,7 +74,7 @@ M.format_opts.filter = function(client)
 end
 
 --- Helper function to set up a given server with the Neovim LSP client
--- @param server the name of the server to be setup
+---@param server string The name of the server to be setup
 M.setup = function(server)
   -- if server doesn't exist, set it up from user server definition
   local config_avail, config = pcall(require, "lspconfig.server_configurations." .. server)
@@ -84,6 +85,22 @@ M.setup = function(server)
   local opts = M.config(server)
   local setup_handler = setup_handlers[server] or setup_handlers[1]
   if setup_handler then setup_handler(server, opts) end
+end
+
+--- Helper function to check if any active LSP clients given a filter provide a specific capability
+---@param capability string The server capability to check for (example: "documentFormattingProvider")
+---@param filter vim.lsp.get_active_clients.filter|nil (table|nil) A table with
+---              key-value pairs used to filter the returned clients.
+---              The available keys are:
+---               - id (number): Only return clients with the given id
+---               - bufnr (number): Only return clients attached to this buffer
+---               - name (string): Only return clients with the given name
+---@return boolean # Whether or not any of the clients provide the capability
+function M.has_capability(capability, filter)
+  for _, client in ipairs(vim.lsp.get_active_clients(filter)) do
+    if client.supports_method(capability) then return true end
+  end
+  return false
 end
 
 local function add_buffer_autocmd(augroup, bufnr, autocmds)
@@ -102,8 +119,8 @@ local function add_buffer_autocmd(augroup, bufnr, autocmds)
 end
 
 --- The `on_attach` function used by AstroNvim
--- @param client the LSP client details when attaching
--- @param bufnr the number of the buffer that the LSP client is attaching to
+---@param client table The LSP client details when attaching
+---@param bufnr number The buffer that the LSP client is attaching to
 M.on_attach = function(client, bufnr)
   local capabilities = client.server_capabilities
   local lsp_mappings = {
@@ -326,8 +343,8 @@ M.capabilities.textDocument.foldingRange = { dynamicRegistration = false, lineFo
 -- M.flags = user_opts "lsp.flags"
 
 --- Get the server configuration for a given language server to be provided to the server's `setup()` call
--- @param  server_name the name of the server
--- @return the table of LSP options used when setting up the given language server
+---@param  server_name the name of the server
+---@return the table of LSP options used when setting up the given language server
 function M.config(server_name)
   local server = require("lspconfig")[server_name]
   local lsp_opts = require("utils").extend_tbl(
