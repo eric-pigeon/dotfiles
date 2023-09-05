@@ -41,6 +41,18 @@ function M.get_hlgroup(name, fallback)
   return fallback
 end
 
+--- Trigger an AstroNvim user event
+---@param event string The event name to be appended to Astro
+---@param delay? boolean Whether or not to delay the event asynchronously (Default: true)
+function M.event(event, delay)
+  local emit_event = function() vim.api.nvim_exec_autocmds("User", { pattern = event, modeline = false }) end
+  if delay == false then
+    emit_event()
+  else
+    vim.schedule(emit_event)
+  end
+end
+
 --- Open a URL under the cursor with the current operating system
 ---@param path string The path of the file to open with the system opener
 function M.system_open(path)
@@ -57,24 +69,19 @@ function M.system_open(path)
 end
 
 
---- Trigger an AstroNvim user event
--- @param event the event name
-function M.event(event)
-  vim.schedule(function() vim.api.nvim_exec_autocmds("User", { pattern = event }) end)
-end
 
 --- Check if a plugin is defined in lazy. Useful with lazy loading when a plugin is not necessarily loaded yet
--- @param plugin the plugin string to search for
--- @return boolean value if the plugin is available
+---@param plugin string The plugin to search for
+---@return boolean available # Whether the plugin is available
 function M.is_available(plugin)
   local lazy_config_avail, lazy_config = pcall(require, "lazy.core.config")
   return lazy_config_avail and lazy_config.plugins[plugin] ~= nil
 end
 
 --- A helper function to wrap a module function to require a plugin before running
--- @param plugin the plugin string to call `require("lazy").laod` with
--- @param module the system module where the functions live (e.g. `vim.ui`)
--- @param func_names a string or a list like table of strings for functions to wrap in the given moduel (e.g. `{ "ui", "select }`)
+---@param plugin string The plugin to call `require("lazy").load` with
+---@param module table The system module where the functions live (e.g. `vim.ui`)
+---@param func_names string|string[] The functions to wrap in the given module (e.g. `{ "ui", "select }`)
 function M.load_plugin_with_func(plugin, module, func_names)
   if type(func_names) == "string" then func_names = { func_names } end
   for _, func in ipairs(func_names) do
@@ -87,9 +94,37 @@ function M.load_plugin_with_func(plugin, module, func_names)
   end
 end
 
+--- Register queued which-key mappings
+function M.which_key_register()
+  if M.which_key_queue then
+    local wk_avail, wk = pcall(require, "which-key")
+    if wk_avail then
+      for mode, registration in pairs(M.which_key_queue) do
+        wk.register(registration, { mode = mode })
+      end
+      M.which_key_queue = nil
+    end
+  end
+end
+
+--- Get an empty table of mappings with a key for each map mode
+---@return table<string,table> # a table with entries for each map mode
+function M.empty_map_table()
+  local maps = {}
+  for _, mode in ipairs { "", "n", "v", "x", "s", "o", "!", "i", "l", "c", "t" } do
+    maps[mode] = {}
+  end
+  if vim.fn.has "nvim-0.10.0" == 1 then
+    for _, abbr_mode in ipairs { "ia", "ca", "!a" } do
+      maps[abbr_mode] = {}
+    end
+  end
+  return maps
+end
+
 --- Table based API for setting keybindings
--- @param map_table A nested table where the first key is the vim mode, the second key is the key to map, and the value is the function to set the mapping to
--- @param base A base set of options to set on every keybinding
+---@param map_table table A nested table where the first key is the vim mode, the second key is the key to map, and the value is the function to set the mapping to
+---@param base? table A base set of options to set on every keybinding
 function M.set_mappings(map_table, base)
   -- iterate over the first keys for each mode
   base = base or {}
@@ -106,6 +141,7 @@ function M.set_mappings(map_table, base)
           keymap_opts[1] = nil
         end
         if not cmd or keymap_opts.name then -- if which-key mapping, queue it
+          if not keymap_opts.name then keymap_opts.name = keymap_opts.desc end
           if not M.which_key_queue then M.which_key_queue = {} end
           if not M.which_key_queue[mode] then M.which_key_queue[mode] = {} end
           M.which_key_queue[mode][keymap] = keymap_opts
@@ -136,10 +172,11 @@ function M.set_url_match()
 end
 
 --- Run a shell command and capture the output and if the command succeeded or failed
--- @param cmd the terminal command to execute
--- @param show_error boolean of whether or not to show an unsuccessful command as an error to the user
--- @return the result of a successfully executed command or nil
+---@param cmd string|string[] The terminal command to execute
+---@param show_error? boolean Whether or not to show an unsuccessful command as an error to the user
+---@return string|nil # The result of a successfully executed command or nil
 function M.cmd(cmd, show_error)
+  if type(cmd) == "string" then cmd = { cmd } end
   if vim.fn.has "win32" == 1 then cmd = { "cmd.exe", "/C", cmd } end
   local result = vim.fn.system(cmd)
   local success = vim.api.nvim_get_vvar "shell_error" == 0
