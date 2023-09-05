@@ -12,7 +12,6 @@
 local M = {}
 local tbl_contains = vim.tbl_contains
 local tbl_isempty = vim.tbl_isempty
---local user_opts = astronvim.user_opts
 
 local utils = require "utils"
 local is_available = utils.is_available
@@ -118,38 +117,36 @@ local function add_buffer_autocmd(augroup, bufnr, autocmds)
   end
 end
 
+local function del_buffer_autocmd(augroup, bufnr)
+  local cmds_found, cmds = pcall(vim.api.nvim_get_autocmds, { group = augroup, buffer = bufnr })
+  if cmds_found then vim.tbl_map(function(cmd) vim.api.nvim_del_autocmd(cmd.id) end, cmds) end
+end
 --- The `on_attach` function used by AstroNvim
 ---@param client table The LSP client details when attaching
 ---@param bufnr number The buffer that the LSP client is attaching to
 M.on_attach = function(client, bufnr)
+  local lsp_mappings = require("utils").empty_map_table()
+
+  lsp_mappings.n["<leader>ld"] = { function() vim.diagnostic.open_float() end, desc = "Hover diagnostics" }
+  lsp_mappings.n["[d"] = { function() vim.diagnostic.goto_prev() end, desc = "Previous diagnostic" }
+  lsp_mappings.n["]d"] = { function() vim.diagnostic.goto_next() end, desc = "Next diagnostic" }
+  lsp_mappings.n["gl"] = { function() vim.diagnostic.open_float() end, desc = "Hover diagnostics" }
+
+  if is_available "telescope.nvim" then
+    lsp_mappings.n["<leader>lD"] =
+      { function() require("telescope.builtin").diagnostics() end, desc = "Search diagnostics" }
+  end
+
+  if is_available "mason-lspconfig.nvim" then
+    lsp_mappings.n["<leader>li"] = { "<cmd>LspInfo<cr>", desc = "LSP information" }
+  end
+
+  if is_available "null-ls.nvim" then
+    lsp_mappings.n["<leader>lI"] = { "<cmd>NullLsInfo<cr>", desc = "Null-ls information" }
+  end
+
   local capabilities = client.server_capabilities
-  local lsp_mappings = {
-    n = {
-      ["<leader>ld"] = {
-        function() vim.diagnostic.open_float() end,
-        desc = "Hover diagnostics",
-      },
-      ["[d"] = {
-        function() vim.diagnostic.goto_prev() end,
-        desc = "Previous diagnostic",
-      },
-      ["]d"] = {
-        function() vim.diagnostic.goto_next() end,
-        desc = "Next diagnostic",
-      },
-      ["gl"] = {
-        function() vim.diagnostic.open_float() end,
-        desc = "Hover diagnostics",
-      },
-    },
-    v = {},
-  }
-
-  lsp_mappings.n["<leader>li"] = { "<cmd>LspInfo<cr>", desc = "LSP information" }
-
-  lsp_mappings.n["<leader>lI"] = { "<cmd>NullLsInfo<cr>", desc = "Null-ls information" }
-
-  if capabilities.codeActionProvider then
+  if client.supports_method "textDocument/codeAction" then
     lsp_mappings.n["<leader>la"] = {
       function() vim.lsp.buf.code_action() end,
       desc = "LSP code action",
@@ -157,11 +154,15 @@ M.on_attach = function(client, bufnr)
     lsp_mappings.v["<leader>la"] = lsp_mappings.n["<leader>la"]
   end
 
-  if capabilities.codeLensProvider then
+  if client.supports_method "textDocument/codeLens" then
     add_buffer_autocmd("lsp_codelens_refresh", bufnr, {
       events = { "InsertLeave", "BufEnter" },
       desc = "Refresh codelens",
       callback = function()
+        if not M.has_capability("textDocument/codeLens", { bufnr = bufnr }) then
+          del_buffer_autocmd("lsp_codelens_refresh", bufnr)
+          return
+        end
         if vim.g.codelens_enabled then vim.lsp.codelens.refresh() end
       end,
     })
@@ -176,21 +177,21 @@ M.on_attach = function(client, bufnr)
     }
   end
 
-  if capabilities.declarationProvider then
+  if client.supports_method "textDocument/declaration" then
     lsp_mappings.n["gD"] = {
       function() vim.lsp.buf.declaration() end,
       desc = "Declaration of current symbol",
     }
   end
 
-  if capabilities.definitionProvider then
+  if client.supports_method "textDocument/definition" then
     lsp_mappings.n["gd"] = {
       function() vim.lsp.buf.definition() end,
       desc = "Show the definition of current symbol",
     }
   end
 
-  if capabilities.documentFormattingProvider and not tbl_contains(M.formatting.disabled, client.name) then
+  if client.supports_method "textDocument/formatting" and not tbl_contains(M.formatting.disabled, client.name) then
     lsp_mappings.n["<leader>lf"] = {
       function() vim.lsp.buf.format(M.format_opts) end,
       desc = "Format buffer",
@@ -214,6 +215,10 @@ M.on_attach = function(client, bufnr)
         events = "BufWritePre",
         desc = "autoformat on save",
         callback = function()
+          if not M.has_capability("textDocument/formatting", { bufnr = bufnr }) then
+            del_buffer_autocmd("lsp_auto_format", bufnr)
+            return
+          end
           local autoformat_enabled = vim.b.autoformat_enabled
           if autoformat_enabled == nil then autoformat_enabled = vim.g.autoformat_enabled end
           if autoformat_enabled and ((not autoformat.filter) or autoformat.filter(bufnr)) then
@@ -232,12 +237,18 @@ M.on_attach = function(client, bufnr)
     end
   end
 
-  if capabilities.documentHighlightProvider then
+  if client.supports_method "textDocument/documentHighlight" then
     add_buffer_autocmd("lsp_document_highlight", bufnr, {
       {
         events = { "CursorHold", "CursorHoldI" },
         desc = "highlight references when cursor holds",
-        callback = function() vim.lsp.buf.document_highlight() end,
+        callback = function()
+          if not M.has_capability("textDocument/documentHighlight", { bufnr = bufnr }) then
+            del_buffer_autocmd("lsp_document_highlight", bufnr)
+            return
+          end
+          vim.lsp.buf.document_highlight()
+        end,
       },
       {
         events = { "CursorMoved", "CursorMovedI" },
@@ -247,21 +258,36 @@ M.on_attach = function(client, bufnr)
     })
   end
 
-  if capabilities.hoverProvider then
-    lsp_mappings.n["K"] = {
-      function() vim.lsp.buf.hover() end,
-      desc = "Hover symbol details",
-    }
+  if client.supports_method "textDocument/hover" then
+    -- TODO: Remove mapping after dropping support for Neovim v0.9, it's automatic
+    if vim.fn.has "nvim-0.10" == 0 then
+      lsp_mappings.n["K"] = {
+        function() vim.lsp.buf.hover() end,
+        desc = "Hover symbol details",
+      }
+    end
   end
 
-  if capabilities.implementationProvider then
+  if client.supports_method "textDocument/implementation" then
     lsp_mappings.n["gI"] = {
       function() vim.lsp.buf.implementation() end,
       desc = "Implementation of current symbol",
     }
   end
 
-  if capabilities.referencesProvider then
+  if client.supports_method "textDocument/inlayHint" then
+    if vim.b.inlay_hints_enabled == nil then vim.b.inlay_hints_enabled = vim.g.inlay_hints_enabled end
+    -- TODO: remove check after dropping support for Neovim v0.9
+    if vim.lsp.inlay_hint then
+      if vim.b.inlay_hints_enabled then vim.lsp.inlay_hint(bufnr, true) end
+      lsp_mappings.n["<leader>uH"] = {
+        function() require("astronvim.utils.ui").toggle_buffer_inlay_hints(bufnr) end,
+        desc = "Toggle LSP inlay hints (buffer)",
+      }
+    end
+  end
+
+  if client.supports_method "textDocument/references" then
     lsp_mappings.n["gr"] = {
       function() vim.lsp.buf.references() end,
       desc = "References of current symbol",
@@ -272,32 +298,41 @@ M.on_attach = function(client, bufnr)
     }
   end
 
-  if capabilities.renameProvider then
+  if client.supports_method "textDocument/rename" then
     lsp_mappings.n["<leader>lr"] = {
       function() vim.lsp.buf.rename() end,
       desc = "Rename current symbol",
     }
   end
 
-  if capabilities.signatureHelpProvider then
+  if client.supports_method "textDocument/signatureHelp" then
     lsp_mappings.n["<leader>lh"] = {
       function() vim.lsp.buf.signature_help() end,
       desc = "Signature help",
     }
   end
 
-  if capabilities.typeDefinitionProvider then
+  if client.supports_method "textDocument/typeDefinition" then
     lsp_mappings.n["gT"] = {
       function() vim.lsp.buf.type_definition() end,
       desc = "Definition of current type",
     }
   end
 
-  if capabilities.workspaceSymbolProvider then
-    lsp_mappings.n["<leader>lG"] = {
-      function() vim.lsp.buf.workspace_symbol() end,
-      desc = "Search workspace symbols",
-    }
+  if client.supports_method "workspace/symbol" then
+    lsp_mappings.n["<leader>lG"] = { function() vim.lsp.buf.workspace_symbol() end, desc = "Search workspace symbols" }
+  end
+
+  if client.supports_method "textDocument/semanticTokens/full" and vim.lsp.semantic_tokens then
+    if vim.g.semantic_tokens_enabled then
+      vim.b[bufnr].semantic_tokens_enabled = true
+      lsp_mappings.n["<leader>uY"] = {
+        function() require("astronvim.utils.ui").toggle_buffer_semantic_tokens(bufnr) end,
+        desc = "Toggle LSP semantic highlight (buffer)",
+      }
+    else
+      client.server_capabilities.semanticTokensProvider = nil
+    end
   end
 
   if is_available "telescope.nvim" then -- setup telescope mappings if available

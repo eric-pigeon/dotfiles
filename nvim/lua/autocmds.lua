@@ -17,10 +17,19 @@ autocmd("BufReadPost", {
     end
   end
 })
--- }}}
+
+--autocmd("BufReadPre", {
+--  desc = "Disable certain functionality on very large files",
+--  group = augroup("large_buf", { clear = true }),
+--  callback = function(args)
+--    local ok, stats = pcall(vim.loop.fs_stat, vim.api.nvim_buf_get_name(args.buf))
+--    vim.b[args.buf].large_buf = (ok and stats and stats.size > vim.g.max_file.size)
+--      or vim.api.nvim_buf_line_count(args.buf) > vim.g.max_file.lines
+--  end,
+--})
 
 local bufferline_group = augroup("bufferline", { clear = true })
-autocmd({ "BufAdd", "BufEnter" }, {
+autocmd({ "BufAdd", "BufEnter", "TabNewEntered" }, {
   desc = "Update buffers when adding new buffers",
   group = bufferline_group,
   callback = function(args)
@@ -57,19 +66,18 @@ autocmd("BufDelete", {
 autocmd({ "VimEnter", "FileType", "BufEnter", "WinEnter" }, {
   desc = "URL Highlighting",
   group = augroup("highlighturl", { clear = true }),
-  pattern = "*",
   callback = function() utils.set_url_match() end,
 })
 
-autocmd({ "BufReadPost", "BufNewFile" }, {
-  group = augroup("file_user_events", { clear = true }),
-  callback = function(args)
-    if not (vim.fn.expand "%" == "" or vim.api.nvim_get_option_value("buftype", { buf = args.buf }) == "nofile") then
-      utils.event "File"
-      if utils.cmd('git -C "' .. vim.fn.expand "%:p:h" .. '" rev-parse', false) then utils.event "GitFile" end
-    end
-  end,
-})
+-- autocmd({ "BufReadPost", "BufNewFile" }, {
+--   group = augroup("file_user_events", { clear = true }),
+--   callback = function(args)
+--     if not (vim.fn.expand "%" == "" or vim.api.nvim_get_option_value("buftype", { buf = args.buf }) == "nofile") then
+--       utils.event "File"
+--       if utils.cmd('git -C "' .. vim.fn.expand "%:p:h" .. '" rev-parse', false) then utils.event "GitFile" end
+--     end
+--   end,
+-- })
 
 -- Hightlight matched under cursor
 autocmd("CursorMoved", {
