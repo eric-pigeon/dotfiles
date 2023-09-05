@@ -3,7 +3,7 @@ return {
   { "NMAC427/guess-indent.nvim", event = "User File", config = require "plugins.configs.guess-indent" },
   {
     "windwp/nvim-autopairs",
-    event = "InsertEnter",
+    event = "User File",
     opts = {
       check_ts = true,
       ts_config = { java = false },
@@ -22,8 +22,17 @@ return {
     config = require "plugins.configs.nvim-autopairs",
   },
   {
+    "folke/which-key.nvim",
+    event = "VeryLazy",
+    opts = {
+      icons = { group = vim.g.icons_enabled and "" or "+", separator = "" },
+      disable = { filetypes = { "TelescopePrompt" } },
+    },
+    config = require "plugins.configs.which-key",
+  },
+  {
     "kevinhwang91/nvim-ufo",
-    event = { "InsertEnter" },
+    event = { "User File", "InsertEnter" },
     dependencies = { "kevinhwang91/promise-async" },
     opts = {
       preview = {
@@ -55,7 +64,10 @@ return {
   },
   {
     "numToStr/Comment.nvim",
-    keys = { { "gc", mode = { "n", "v" } }, { "gb", mode = { "n", "v" } } },
+    keys = {
+      { "gc", mode = { "n", "v" }, desc = "Comment toggle linewise" },
+      { "gb", mode = { "n", "v" }, desc = "Comment toggle blockwise" },
+    },
     opts = function()
       local commentstring_avail, commentstring = pcall(require, "ts_context_commentstring.integrations.comment_nvim")
       return commentstring_avail and commentstring and { pre_hook = commentstring.create_pre_hook() } or {}
