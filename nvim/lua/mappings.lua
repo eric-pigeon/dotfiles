@@ -7,9 +7,9 @@ vim.keymap.set("n", "<leader>nt", "<cmd>Neotree toggle<cr>", { desc = "Toggle Ex
 -- Telescope {{{
 vim.keymap.set('n', '<space>f', function() require('telescope.builtin').find_files() end, { desc = "Find file" })
 vim.keymap.set('n', '<space>l', function() require('telescope.builtin').current_buffer_fuzzy_find() end, { desc = "Find line" })
-vim.keymap.set('n', '<space>b', function() require('telescope.builtin').buffers() end, { silent = true })
-vim.keymap.set('n', '<space>s', function() require('telescope.builtin').live_grep() end, { silent = true})
-vim.keymap.set('n', '<space><space>', function() require('telescope.builtin').resume() end, { silent = true})
+vim.keymap.set('n', '<space>b', function() require('telescope.builtin').buffers() end, { desc = "Find buffers", silent = true })
+vim.keymap.set('n', '<space>s', function() require('telescope.builtin').live_grep() end, { desc = "Find words", silent = true})
+vim.keymap.set('n', '<space><space>', function() require('telescope.builtin').resume() end, { desc = "Resume previou search", silent = true})
 
 -- maps.n["<leader>f"] = sections.f
 -- maps.n["<leader>g"] = sections.g
