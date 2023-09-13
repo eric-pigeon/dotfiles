@@ -9,12 +9,9 @@ return {
     local get_icon = require("utils").get_icon
     return {
       defaults = {
-        prompt_title = "",
         prompt_prefix = get_icon("Selected", 1),
         selection_caret = get_icon("Selected", 1),
         path_display = { "truncate" },
-        results_title = false,
-        preview_title = false,
         sorting_strategy = "ascending",
         layout_config = {
           horizontal = { prompt_position = "top", preview_width = 0.55 },
@@ -23,15 +20,15 @@ return {
           height = 0.8,
           preview_cutoff = 120,
         },
-        border = true,
-        borderchars = {
-          "z",
-          prompt = {"─", "│", " ", "│", "╭", "╮", "│", "│"},
-          results = {" ", "│", "─", "│", "│", "│", "╯", "╰"},
-          preview = { "─", "│", "─", "│", "╭", "╮", "╯", "╰"},
+        mappings = {
+          i = {
+            ["<C-n>"] = actions.cycle_history_next,
+            ["<C-p>"] = actions.cycle_history_prev,
+            ["<C-j>"] = actions.move_selection_next,
+            ["<C-k>"] = actions.move_selection_previous,
+          },
+          n = { q = actions.close },
         },
-        generic_sorter =  require'telescope.sorters'.get_fzy_sorter,
-        file_sorter =  require'telescope.sorters'.get_fzy_sorter,
       },
     }
   end,
