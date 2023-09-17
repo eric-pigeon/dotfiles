@@ -1,25 +1,29 @@
 return {
   -- "b0o/SchemaStore.nvim",
-  -- -- {
-  -- --   "folke/neodev.nvim",
-  -- --   opts = {
-  -- --     override = function(root_dir, library)
-  -- --       for _, astronvim_config in ipairs(astronvim.supported_configs) do
-  -- --         if root_dir:match(astronvim_config) then
-  -- --           library.plugins = true
-  -- --           break
-  -- --         end
-  -- --       end
-  -- --       vim.b.neodev_enabled = library.enabled
-  -- --     end,
-  -- --   },
-  -- -- },
+  {
+    "folke/neodev.nvim",
+    opts = {
+      override = function(root_dir, library)
+        for _, astronvim_config in ipairs(astronvim.supported_configs) do
+          if root_dir:match(astronvim_config) then
+            library.plugins = true
+            break
+          end
+        end
+        vim.b.neodev_enabled = library.enabled
+      end,
+    },
+  },
   {
     "neovim/nvim-lspconfig",
     dependencies = {
       {
         "williamboman/mason-lspconfig.nvim",
         cmd = { "LspInstall", "LspUninstall" },
+        opts = function(_, opts)
+          if not opts.handlers then opts.handlers = {} end
+          opts.handlers[1] = function(server) require("utils.lsp").setup(server) end
+        end,
         config = require "plugins.configs.mason-lspconfig",
       },
     },
