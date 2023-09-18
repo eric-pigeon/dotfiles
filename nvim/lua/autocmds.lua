@@ -2,22 +2,6 @@ local augroup = vim.api.nvim_create_augroup
 local autocmd = vim.api.nvim_create_autocmd
 local utils = require "utils"
 
--- Line Return {{{
--- When editing a file, always jump to the last known cursor position.
--- Don't do it when the position is invalid or when inside an event handler
--- (happens when dropping a file on gvim).
--- Also don't do it when the mark is in the first line, that is the default
--- position when opening a file.
-local line_return vim.api.nvim_create_augroup("line_return", { clear = true })
-autocmd("BufReadPost", {
-  group = line_return,
-  callback = function()
-    if vim.fn.line("'\"") > 1 and vim.fn.line("'\"") <= vim.fn.line("$") then
-      vim.api.nvim_command("normal! g`\"")
-    end
-  end
-})
-
 --autocmd("BufReadPre", {
 --  desc = "Disable certain functionality on very large files",
 --  group = augroup("large_buf", { clear = true }),
@@ -42,15 +26,17 @@ autocmd({ "BufAdd", "BufEnter", "TabNewEntered" }, {
     vim.t.bufs = vim.tbl_filter(require("utils.buffer").is_valid, vim.t.bufs)
   end,
 })
-autocmd("BufDelete", {
+autocmd({ "BufDelete", "TermClose" }, {
   desc = "Update buffers when deleting buffers",
   group = bufferline_group,
   callback = function(args)
+    local removed
     for _, tab in ipairs(vim.api.nvim_list_tabpages()) do
       local bufs = vim.t[tab].bufs
       if bufs then
         for i, bufnr in ipairs(bufs) do
           if bufnr == args.buf then
+            removed = true
             table.remove(bufs, i)
             vim.t[tab].bufs = bufs
             break
@@ -59,6 +45,7 @@ autocmd("BufDelete", {
       end
     end
     vim.t.bufs = vim.tbl_filter(require("utils.buffer").is_valid, vim.t.bufs)
+    if removed then utils.event "BufsUpdated" end
     vim.cmd.redrawtabline()
   end,
 })
@@ -69,12 +56,45 @@ autocmd({ "VimEnter", "FileType", "BufEnter", "WinEnter" }, {
   callback = function() utils.set_url_match() end,
 })
 
+local view_group = augroup("auto_view", { clear = true })
+autocmd({ "BufWinLeave", "BufWritePost", "WinLeave" }, {
+  desc = "Save view with mkview for real files",
+  group = view_group,
+  callback = function(args)
+    if vim.b[args.buf].view_activated then vim.cmd.mkview { mods = { emsg_silent = true } } end
+  end,
+})
+autocmd("BufWinEnter", {
+  desc = "Try to load file view if available and enable view saving for real files",
+  group = view_group,
+  callback = function(args)
+    if not vim.b[args.buf].view_activated then
+      local filetype = vim.api.nvim_get_option_value("filetype", { buf = args.buf })
+      local buftype = vim.api.nvim_get_option_value("buftype", { buf = args.buf })
+      local ignore_filetypes = { "gitcommit", "gitrebase", "svg", "hgcommit" }
+      if buftype == "" and filetype and filetype ~= "" and not vim.tbl_contains(ignore_filetypes, filetype) then
+        vim.b[args.buf].view_activated = true
+        vim.cmd.loadview { mods = { emsg_silent = true } }
+      end
+    end
+  end,
+})
+
+
 autocmd({ "BufReadPost", "BufNewFile" }, {
+  desc = "User events for file detection (File and GitFile)",
   group = augroup("file_user_events", { clear = true }),
   callback = function(args)
-    if not (vim.fn.expand "%" == "" or vim.api.nvim_get_option_value("buftype", { buf = args.buf }) == "nofile") then
+    local current_file = vim.fn.resolve(vim.fn.expand "%")
+    if not (current_file == "" or vim.api.nvim_get_option_value("buftype", { buf = args.buf }) == "nofile") then
       utils.event "File"
-      -- if utils.cmd('git -C "' .. vim.fn.expand "%:p:h" .. '" rev-parse', false) then utils.event "GitFile" end
+      -- if
+      --   require("utils.git").file_worktree()
+      --   or utils.cmd({ "git", "-C", vim.fn.fnamemodify(current_file, ":p:h"), "rev-parse" }, false)
+      -- then
+      --   -- utils.event "GitFile"
+      --   vim.api.nvim_del_augroup_by_name "file_user_events"
+      -- end
     end
   end,
 })
