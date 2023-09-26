@@ -96,10 +96,7 @@ return {
   "tpope/vim-fugitive",
   "joshdick/onedark.vim",
 
-  "folke/tokyonight.nvim",
-  { "catppuccin/nvim", name = "catppuccin" }
-
-
+  "folke/tokyonight.nvim"
 }
 --  use { 'prettier/vim-prettier', run = 'yarn install --frozen-lockfile --production' }
 ---- easy align {{{
