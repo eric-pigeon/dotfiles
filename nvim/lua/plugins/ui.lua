@@ -46,6 +46,7 @@ return {
   -- },
   {
     "lukas-reineke/indent-blankline.nvim",
+    version = "^2",
     event = "User File",
     opts = {
       buftype_exclude = {
