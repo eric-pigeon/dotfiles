@@ -1,19 +1,6 @@
 return {
-  -- "b0o/SchemaStore.nvim",
-  {
-    "folke/neodev.nvim",
-    opts = {
-      override = function(root_dir, library)
-        for _, astronvim_config in ipairs(astronvim.supported_configs) do
-          if root_dir:match(astronvim_config) then
-            library.plugins = true
-            break
-          end
-        end
-        vim.b.neodev_enabled = library.enabled
-      end,
-    },
-  },
+  { "b0o/SchemaStore.nvim", lazy = true },
+  { "folke/neodev.nvim", lazy = true, options = {} },
   {
     "neovim/nvim-lspconfig",
     dependencies = {
@@ -31,7 +18,8 @@ return {
     config = require "plugins.configs.lspconfig",
   },
   {
-    "jose-elias-alvarez/null-ls.nvim",
+    "nvimtools/none-ls.nvim",
+    main = "null-ls",
     dependencies = {
       {
         "jay-babu/mason-null-ls.nvim",
