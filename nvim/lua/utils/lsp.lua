@@ -121,6 +121,7 @@ local function del_buffer_autocmd(augroup, bufnr)
   local cmds_found, cmds = pcall(vim.api.nvim_get_autocmds, { group = augroup, buffer = bufnr })
   if cmds_found then vim.tbl_map(function(cmd) vim.api.nvim_del_autocmd(cmd.id) end, cmds) end
 end
+
 --- The `on_attach` function used by AstroNvim
 ---@param client table The LSP client details when attaching
 ---@param bufnr number The buffer that the LSP client is attaching to
@@ -145,7 +146,6 @@ M.on_attach = function(client, bufnr)
     lsp_mappings.n["<leader>lI"] = { "<cmd>NullLsInfo<cr>", desc = "Null-ls information" }
   end
 
-  local capabilities = client.server_capabilities
   if client.supports_method "textDocument/codeAction" then
     lsp_mappings.n["<leader>la"] = {
       function() vim.lsp.buf.code_action() end,
@@ -251,7 +251,7 @@ M.on_attach = function(client, bufnr)
         end,
       },
       {
-        events = { "CursorMoved", "CursorMovedI" },
+        events = { "CursorMoved", "CursorMovedI", "BufLeave" },
         desc = "clear references when cursor moves",
         callback = function() vim.lsp.buf.clear_references() end,
       },
@@ -279,7 +279,7 @@ M.on_attach = function(client, bufnr)
     if vim.b.inlay_hints_enabled == nil then vim.b.inlay_hints_enabled = vim.g.inlay_hints_enabled end
     -- TODO: remove check after dropping support for Neovim v0.9
     if vim.lsp.inlay_hint then
-      if vim.b.inlay_hints_enabled then vim.lsp.inlay_hint(bufnr, true) end
+      if vim.b.inlay_hints_enabled then vim.lsp.inlay_hint.enable(bufnr, true) end
       lsp_mappings.n["<leader>uH"] = {
         function() require("astronvim.utils.ui").toggle_buffer_inlay_hints(bufnr) end,
         desc = "Toggle LSP inlay hints (buffer)",
@@ -348,7 +348,18 @@ M.on_attach = function(client, bufnr)
       lsp_mappings.n.gT[1] = function() require("telescope.builtin").lsp_type_definitions() end
     end
     if lsp_mappings.n["<leader>lG"] then
-      lsp_mappings.n["<leader>lG"][1] = function() require("telescope.builtin").lsp_workspace_symbols() end
+      lsp_mappings.n["<leader>lG"][1] = function()
+        vim.ui.input({ prompt = "Symbol Query: (leave empty for word under cursor)" }, function(query)
+          if query then
+            -- word under cursor if given query is empty
+            if query == "" then query = vim.fn.expand "<cword>" end
+            require("telescope.builtin").lsp_workspace_symbols {
+              query = query,
+              prompt_title = ("Find word (%s)"):format(query),
+            }
+          end
+        end)
+      end
     end
   end
 
