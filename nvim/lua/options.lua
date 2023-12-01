@@ -90,7 +90,7 @@ vim.o.visualbell = true
 -- goth mode
 vim.o.background = "dark"
 --Add map to enter paste mode
-vim.o.pastetoggle=  "<F2>"
+-- vim.o.pastetoggle=  "<F2>"
 -- special character display
 vim.o.list = true
 vim.o.listchars = "tab:┊ ,eol:¬,extends:❯,precedes:❮,trail:-,nbsp:+"
