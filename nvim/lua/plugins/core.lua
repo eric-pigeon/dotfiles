@@ -1,5 +1,6 @@
 return {
   "nvim-lua/plenary.nvim",
+  "echasnovski/mini.bufremove",
   { "NMAC427/guess-indent.nvim", event = "User File", config = require "plugins.configs.guess-indent" },
   {
     "windwp/nvim-autopairs",
