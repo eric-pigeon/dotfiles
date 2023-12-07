@@ -32,6 +32,7 @@ vim.opt.splitbelow = true -- Splitting a new window below the current one
 vim.opt.splitright = true -- Splitting a new window at the right of the current one
 vim.opt.termguicolors = true -- Enable 24-bit RGB color in the TUI
 vim.opt.timeoutlen = 500 -- Shorten key timeout length a little bit for which-key
+vim.opt.title = true -- set terminal title to the filename and path
 vim.opt.undofile = true -- Enable persistent undo
 vim.opt.updatetime = 300 -- Length of time to wait before triggering the plugin
 vim.opt.undoreload = 10000
@@ -129,6 +130,8 @@ vim.g.autopairs_enabled = true -- enable autopairs at start
 vim.g.diagnostics_mode = 3 -- set the visibility of diagnostics in the UI (0=off, 1=only show in status line, 2=virtual text off, 3=all on)
 vim.g.icons_enabled = true -- disable icons in the UI (disable if no nerd font is available)
 vim.g.ui_notifications_enabled = true -- disable notifications when toggling UI elements
+vim.g.max_file = { size = 1024 * 100, lines = 10000 } -- set global limits for large files
+
 --   },
 --   t = { bufs = vim.api.nvim_list_bufs() }, -- initialize buffers for the current tab
 -- })
