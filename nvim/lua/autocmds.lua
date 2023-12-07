@@ -111,7 +111,7 @@ autocmd({ "BufReadPost", "BufNewFile" }, {
 autocmd("CursorMoved", {
   callback = function()
     if vim.fn.getfsize("@%") < 1000000 then
-      vim.api.nvim_command(vim.fn.printf('match SpellLocal /\\<%s\\>/', vim.fn.escape(vim.fn.expand('<cword>'), '^$.*?/\\[]~')))
+      vim.api.nvim_command(vim.fn.printf('match SpellLocal /\\<%s\\>/', vim.fn.escape(vim.fn.expand('<cword>'), '^$.*/\\[]~')))
     end
   end,
 })
