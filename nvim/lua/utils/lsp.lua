@@ -222,7 +222,7 @@ M.on_attach = function(client, bufnr)
           local autoformat_enabled = vim.b.autoformat_enabled
           if autoformat_enabled == nil then autoformat_enabled = vim.g.autoformat_enabled end
           if autoformat_enabled and ((not autoformat.filter) or autoformat.filter(bufnr)) then
-            vim.lsp.buf.format(require("utils").extend_tbl(M.format_opts, { bufnr = bufnr }))
+            vim.lsp.buf.format(extend_tbl(M.format_opts, { bufnr = bufnr }))
           end
         end,
       })
@@ -389,14 +389,11 @@ M.capabilities.textDocument.foldingRange = { dynamicRegistration = false, lineFo
 -- M.flags = user_opts "lsp.flags"
 
 --- Get the server configuration for a given language server to be provided to the server's `setup()` call
----@param  server_name the name of the server
----@return the table of LSP options used when setting up the given language server
+---@param server_name string The name of the server
+---@return table # The table of LSP options used when setting up the given language server
 function M.config(server_name)
   local server = require("lspconfig")[server_name]
-  local lsp_opts = require("utils").extend_tbl(
-    { capabilities = server.capabilities, flags = server.flags },
-    { capabilities = M.capabilities, flags = M.flags }
-  )
+  local lsp_opts = extend_tbl(server, { capabilities = M.capabilities, flags = M.flags })
   if server_name == "jsonls" then -- by default add json schemas
     local schemastore_avail, schemastore = pcall(require, "schemastore")
     if schemastore_avail then
