@@ -1,8 +1,9 @@
 return function(_, opts)
   local heirline = require "heirline"
-  local status = require "utils.status"
-  local C = status.env.fallback_colors
+  local C = require("utils.status.env").fallback_colors
   local get_hlgroup = require("utils").get_hlgroup
+  local lualine_mode = require("utils.status.hl").lualine_mode
+  local function resolve_lualine(orig, ...) return (not orig or orig == "NONE") and lualine_mode(...) or orig end
 
   local function setup_colors()
     local Normal = get_hlgroup("Normal", { fg = C.fg, bg = C.bg })
@@ -10,6 +11,7 @@ return function(_, opts)
     local Error = get_hlgroup("Error", { fg = C.red, bg = C.bg })
     local StatusLine = get_hlgroup("StatusLine", { fg = C.fg, bg = C.dark_bg })
     local TabLine = get_hlgroup("TabLine", { fg = C.grey, bg = C.none })
+    local TabLineFill = get_hlgroup("TabLineFill", { fg = C.fg, bg = C.dark_bg })
     local TabLineSel = get_hlgroup("TabLineSel", { fg = C.fg, bg = C.none })
     local WinBar = get_hlgroup("WinBar", { fg = C.bright_grey, bg = C.bg })
     local WinBarNC = get_hlgroup("WinBarNC", { fg = C.grey, bg = C.bg })
@@ -23,17 +25,13 @@ return function(_, opts)
     local DiagnosticWarn = get_hlgroup("DiagnosticWarn", { fg = C.orange, bg = C.dark_bg })
     local DiagnosticInfo = get_hlgroup("DiagnosticInfo", { fg = C.white, bg = C.dark_bg })
     local DiagnosticHint = get_hlgroup("DiagnosticHint", { fg = C.bright_yellow, bg = C.dark_bg })
-    local HeirlineInactive = get_hlgroup("HeirlineInactive", { bg = nil }).bg
-      or status.hl.lualine_mode("inactive", C.dark_grey)
-    local HeirlineNormal = get_hlgroup("HeirlineNormal", { bg = nil }).bg or status.hl.lualine_mode("normal", C.blue)
-    local HeirlineInsert = get_hlgroup("HeirlineInsert", { bg = nil }).bg or status.hl.lualine_mode("insert", C.green)
-    local HeirlineVisual = get_hlgroup("HeirlineVisual", { bg = nil }).bg or status.hl.lualine_mode("visual", C.purple)
-    local HeirlineReplace = get_hlgroup("HeirlineReplace", { bg = nil }).bg
-      or status.hl.lualine_mode("replace", C.bright_red)
-    local HeirlineCommand = get_hlgroup("HeirlineCommand", { bg = nil }).bg
-      or status.hl.lualine_mode("command", C.bright_yellow)
-    local HeirlineTerminal = get_hlgroup("HeirlineTerminal", { bg = nil }).bg
-      or status.hl.lualine_mode("insert", HeirlineInsert)
+    local HeirlineInactive = resolve_lualine(get_hlgroup("HeirlineInactive", { bg = nil }).bg, "inactive", C.dark_grey)
+    local HeirlineNormal = resolve_lualine(get_hlgroup("HeirlineNormal", { bg = nil }).bg, "normal", C.blue)
+    local HeirlineInsert = resolve_lualine(get_hlgroup("HeirlineInsert", { bg = nil }).bg, "insert", C.green)
+    local HeirlineVisual = resolve_lualine(get_hlgroup("HeirlineVisual", { bg = nil }).bg, "visual", C.purple)
+    local HeirlineReplace = resolve_lualine(get_hlgroup("HeirlineReplace", { bg = nil }).bg, "replace", C.bright_red)
+    local HeirlineCommand = resolve_lualine(get_hlgroup("HeirlineCommand", { bg = nil }).bg, "command", C.bright_yellow)
+    local HeirlineTerminal = resolve_lualine(get_hlgroup("HeirlineTerminal", { bg = nil }).bg, "insert", HeirlineInsert)
 
     local colors = {
       close_fg = Error.fg,
