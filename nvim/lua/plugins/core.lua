@@ -1,6 +1,7 @@
 return {
   "nvim-lua/plenary.nvim",
   "echasnovski/mini.bufremove",
+  "LunarVim/bigfile.nvim",
   { "NMAC427/guess-indent.nvim", event = "User File", config = require "plugins.configs.guess-indent" },
   {
     "windwp/nvim-autopairs",

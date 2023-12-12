@@ -11,8 +11,8 @@ end
 -- TODO
 vim.fn['camelcasemotion#CreateMotionMappings']('<leader>')
 
-vim.o.foldmethod = "expr"
-vim.o.foldexpr = "nvim_treesitter#foldexpr()"
+-- vim.o.foldmethod = "expr"
+-- vim.o.foldexpr = "nvim_treesitter#foldexpr()"
 
 -- vim.cmd.colorscheme("onedark")
 -- vim.cmd.colorscheme("tokyonight")

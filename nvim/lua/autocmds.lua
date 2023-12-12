@@ -107,15 +107,6 @@ autocmd({ "BufReadPost", "BufNewFile" }, {
   end,
 })
 
--- Hightlight matched under cursor
-autocmd("CursorMoved", {
-  callback = function()
-    if vim.fn.getfsize("@%") < 1000000 then
-      vim.api.nvim_command(vim.fn.printf('match SpellLocal /\\<%s\\>/', vim.fn.escape(vim.fn.expand('<cword>'), '^$.*/\\[]~')))
-    end
-  end,
-})
-
 vim.api.nvim_create_user_command("CloseHiddenBuffers", function()
   local open_buffers = {}
 
