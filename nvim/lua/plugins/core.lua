@@ -107,9 +107,6 @@ return {
   "sheerun/vim-polyglot",
 
   "tpope/vim-fugitive",
-  "joshdick/onedark.vim",
-
-  "folke/tokyonight.nvim"
 }
 --  use { 'prettier/vim-prettier', run = 'yarn install --frozen-lockfile --production' }
 ---- easy align {{{

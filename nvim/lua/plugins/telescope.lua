@@ -29,6 +29,9 @@ return {
           },
           n = { q = actions.close },
         },
+        highlight = {
+          enabled = true,
+        }
       },
     }
   end,
