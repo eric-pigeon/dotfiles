@@ -11,13 +11,4 @@ end
 -- TODO
 vim.fn['camelcasemotion#CreateMotionMappings']('<leader>')
 
--- vim.o.foldmethod = "expr"
--- vim.o.foldexpr = "nvim_treesitter#foldexpr()"
-
--- vim.cmd.colorscheme("onedark")
--- vim.cmd.colorscheme("tokyonight")
--- vim.cmd.colorscheme("astrodark")
 vim.cmd.colorscheme "catppuccin"
-
--- vim.api.nvim_set_hl(0, "Normal", { ctermbg = "NONE" })
--- vim.api.nvim_set_hl(0, "NotifyBackground", { bg = "#1e222a" })

@@ -1,0 +1,6 @@
+[env]
+XDG_CACHE_HOME = "/Users/epigeon/.cache"
+XDG_CONFIG_HOME = "/Users/epigeon/.config"
+XDG_DATA_HOME = "/Users/epigeon/.local/share"
+XDG_STATE_HOME = "/Users/epigeon/.local/state"
+ZDOTDIR = "/Users/epigeon/.config/zsh"
