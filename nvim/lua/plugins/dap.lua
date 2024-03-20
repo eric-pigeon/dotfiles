@@ -10,8 +10,14 @@ return {
     },
     {
       "rcarriga/nvim-dap-ui",
+      dependencies = { "nvim-neotest/nvim-nio" },
       opts = { floating = { border = "rounded" } },
       config = require "plugins.configs.nvim-dap-ui",
+    },
+    {
+      "rcarriga/cmp-dap",
+      dependencies = { "nvim-cmp" },
+      config = require "plugins.configs.cmp-dap",
     },
   },
   event = "User File",
