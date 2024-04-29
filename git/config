@@ -1,0 +1,78 @@
+[core]
+  editor = nvim
+[status]
+  showUntrackedFiles = all
+  short = true
+  showStash = true
+  relativePaths = false ; false = show path relative to git root, not relative to cwd
+[stash]
+  showIncludeUntracked = true
+
+[init]
+  defaultBranch = main
+[url "git@github.com:"]
+  insteadOf = "https://github.com/" ; automatically use SSH instead of HTTPS for remotes
+
+[pull]
+  rebase = true ; rebase changes instead of merging
+  ; ff = only ; https://blog.sffc.xyz/post/185195398930/why-you-should-use-git-pull-ff-only
+[fetch]
+  prune = true ; automatically delete remote tracking branches that have been deleted
+[push]
+  autoSetupRemote = true ; create remote branch, if it doesn't exist
+[rerere]
+  enabled = true
+  autoUpdate = true
+
+[branch]
+  sort = -committerdate ; sort by recency, not by name
+[tag]
+  sort = -committerdate
+
+[log]
+  abbrevCommit = true
+  follow = true
+[format]
+  pretty = %C(yellow)%h%C(red)%d%C(reset) %s %C(green)(%cr) %C(bold blue)%an%C(reset)
+
+[advice]
+  detachedHead = false
+  addEmptyPathspec = false
+[help]
+  autoCorrect = prompt ; prompt whether to run auto-correction
+
+[rebase]
+  autoSquash = true
+  autoStash = true
+  missingCommitsCheck = error ; commits must be removed with `drop`, not by deleting a line
+  updateRefs = true
+[diff]
+  colorMoved = true ; moved lines colored different than added/removed
+  colorMovedWS = ignore-all-space
+  algorithm = histogram ; https://luppeng.wordpress.com/2020/10/10/when-to-use-each-of-the-git-diff-algorithms/
+[merge]
+  conflictStyle = zdiff3 ; shows original version in middle ; https://ductile.systems/zdiff3/
+
+;───────────────────────────────────────────────────────────────────────────────
+
+; MERGE TOOL
+[merge]
+  ; DOCS https://neovim.io/doc/user/diff.html;dp
+  tool = nvim
+[mergetool "nvim"]
+  ; SOURCE https://smittie.de/posts/git-mergetool/
+  cmd = "nvim -d -c \"wincmd l\" -c \"norm ]c\" \"$LOCAL\" \"$MERGED\" \"$REMOTE\""
+
+;───────────────────────────────────────────────────────────────────────────────
+; SETUP FOR DELTA
+
+[core]
+  pager = delta
+[interactive]
+  diffFilter = delta --color-only
+[delta]
+  tabs = 3 ; tabwidth
+  navigate = true ; use n and N to move between diff sections (requires LESSHISTFILE)
+  hyperlinks = true
+
+;────────────────────────────────────────────────────────────────────────────
