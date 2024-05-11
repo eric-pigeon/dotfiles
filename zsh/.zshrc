@@ -171,19 +171,15 @@ export PATH="${HOME}/.local/bin:$PATH"
 
 # ruby settings {{{
 if (( $+commands[rbenv] )); then
-  export PATH="$HOME/.rbenv/bin:$PATH"
-  eval "$(rbenv init - --no-rehash)"
-  # eval "$(rbenv init -)"
+  export RBENV_ROOT="$XDG_DATA_HOME/rbenv"
+  eval "$(rbenv init - zsh --no-rehash)"
+  export PATH="$RBENV_ROOT/bin:$PATH"
 fi
 export SOLARGRAPH_CACHE=${XDG_CACHE_HOME}
 # }}}
 
 # fzf {{{
 [ -f ~/.config/zsh/.fzf.zsh ] && source ~/.config/zsh/.fzf.zsh
-# }}}
-
-# direnv {{{
-# eval "$(direnv hook zsh)"
 # }}}
 
 # source p10k prompt {{{
@@ -195,8 +191,4 @@ export SOLARGRAPH_CACHE=${XDG_CACHE_HOME}
 export ASDF_CONFIG_FILE="${XDG_CONFIG_HOME}/asdf/asdfrc"
 # . /usr/local/opt/asdf/asdf.sh
 # . /usr/local/opt/asdf/libexec/asdf.sh
-# }}}
-
-# kcx {{{
-# source "$(npm root -g)/kcx/bin/kcxcli.sh"
 # }}}
