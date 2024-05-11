@@ -1,9 +1,9 @@
 return {
   { "b0o/SchemaStore.nvim", lazy = true },
-  { "folke/neodev.nvim", lazy = true, options = {} },
   {
     "neovim/nvim-lspconfig",
     dependencies = {
+      { "folke/neoconf.nvim", lazy = true, opts = {} },
       {
         "williamboman/mason-lspconfig.nvim",
         cmd = { "LspInstall", "LspUninstall" },
