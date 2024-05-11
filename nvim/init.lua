@@ -8,7 +8,4 @@ for _, source in ipairs {
   if not status_ok then vim.api.nvim_err_writeln("Failed to load " .. source .. "\n\n" .. fault) end
 end
 
--- TODO
-vim.fn['camelcasemotion#CreateMotionMappings']('<leader>')
-
 vim.cmd.colorscheme "catppuccin"

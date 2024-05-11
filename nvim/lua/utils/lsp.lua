@@ -237,27 +237,6 @@ M.on_attach = function(client, bufnr)
     end
   end
 
-  if client.supports_method "textDocument/documentHighlight" then
-    add_buffer_autocmd("lsp_document_highlight", bufnr, {
-      {
-        events = { "CursorHold", "CursorHoldI" },
-        desc = "highlight references when cursor holds",
-        callback = function()
-          if not M.has_capability("textDocument/documentHighlight", { bufnr = bufnr }) then
-            del_buffer_autocmd("lsp_document_highlight", bufnr)
-            return
-          end
-          vim.lsp.buf.document_highlight()
-        end,
-      },
-      {
-        events = { "CursorMoved", "CursorMovedI", "BufLeave" },
-        desc = "clear references when cursor moves",
-        callback = function() vim.lsp.buf.clear_references() end,
-      },
-    })
-  end
-
   if client.supports_method "textDocument/hover" then
     -- TODO: Remove mapping after dropping support for Neovim v0.9, it's automatic
     if vim.fn.has "nvim-0.10" == 0 then

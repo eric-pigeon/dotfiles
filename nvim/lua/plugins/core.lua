@@ -102,7 +102,6 @@ return {
   },
 
 
-  "bkad/CamelCaseMotion",
   "junegunn/vim-easy-align",
   "sheerun/vim-polyglot",
 
