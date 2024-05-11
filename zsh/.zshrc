@@ -178,6 +178,11 @@ fi
 export SOLARGRAPH_CACHE=${XDG_CACHE_HOME}
 # }}}
 
+# rust settings {{{
+export RUSTUP_HOME="$XDG_DATA_HOME/rustup"
+export CARGO_HOME="$XDG_DATA_HOME/cargo"
+# }}}
+
 # fzf {{{
 [ -f ~/.config/zsh/.fzf.zsh ] && source ~/.config/zsh/.fzf.zsh
 # }}}
