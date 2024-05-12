@@ -134,7 +134,6 @@ alias rm="rm -i"
 alias l="l -CF"
 alias less="less -S"
 alias vim="nvim"
-alias chrome="/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome"
 alias fix='echo -e "\033c"'
 alias kc="kubectl"
 alias kcgpa="kubectl get pods --all-namespaces"
@@ -174,6 +173,10 @@ if (( $+commands[rbenv] )); then
   export RBENV_ROOT="$XDG_DATA_HOME/rbenv"
   eval "$(rbenv init - zsh --no-rehash)"
   export PATH="$RBENV_ROOT/bin:$PATH"
+  export BUNDLE_USER_HOME="$XDG_DATA_HOME/bundle"
+  export BUNDLE_USER_CONFIG="$XDG_CONFIG_HOME/bundle/config"
+  export BUNDLE_USER_CACHE="$XDG_CACHE_HOME/bundle"
+  export BUNDLE_USER_PLUGIN="$XDG_DATA_HOME/bundle/plugin"
 fi
 export SOLARGRAPH_CACHE=${XDG_CACHE_HOME}
 # }}}
