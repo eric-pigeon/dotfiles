@@ -194,7 +194,9 @@ export GOENV_GOPATH_PREFIX="$XDG_DATA_HOME/goenv/modules"
 # }}}
 
 # fzf {{{
-[ -f ~/.config/zsh/.fzf.zsh ] && source ~/.config/zsh/.fzf.zsh
+if (( $+commands[fzf] )); then
+  eval "$(fzf --zsh)"
+fi
 # }}}
 
 # source p10k prompt {{{
