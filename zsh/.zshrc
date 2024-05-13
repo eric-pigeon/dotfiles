@@ -156,15 +156,12 @@ fi
 
 # path {{{
 # TODO: clean this up
-export GOPATH=$HOME/go
-export PATH=$PATH:~/go/bin
-export PATH="${PATH}:${HOME}/.krew/bin"
-export PATH=$PATH:/usr/local/kubebuilder/bin
-export PATH=$PATH:/usr/local/kubectx/bin
-export PATH=$PATH:~/.cargo/bin
-export PATH=$PATH:/usr/local/opt/llvm/bin
-export PATH="/usr/local/sbin:$PATH"
-export PATH="/usr/local/opt/openjdk@8/bin:$PATH"
+# export PATH="${PATH}:${HOME}/.krew/bin"
+# export PATH=$PATH:/usr/local/kubebuilder/bin
+# export PATH=$PATH:/usr/local/kubectx/bin
+# export PATH=$PATH:/usr/local/opt/llvm/bin
+# export PATH="/usr/local/sbin:$PATH"
+# export PATH="/usr/local/opt/openjdk@8/bin:$PATH"
 export PATH="${HOME}/.local/bin:$PATH"
 # }}}
 
@@ -177,6 +174,7 @@ if (( $+commands[rbenv] )); then
   export BUNDLE_USER_CONFIG="$XDG_CONFIG_HOME/bundle/config"
   export BUNDLE_USER_CACHE="$XDG_CACHE_HOME/bundle"
   export BUNDLE_USER_PLUGIN="$XDG_DATA_HOME/bundle/plugin"
+  export IRBRC="$XDG_CONFIG_HOME/irb/irbrc"
 fi
 export SOLARGRAPH_CACHE=${XDG_CACHE_HOME}
 # }}}
@@ -184,6 +182,15 @@ export SOLARGRAPH_CACHE=${XDG_CACHE_HOME}
 # rust settings {{{
 export RUSTUP_HOME="$XDG_DATA_HOME/rustup"
 export CARGO_HOME="$XDG_DATA_HOME/cargo"
+export PATH="$CARGO/bin:$PATH"
+# }}}
+
+# go settings {{{
+# TODO
+# export GOPATH=$HOME/go
+# export PATH=$PATH:~/go/bin
+export GOENV_ROOT="$XDG_DATA_HOME/goenv"
+export GOENV_GOPATH_PREFIX="$XDG_DATA_HOME/goenv/modules"
 # }}}
 
 # fzf {{{
