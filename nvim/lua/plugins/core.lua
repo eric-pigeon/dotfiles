@@ -66,6 +66,9 @@ return {
   },
   {
     "numToStr/Comment.nvim",
+    dependencies = {
+      { "JoosepAlviste/nvim-ts-context-commentstring", lazy = true, opts = { enable_autocmd = false } },
+    },
     keys = {
       { "gc", mode = { "n", "v" }, desc = "Comment toggle linewise" },
       { "gb", mode = { "n", "v" }, desc = "Comment toggle blockwise" },
