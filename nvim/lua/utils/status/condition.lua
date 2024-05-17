@@ -103,7 +103,7 @@ function M.aerial_available() return package.loaded["aerial"] end
 function M.lsp_attached(bufnr)
   if type(bufnr) == "table" then bufnr = bufnr.bufnr end
   -- HACK: Check for lsp utilities loaded first, get_active_clients seems to have a bug if called too early (tokyonight colorscheme seems to be a good way to expose this for some reason)
-  return package.loaded["utils.lsp"] and next(vim.lsp.get_active_clients { bufnr = bufnr or 0 }) ~= nil
+  return package.loaded["utils.lsp"] and next(vim.lsp.get_clients { bufnr = bufnr or 0 }) ~= nil
 end
 
 --- A condition function if treesitter is in use

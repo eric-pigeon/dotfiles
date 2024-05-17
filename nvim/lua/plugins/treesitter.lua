@@ -1,11 +1,7 @@
 return {
   "nvim-treesitter/nvim-treesitter",
-  dependencies = {
-    { "JoosepAlviste/nvim-ts-context-commentstring", commit = "6c30f3c8915d7b31c3decdfe6c7672432da1809d" },
-    "nvim-treesitter/nvim-treesitter-textobjects",
-    -- HACK: remove when https://github.com/windwp/nvim-ts-autotag/issues/125 closed.
-    { "windwp/nvim-ts-autotag", opts = { enable_close_on_slash = false } },
-  },
+  main = "nvim-treesitter.configs",
+  -- dependencies = { { "nvim-treesitter/nvim-treesitter-textobjects", lazy = true } },
   event = "User File",
   cmd = {
     "TSBufDisable",
@@ -34,21 +30,9 @@ return {
     require "nvim-treesitter.query_predicates"
   end,
   opts = function()
+    require("lazy").load { plugins = { "mason.nvim" } }
     return {
       autotag = { enable = true },
-      context_commentstring = { enable = true, enable_autocmd = false },
-      -- HACK: force install of shipped neovim parsers since TSUpdate doesn't correctly update them
-      ensure_installed = {
-        "bash",
-        "c",
-        "lua",
-        "markdown",
-        "markdown_inline",
-        "python",
-        "query",
-        "vim",
-        "vimdoc",
-      },
       highlight = {
         enable = true,
         disable = function(_, bufnr) return vim.b[bufnr].large_buf end,

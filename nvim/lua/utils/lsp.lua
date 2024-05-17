@@ -11,7 +11,7 @@
 
 local M = {}
 local tbl_contains = vim.tbl_contains
-local tbl_isempty = vim.tbl_isempty
+-- local tbl_isempty = vim.tbl_isempty
 
 local utils = require "utils"
 local is_available = utils.is_available
@@ -96,7 +96,7 @@ end
 ---               - name (string): Only return clients with the given name
 ---@return boolean # Whether or not any of the clients provide the capability
 function M.has_capability(capability, filter)
-  for _, client in ipairs(vim.lsp.get_active_clients(filter)) do
+  for _, client in ipairs(vim.lsp.get_clients(filter)) do
     if client.supports_method(capability) then return true end
   end
   return false
@@ -155,26 +155,7 @@ M.on_attach = function(client, bufnr)
   end
 
   if client.supports_method "textDocument/codeLens" then
-    add_buffer_autocmd("lsp_codelens_refresh", bufnr, {
-      events = { "InsertLeave", "BufEnter" },
-      desc = "Refresh codelens",
-      callback = function()
-        if not M.has_capability("textDocument/codeLens", { bufnr = bufnr }) then
-          del_buffer_autocmd("lsp_codelens_refresh", bufnr)
-          return
-        end
-        if vim.g.codelens_enabled then vim.lsp.codelens.refresh() end
-      end,
-    })
-    vim.lsp.codelens.refresh()
-    lsp_mappings.n["<leader>ll"] = {
-      function() vim.lsp.codelens.refresh() end,
-      desc = "LSP CodeLens refresh",
-    }
-    lsp_mappings.n["<leader>lL"] = {
-      function() vim.lsp.codelens.run() end,
-      desc = "LSP CodeLens run",
-    }
+    vim.lsp.codelens.refresh { bufnr = bufnr }
   end
 
   if client.supports_method "textDocument/declaration" then
@@ -204,47 +185,37 @@ M.on_attach = function(client, bufnr)
       function() vim.lsp.buf.format(M.format_opts) end,
       { desc = "Format file with LSP" }
     )
-    local autoformat = M.formatting.format_on_save
-    local filetype = vim.api.nvim_get_option_value("filetype", { buf = bufnr })
-    if
-      autoformat.enabled
-      and (tbl_isempty(autoformat.allow_filetypes or {}) or tbl_contains(autoformat.allow_filetypes, filetype))
-      and (tbl_isempty(autoformat.ignore_filetypes or {}) or not tbl_contains(autoformat.ignore_filetypes, filetype))
-    then
-      add_buffer_autocmd("lsp_auto_format", bufnr, {
-        events = "BufWritePre",
-        desc = "autoformat on save",
-        callback = function()
-          if not M.has_capability("textDocument/formatting", { bufnr = bufnr }) then
-            del_buffer_autocmd("lsp_auto_format", bufnr)
-            return
-          end
-          local autoformat_enabled = vim.b.autoformat_enabled
-          if autoformat_enabled == nil then autoformat_enabled = vim.g.autoformat_enabled end
-          if autoformat_enabled and ((not autoformat.filter) or autoformat.filter(bufnr)) then
-            vim.lsp.buf.format(extend_tbl(M.format_opts, { bufnr = bufnr }))
-          end
-        end,
-      })
-      lsp_mappings.n["<leader>uf"] = {
-        function() require("utils.ui").toggle_buffer_autoformat() end,
-        desc = "Toggle autoformatting (buffer)",
-      }
-      lsp_mappings.n["<leader>uF"] = {
-        function() require("utils.ui").toggle_autoformat() end,
-        desc = "Toggle autoformatting (global)",
-      }
-    end
-  end
-
-  if client.supports_method "textDocument/hover" then
-    -- TODO: Remove mapping after dropping support for Neovim v0.9, it's automatic
-    if vim.fn.has "nvim-0.10" == 0 then
-      lsp_mappings.n["K"] = {
-        function() vim.lsp.buf.hover() end,
-        desc = "Hover symbol details",
-      }
-    end
+    -- local autoformat = M.formatting.format_on_save
+    -- local filetype = vim.api.nvim_get_option_value("filetype", { buf = bufnr })
+    -- if
+    --   autoformat.enabled
+    --   and (tbl_isempty(autoformat.allow_filetypes or {}) or tbl_contains(autoformat.allow_filetypes, filetype))
+    --   and (tbl_isempty(autoformat.ignore_filetypes or {}) or not tbl_contains(autoformat.ignore_filetypes, filetype))
+    -- then
+    --   add_buffer_autocmd("lsp_auto_format", bufnr, {
+    --     events = "BufWritePre",
+    --     desc = "autoformat on save",
+    --     callback = function()
+    --       if not M.has_capability("textDocument/formatting", { bufnr = bufnr }) then
+    --         del_buffer_autocmd("lsp_auto_format", bufnr)
+    --         return
+    --       end
+    --       local autoformat_enabled = vim.b.autoformat_enabled
+    --       if autoformat_enabled == nil then autoformat_enabled = vim.g.autoformat_enabled end
+    --       if autoformat_enabled and ((not autoformat.filter) or autoformat.filter(bufnr)) then
+    --         vim.lsp.buf.format(extend_tbl(M.format_opts, { bufnr = bufnr }))
+    --       end
+    --     end,
+    --   })
+    --   lsp_mappings.n["<leader>uf"] = {
+    --     function() require("utils.ui").toggle_buffer_autoformat() end,
+    --     desc = "Toggle autoformatting (buffer)",
+    --   }
+    --   lsp_mappings.n["<leader>uF"] = {
+    --     function() require("utils.ui").toggle_autoformat() end,
+    --     desc = "Toggle autoformatting (global)",
+    --   }
+    -- end
   end
 
   if client.supports_method "textDocument/implementation" then
