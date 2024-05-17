@@ -10,6 +10,11 @@ if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]
 fi
 # }}}
 
+if (( $+commands[brew] )); then
+  # If you're using macOS, you'll want this enabled
+  eval "$(brew shellenv)"
+fi
+
 ### Added by Zinit's installer {{{
 if [[ ! -f $HOME/.local/share/zinit/zinit.git/zinit.zsh ]]; then
     print -P "%F{33} %F{220}Installing %F{33}ZDHARMA-CONTINUUM%F{220} Initiative Plugin Manager (%F{33}zdharma-continuum/zinit%F{220})…%f"
@@ -37,7 +42,7 @@ zinit ice depth=1; zinit light romkatv/powerlevel10k
 zinit light zsh-users/zsh-syntax-highlighting
 zinit light zsh-users/zsh-completions
 zinit light zsh-users/zsh-autosuggestions
-zinit light Aloxaf/fzf-tab
+# zinit light Aloxaf/fzf-tab
 
 # General Settings {{{
 # Autoload tab completion {{{
@@ -54,7 +59,8 @@ export CLICOLOR=1
 #-------------------------------------------------------------------------------
 zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}' 'r:|[._-]=* r:|=*' 'l:|=* r:|=*'
 zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
-zstyle ':completion:*' menu no
+# TODO fzf-tab not working
+# zstyle ':completion:*' menu no
 zstyle ':fzf-tab:complete:cd:*' fzf-preview 'ls --color $realpath'
 zstyle -e ':completion:*:(ssh|scp|sshfs|ping|telnet|nc|rsync):*' hosts '
     reply=( ${=${${(M)${(f)"$(<~/.ssh/config)"}:#Host*}#Host }:#*\**} )'
@@ -176,9 +182,7 @@ fi
 # export PATH=$PATH:/usr/local/kubebuilder/bin
 # export PATH=$PATH:/usr/local/kubectx/bin
 # export PATH=$PATH:/usr/local/opt/llvm/bin
-# export PATH="/usr/local/sbin:$PATH"
 # export PATH="/usr/local/opt/openjdk@8/bin:$PATH"
-export PATH="${HOME}/.local/bin:$PATH"
 # }}}
 
 # ruby settings {{{
