@@ -193,6 +193,39 @@ export GOENV_ROOT="$XDG_DATA_HOME/goenv"
 export GOENV_GOPATH_PREFIX="$XDG_DATA_HOME/goenv/modules"
 # }}}
 
+# PostgreSQL XDG {{{
+export PSQLRC="$XDG_CONFIG_HOME/postgres/rc" \
+  PSQL_HISTORY="$XDG_STATE_HOME/postgres/history" \
+  PGPASSFILE="$XDG_CONFIG_HOME/postgres/pass" \
+  PGSERVICEFILE="$XDG_CONFIG_HOME/postgres/service.conf"
+# }}}
+
+# ACK XDG {{{
+export ACKRC="$XDG_CONFIG_HOME/ack/ackrc"
+# }}}
+
+# aws cli XDG {{{
+export AWS_SHARED_CREDENTIALS_FILE="$XDG_CONFIG_HOME/aws/credentials" \
+  AWS_CONFIG_FILE="$XDG_CONFIG_HOME/aws/config"
+# }}}
+
+# docker XDG {{{
+export DOCKER_CONFIG="$XDG_CONFIG_HOME/docker"
+export MACHINE_STORAGE_PATH="$XDG_DATA_HOME/docker/machine"
+# }}}
+
+# GnuPG XDG {{{
+export GNUPGHOME="$XDG_DATA_HOME/gnupg"
+# }}}
+
+# node XDG {{{
+export NODE_REPL_HISTORY="$XDG_STATE_HOME/node/repl_history"
+# }}}
+
+# readline XDG {{{
+export INPUTRC="$XDG_CONFIG_HOME/readline/inputrc"
+# }}}
+
 # fzf {{{
 if (( $+commands[fzf] )); then
   eval "$(fzf --zsh)"
