@@ -10,30 +10,39 @@ if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]
 fi
 # }}}
 
-# zplugin {{{
-export ZPLUG_HOME=/usr/local/opt/zplug
-source $ZPLUG_HOME/init.zsh
+### Added by Zinit's installer {{{
+if [[ ! -f $HOME/.local/share/zinit/zinit.git/zinit.zsh ]]; then
+    print -P "%F{33} %F{220}Installing %F{33}ZDHARMA-CONTINUUM%F{220} Initiative Plugin Manager (%F{33}zdharma-continuum/zinit%F{220})…%f"
+    command mkdir -p "$HOME/.local/share/zinit" && command chmod g-rwX "$HOME/.local/share/zinit"
+    command git clone https://github.com/zdharma-continuum/zinit "$HOME/.local/share/zinit/zinit.git" && \
+        print -P "%F{33} %F{34}Installation successful.%f%b" || \
+        print -P "%F{160} The clone has failed.%f%b"
+fi
 
-zplug "plugins/docker", from:oh-my-zsh
-# zplug "plugins/asdf", from:oh-my-zsh
+source "$HOME/.local/share/zinit/zinit.git/zinit.zsh"
+autoload -Uz _zinit
+(( ${+_comps} )) && _comps[zinit]=_zinit
 
-zplug zsh-users/zsh-syntax-highlighting
-zplug zsh-users/zsh-completions
+# Load a few important annexes, without Turbo
+# (this is currently required for annexes)
+zinit light-mode for \
+    zdharma-continuum/zinit-annex-as-monitor \
+    zdharma-continuum/zinit-annex-bin-gem-node \
+    zdharma-continuum/zinit-annex-patch-dl \
+    zdharma-continuum/zinit-annex-rust
 
-zplug chrissicool/zsh-256color
-zplug romkatv/powerlevel10k, as:theme, depth:1
+### End of Zinit's installer chunk }}}
 
-zplug load
-# }}}
+zinit ice depth=1; zinit light romkatv/powerlevel10k
+zinit light zsh-users/zsh-syntax-highlighting
+zinit light zsh-users/zsh-completions
+zinit light zsh-users/zsh-autosuggestions
+zinit light Aloxaf/fzf-tab
 
 # General Settings {{{
 # Autoload tab completion {{{
 #-------------------------------------------------------------------------------
-autoload bashcompinit
-bashcompinit
-autoload -U compinit
-compinit -C
-fpath+="${ZDOTDIR}/.zfunc"
+autoload -Uz compinit bashcompinit && compinit -C && bashcompinit
 # }}}
 # Modify default zsh directory coloring on ls commands {{{
 #-------------------------------------------------------------------------------
@@ -44,7 +53,9 @@ export CLICOLOR=1
 # Completion settings {{{
 #-------------------------------------------------------------------------------
 zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}' 'r:|[._-]=* r:|=*' 'l:|=* r:|=*'
-zstyle ':completion:*' list-colors "$LS_COLORS"
+zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
+zstyle ':completion:*' menu no
+zstyle ':fzf-tab:complete:cd:*' fzf-preview 'ls --color $realpath'
 zstyle -e ':completion:*:(ssh|scp|sshfs|ping|telnet|nc|rsync):*' hosts '
     reply=( ${=${${(M)${(f)"$(<~/.ssh/config)"}:#Host*}#Host }:#*\**} )'
 zstyle ':completion:*:*:docker:*' option-stacking yes
@@ -66,15 +77,6 @@ setopt  complete_aliases
 # generation, etc.  (An initial unquoted `~' always produces named directory
 # expansion.)
 setopt  extended_glob
-# If a new command line being added to the history list duplicates an older one,
-# the older command is removed from the list (even if it is not the previous event).
-setopt  hist_ignore_all_dups
-#  Remove command lines from the history list when the first character on the line
-#  is a space, or when one of the expanded aliases contains a leading space.
-setopt  hist_ignore_space
-# This  option  both  imports new commands from the history file, and also
-# causes your typed commands to be appended to the history file
-setopt  share_history
 setopt  noflowcontrol
 # When listing files that are possible completions, show the type of each file
 # with a trailing identifying mark.
@@ -99,8 +101,22 @@ setopt  prompt_subst
 HISTFILE=${XDG_STATE_HOME:-$HOME/.local/state}/zsh/history
 HISTFILESIZE=65536  # search this with `grep | sort -u`
 HISTSIZE=4096
-SAVEHIST=4096
+SAVEHIST=$HISTSIZE
+HISTDUP=erase
 REPORTTIME=60       # Report time statistics for progs that take more than a minute to run
+setopt appendhistory
+#  Remove command lines from the history list when the first character on the line
+#  is a space, or when one of the expanded aliases contains a leading space.
+setopt hist_ignore_space
+# This  option  both  imports new commands from the history file, and also
+# causes your typed commands to be appended to the history file
+setopt share_history
+# If a new command line being added to the history list duplicates an older one,
+# the older command is removed from the list (even if it is not the previous event).
+setopt hist_ignore_all_dups
+setopt hist_save_no_dups
+setopt hist_ignore_dups
+setopt hist_find_no_dups
 # }}}
 # utf-8 in the terminal, will break stuff if your term isn't utf aware {{{
 #-------------------------------------------------------------------------------
