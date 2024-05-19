@@ -1,28 +1,38 @@
 return {
   "nvim-neo-tree/neo-tree.nvim",
-  branch = "main", -- HACK: force neo-tree to checkout `main` for initial v3 migration since default branch has changed
-  dependencies = { "MunifTanjim/nui.nvim" },
+  dependencies = {
+    { "nvim-lua/plenary.nvim", lazy = true },
+    { "MunifTanjim/nui.nvim", lazy = true },
+  },
   cmd = "Neotree",
-  init = function() vim.g.neo_tree_remove_legacy_commands = true end,
   opts = function()
     local utils = require "utils"
     local get_icon = utils.get_icon
+    local git_available = vim.fn.executable "git" == 1
+    local sources = {
+      { source = "filesystem", display_name = get_icon("FolderClosed", 1, true) .. "File" },
+      { source = "buffers", display_name = get_icon("DefaultFile", 1, true) .. "Bufs" },
+      { source = "diagnostics", display_name = get_icon("Diagnostic", 1, true) .. "Diagnostic" },
+    }
+    if git_available then
+      table.insert(sources, 3, { source = "git_status", display_name = get_icon("Git", 1, true) .. "Git" })
+    end
     local opts = {
+      enable_git_status = git_available,
       auto_clean_after_session_restore = true,
       close_if_last_window = true,
-      sources = { "filesystem", "buffers", "git_status" },
+      sources = { "filesystem", "buffers", git_available and "git_status" or nil },
       source_selector = {
         winbar = true,
         content_layout = "center",
-        sources = {
-          { source = "filesystem", display_name = get_icon("FolderClosed", 1, true) .. "File" },
-          { source = "buffers", display_name = get_icon("DefaultFile", 1, true) .. "Bufs" },
-          { source = "git_status", display_name = get_icon("Git", 1, true) .. "Git" },
-          { source = "diagnostics", display_name = get_icon("Diagnostic", 1, true) .. "Diagnostic" },
-        },
+        sources = sources,
       },
       default_component_configs = {
-        indent = { padding = 0 },
+        indent = {
+          padding = 0,
+          expander_collapsed = get_icon "FoldClosed",
+          expander_expanded = get_icon "FoldOpened",
+        },
         icon = {
           folder_closed = get_icon "FolderClosed",
           folder_open = get_icon "FolderOpen",
@@ -47,12 +57,11 @@ return {
       },
       commands = {
         system_open = function(state)
-          -- TODO: just use vim.ui.open when dropping support for Neovim <0.10
-          (vim.ui.open or require("utils").system_open)(state.tree:get_node():get_id())
+          vim.ui.open(state.tree:get_node():get_id())
         end,
         parent_or_close = function(state)
           local node = state.tree:get_node()
-          if (node.type == "directory" or node:has_children()) and node:is_expanded() then
+          if node:has_children() and node:is_expanded() then
             state.commands.toggle_node(state)
           else
             require("neo-tree.ui.renderer").focus_node(state, node:get_parent_id())
@@ -60,13 +69,17 @@ return {
         end,
         child_or_open = function(state)
           local node = state.tree:get_node()
-          if node.type == "directory" or node:has_children() then
+          if node:has_children() then
             if not node:is_expanded() then -- if unexpanded, expand
               state.commands.toggle_node(state)
             else -- if expanded and has children, seleect the next child
-              require("neo-tree.ui.renderer").focus_node(state, node:get_child_ids()[1])
+              if node.type == "file" then
+                state.commands.open(state)
+              else
+                require("neo-tree.ui.renderer").focus_node(state, node:get_child_ids()[1])
+              end
             end
-          else -- if not a directory just open it
+          else -- if has no children
             state.commands.open(state)
           end
         end,
@@ -107,29 +120,33 @@ return {
       window = {
         width = 30,
         mappings = {
-          ["<space>"] = false, -- disable space until we figure out which-key disabling
+          ["<S-CR>"] = "system_open",
+          ["<Space>"] = false, -- disable space until we figure out which-key disabling
           ["[b"] = "prev_source",
           ["]b"] = "next_source",
           O = "system_open",
           Y = "copy_selector",
           h = "parent_or_close",
           l = "child_or_open",
-          o = "open",
         },
         fuzzy_finder_mappings = { -- define keymaps for filter popup window in fuzzy_finder_mode
-          ["<C-j>"] = "move_cursor_down",
-          ["<C-k>"] = "move_cursor_up",
+          ["<C-J>"] = "move_cursor_down",
+          ["<C-K>"] = "move_cursor_up",
         },
       },
       filesystem = {
         follow_current_file = { enabled = true },
+        filtered_items = { hide_gitignored = git_available },
         hijack_netrw_behavior = "open_current",
         use_libuv_file_watcher = vim.fn.has "win32" ~= 1,
       },
       event_handlers = {
         {
           event = "neo_tree_buffer_enter",
-          handler = function(_) vim.opt_local.signcolumn = "auto" end,
+          handler = function(_)
+            vim.opt_local.signcolumn = "auto"
+            vim.opt_local.foldcolumn = "0"
+          end,
         },
       },
     }
