@@ -13,9 +13,6 @@ return function(_, _)
     { name = "DapLogPoint", text = get_icon "DapLogPoint", texthl = "DiagnosticInfo" },
   }
 
-  for _, sign in ipairs(signs) do
-    vim.fn.sign_define(sign.name, sign)
-  end
   lsp.setup_diagnostics(signs)
 
   if vim.g.lsp_handlers_enabled then
