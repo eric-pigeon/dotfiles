@@ -125,14 +125,47 @@ function M.load_plugin_with_func(plugin, module, func_names)
   end
 end
 
+--- Execute a function when a specified plugin is loaded with Lazy.nvim, or immediately if already loaded
+---@param plugins string|string[] the name of the plugin or a list of plugins to defer the function execution on. If a list is provided, only one needs to be loaded to execute the provided function
+---@param load_op fun()|string|string[] the function to execute when the plugin is loaded, a plugin name to load, or a list of plugin names to load
+function M.on_load(plugins, load_op)
+  local lazy_config_avail, lazy_config = pcall(require, "lazy.core.config")
+  if lazy_config_avail then
+    if type(plugins) == "string" then plugins = { plugins } end
+    if type(load_op) ~= "function" then
+      local to_load = type(load_op) == "string" and { load_op } or load_op --[=[@as string[]]=]
+      load_op = function() require("lazy").load { plugins = to_load } end
+    end
+
+    for _, plugin in ipairs(plugins) do
+      if vim.tbl_get(lazy_config.plugins, plugin, "_", "loaded") then
+        vim.schedule(load_op)
+        return
+      end
+    end
+    vim.api.nvim_create_autocmd("User", {
+      pattern = "LazyLoad",
+      desc = ("A function to be ran when one of these plugins runs: %s"):format(vim.inspect(plugins)),
+      callback = function(args)
+        if vim.tbl_contains(plugins, args.data) then
+          load_op()
+          return true
+        end
+      end,
+    })
+  end
+end
+
+--- A placeholder variable used to queue section names to be registered by which-key
+---@type table?
+M.which_key_queue = nil
+
 --- Register queued which-key mappings
 function M.which_key_register()
   if M.which_key_queue then
     local wk_avail, wk = pcall(require, "which-key")
     if wk_avail then
-      for mode, registration in pairs(M.which_key_queue) do
-        wk.register(registration, { mode = mode })
-      end
+      wk.add(M.which_key_queue)
       M.which_key_queue = nil
     end
   end
@@ -157,32 +190,35 @@ end
 ---@param map_table table A nested table where the first key is the vim mode, the second key is the key to map, and the value is the function to set the mapping to
 ---@param base? table A base set of options to set on every keybinding
 function M.set_mappings(map_table, base)
+  local was_no_which_key_queue = not M.which_key_queue
   -- iterate over the first keys for each mode
-  base = base or {}
   for mode, maps in pairs(map_table) do
     -- iterate over each keybinding set in the current mode
     for keymap, options in pairs(maps) do
       -- build the options for the command accordingly
       if options then
-        local cmd = options
-        local keymap_opts = base
-        if type(options) == "table" then
+        local cmd
+        local keymap_opts = base or {}
+        if type(options) == "string" or type(options) == "function" then
+          cmd = options
+        else
           cmd = options[1]
           keymap_opts = vim.tbl_deep_extend("force", keymap_opts, options)
           keymap_opts[1] = nil
         end
-        if not cmd or keymap_opts.name then -- if which-key mapping, queue it
-          if not keymap_opts.name then keymap_opts.name = keymap_opts.desc end
+        if not cmd then -- if which-key mapping, queue it
+          ---@cast keymap_opts wk.Spec
+          keymap_opts[1], keymap_opts.mode = keymap, mode
+          if not keymap_opts.group then keymap_opts.group = keymap_opts.desc end
           if not M.which_key_queue then M.which_key_queue = {} end
-          if not M.which_key_queue[mode] then M.which_key_queue[mode] = {} end
-          M.which_key_queue[mode][keymap] = keymap_opts
+          table.insert(M.which_key_queue, keymap_opts)
         else -- if not which-key mapping, set it
           vim.keymap.set(mode, keymap, cmd, keymap_opts)
         end
       end
     end
   end
-  if package.loaded["which-key"] then M.which_key_register() end -- if which-key is loaded already, register
+  if was_no_which_key_queue and M.which_key_queue then M.on_load("which-key.nvim", M.which_key_register) end
 end
 
 --- regex used for matching a valid URL/URI string
