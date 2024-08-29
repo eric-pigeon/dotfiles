@@ -2,10 +2,7 @@
 
 vim.opt.shortmess:append { s = true, I = true } -- disable startup message
 vim.opt.backspace:append { "nostop" } -- Don't stop backspace at insert
-if vim.fn.has "nvim-0.9" == 1 then
-  vim.opt.diffopt:append "linematch:60" -- enable linematch diff algorithm
-end
-
+vim.opt.diffopt:append { "algorithm:histogram", "linematch:60" } -- enable linematch diff algorithm
 vim.opt.breakindent = true -- Wrap indent to match  line start
 vim.opt.clipboard = "unnamedplus" -- Connection to the system clipboard
 -- vim.opt.cmdheight = 0 -- hide command line unless needed
@@ -39,10 +36,6 @@ vim.opt.undoreload = 10000
 vim.opt.virtualedit = "block" -- allow going past end of line in visual block mode
 vim.opt.wrap = false -- Disable wrapping of lines longer than the width of window
 vim.opt.writebackup = false -- Disable making a backup before overwriting a file
-
-if  vim.fn.has "nvim-0.9" == 1 then
-  vim.opt.splitkeep = "screen" -- Maintain code view when splitting
-end
 
 -- Folds {{{
 vim.opt.foldenable = true -- enable fold for nvim-ufo
