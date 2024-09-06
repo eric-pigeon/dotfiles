@@ -106,7 +106,6 @@ return {
 
 
   "junegunn/vim-easy-align",
-  "sheerun/vim-polyglot",
 
   "tpope/vim-fugitive",
 }
