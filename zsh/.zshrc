@@ -262,3 +262,9 @@ export ASDF_CONFIG_FILE="${XDG_CONFIG_HOME}/asdf/asdfrc"
 # . /usr/local/opt/asdf/asdf.sh
 # . /usr/local/opt/asdf/libexec/asdf.sh
 # }}}
+
+# zoxide {{{
+if (( $+commands[zoxide] )); then
+  eval "$(zoxide init zsh)"
+fi
+# }}}
