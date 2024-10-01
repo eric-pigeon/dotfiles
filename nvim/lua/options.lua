@@ -115,7 +115,6 @@ vim.g.mapleader = "\\"
 --   g = {
 --     highlighturl_enabled = true, -- highlight URLs by default
 --     mapleader = " ", -- set leader key
---     autoformat_enabled = true, -- enable or disable auto formatting at start (lsp.formatting.format_on_save must be enabled)
 --     codelens_enabled = true, -- enable or disable automatic codelens refreshing for lsp that support it
 vim.g.lsp_handlers_enabled = true -- enable or disable default vim.lsp.handlers (hover and signatureHelp)
 vim.g.cmp_enabled = true -- enable completion at start

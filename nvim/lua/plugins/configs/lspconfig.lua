@@ -21,7 +21,6 @@ return function(_, _)
       vim.lsp.with(vim.lsp.handlers.signature_help, { border = "rounded" })
   end
   local setup_servers = function()
-    -- vim.tbl_map(require("utils.lsp").setup, astronvim.user_opts "lsp.servers")
     vim.api.nvim_exec_autocmds("FileType", {})
     require("utils").event "LspSetup"
   end

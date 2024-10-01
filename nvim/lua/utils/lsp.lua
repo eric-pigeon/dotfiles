@@ -76,11 +76,11 @@ end
 ---@param server string The name of the server to be setup
 M.setup = function(server)
   -- if server doesn't exist, set it up from user server definition
-  local config_avail, config = pcall(require, "lspconfig.server_configurations." .. server)
-  if not config_avail or not config.default_config then
-    local server_definition = user_opts(server_config .. server)
-    if server_definition.cmd then require("lspconfig.configs")[server] = { default_config = server_definition } end
-  end
+  -- local config_avail, config = pcall(require, "lspconfig.server_configurations." .. server)
+  -- if not config_avail or not config.default_config then
+  --   local server_definition = user_opts(server_config .. server)
+  --   if server_definition.cmd then require("lspconfig.configs")[server] = { default_config = server_definition } end
+  -- end
   local opts = M.config(server)
   local setup_handler = setup_handlers[server] or setup_handlers[1]
   if setup_handler then setup_handler(server, opts) end
@@ -318,8 +318,6 @@ M.on_attach = function(client, bufnr)
   end
   utils.set_mappings(lsp_mappings, { buffer = bufnr })
 
-  -- local on_attach_override = user_opts("lsp.on_attach", nil, false)
-  -- conditional_func(on_attach_override, true, client, bufnr)
 end
 
 --- The default AstroNvim LSP capabilities
@@ -353,21 +351,6 @@ function M.config(server_name)
   if server_name == "yamlls" then -- by default add yaml schemas
     local schemastore_avail, schemastore = pcall(require, "schemastore")
     if schemastore_avail then lsp_opts.settings = { yaml = { schemas = schemastore.yaml.schemas() } } end
-  end
-  if server_name == "lua_ls" then -- by default initialize neodev and disable third party checking
-    pcall(require, "neodev")
-    lsp_opts.before_init = function(param, config)
-      if vim.b.neodev_enabled then
-        -- TODO
-        -- for _, astronvim_config in ipairs({ vim.fn.stdpath "config" }) do
-        --   if param.rootPath:match(astronvim_config) then
-        --     table.insert(config.settings.Lua.workspace.library, astronvim.install.home .. "/lua")
-        --     break
-        --   end
-        -- end
-      end
-    end
-    lsp_opts.settings = { Lua = { workspace = { checkThirdParty = false } } }
   end
   local opts = lsp_opts
   local old_on_attach = server.on_attach
