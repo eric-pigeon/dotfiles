@@ -84,14 +84,6 @@ vim.keymap.set('n', '<space><space>', function() require('telescope.builtin').re
 -- }}}
 
 -- Folds {{{
-
--- Improved Code Folding
-vim.keymap.set("n", "zR", function() require("ufo").openAllFolds() end, { desc = "Open all folds" })
-vim.keymap.set("n", "zM", function() require("ufo").closeAllFolds() end, { desc = "Close all folds" })
-vim.keymap.set("n", "zr", function() require("ufo").openFoldsExceptKinds() end, { desc = "Fold less" })
-vim.keymap.set("n", "zm", function() require("ufo").closeFoldsWith() end, { desc = "Fold more" })
-vim.keymap.set("n", "zp", function() require("ufo").peekFoldedLinesUnderCursor() end, { desc = "Peek fold" })
-
 -- tab to toggle foldes
 vim.keymap.set('n', '<Tab>', [[@=(foldlevel('.')?'za':"]]..'<Tab>'..'")'..'<CR>')
 -- " create fold with tab

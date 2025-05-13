@@ -103,8 +103,7 @@ function M.cmd_info(opts)
       update = {
         "RecordingEnter",
         "RecordingLeave",
-        -- TODO: remove when dropping support for Neovim v0.8
-        callback = vim.fn.has "nvim-0.9" == 0 and vim.schedule_wrap(function() vim.cmd.redrawstatus() end) or nil,
+        callback = vim.schedule_wrap(function() vim.cmd.redrawstatus() end),
       },
     },
     search_count = {

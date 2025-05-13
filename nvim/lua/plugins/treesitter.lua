@@ -1,8 +1,9 @@
 return {
   "nvim-treesitter/nvim-treesitter",
   main = "nvim-treesitter.configs",
-  -- dependencies = { { "nvim-treesitter/nvim-treesitter-textobjects", lazy = true } },
-  event = "User File",
+  dependencies = { { "nvim-treesitter/nvim-treesitter-textobjects", lazy = true } },
+  event = "VeryLazy",
+  lazy = vim.fn.argc(-1) == 0, -- load treesitter immediately when opening a file from the cmdline
   cmd = {
     "TSBufDisable",
     "TSBufEnable",
@@ -52,8 +53,8 @@ return {
             ["i?"] = { query = "@conditional.inner", desc = "inside conditional" },
             ["af"] = { query = "@function.outer", desc = "around function " },
             ["if"] = { query = "@function.inner", desc = "inside function " },
-            ["al"] = { query = "@loop.outer", desc = "around loop" },
-            ["il"] = { query = "@loop.inner", desc = "inside loop" },
+            ["ao"] = { query = "@loop.outer", desc = "around loop" },
+            ["io"] = { query = "@loop.inner", desc = "inside loop" },
             ["aa"] = { query = "@parameter.outer", desc = "around argument" },
             ["ia"] = { query = "@parameter.inner", desc = "inside argument" },
           },
@@ -98,5 +99,9 @@ return {
       },
     }
   end,
-  config = require "plugins.configs.nvim-treesitter",
+  config = function(plugin, opts)
+    local ts = require(plugin.main)
+
+    ts.setup(opts)
+  end,
 }

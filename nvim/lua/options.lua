@@ -38,12 +38,13 @@ vim.opt.wrap = false -- Disable wrapping of lines longer than the width of windo
 vim.opt.writebackup = false -- Disable making a backup before overwriting a file
 
 -- Folds {{{
-vim.opt.foldenable = true -- enable fold for nvim-ufo
-vim.opt.foldlevel = 99 -- set high foldlevel for nvim-ufo
+vim.opt.foldcolumn = "1" -- display fold column
+vim.opt.foldenable = true -- enable folds
+vim.opt.foldlevel = 99 -- set high foldlevel
 vim.opt.foldlevelstart = 99 -- start with all code unfolded
-if vim.fn.has "nvim-0.9" == 1 then
-  vim.opt.foldcolumn = "1"
-end
+vim.opt.foldtext = "" -- use transparent foldtext
+vim.o.foldmethod = "expr"
+vim.o.foldexpr = "v:lua.require'folding'.foldexpr()" -- set function for calculating folds
 -- }}}
 
 -- Searching {{{
@@ -88,9 +89,6 @@ vim.o.background = "dark"
 -- special character display
 vim.o.list = true
 vim.o.listchars = "tab:┊ ,eol:¬,extends:❯,precedes:❮,trail:-,nbsp:+"
-
-vim.o.foldmethod = "expr"
-vim.o.foldexpr = "nvim_treesitter#foldexpr()"
 
 -- don't wrap text
 vim.wo.wrap = false
