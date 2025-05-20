@@ -2,7 +2,7 @@
   "neodev": {
     "library": {
       "enabled": true,
-      "plugins": ["lazy.nvim", "astroui", "resession.nvim"]
+      "plugins": true
     }
   },
   "neoconf": {

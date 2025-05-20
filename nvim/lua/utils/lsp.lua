@@ -1,50 +1,18 @@
 local M = {}
+
 local tbl_contains = vim.tbl_contains
--- local tbl_isempty = vim.tbl_isempty
+local tbl_isempty = vim.tbl_isempty
 
 local utils = require "utils"
 local is_available = utils.is_available
 local extend_tbl = utils.extend_tbl
 
-local server_config = "lsp.config."
+local server_config = "lsp.config"
 local setup_handlers = {
   function(server, opts) require("lspconfig")[server].setup(opts) end,
 }
 
 M.diagnostics = { [0] = {}, {}, {}, {} }
-
-M.setup_diagnostics = function(signs)
-  local default_diagnostics = {
-    virtual_text = true,
-    signs = { active = signs },
-    update_in_insert = true,
-    underline = true,
-    severity_sort = true,
-    float = {
-      focused = false,
-      style = "minimal",
-      border = "rounded",
-      source = "always",
-      header = "",
-      prefix = "",
-    },
-  }
-  M.diagnostics = {
-    -- diagnostics off
-    [0] = extend_tbl(
-      default_diagnostics,
-      { underline = false, virtual_text = false, signs = false, update_in_insert = false }
-    ),
-    -- status only
-    extend_tbl(default_diagnostics, { virtual_text = false, signs = false }),
-    -- virtual text off, signs on
-    extend_tbl(default_diagnostics, { virtual_text = false }),
-    -- all diagnostics on
-    default_diagnostics,
-  }
-
-  vim.diagnostic.config(M.diagnostics[vim.g.diagnostics_mode])
-end
 
 M.formatting = { format_on_save = { enabled = true }, disabled = {} }
 if type(M.formatting.format_on_save) == "boolean" then
@@ -75,22 +43,6 @@ M.setup = function(server)
   if setup_handler then setup_handler(server, opts) end
 end
 
---- Helper function to check if any active LSP clients given a filter provide a specific capability
----@param capability string The server capability to check for (example: "documentFormattingProvider")
----@param filter vim.lsp.get_active_clients.filter|nil (table|nil) A table with
----              key-value pairs used to filter the returned clients.
----              The available keys are:
----               - id (number): Only return clients with the given id
----               - bufnr (number): Only return clients attached to this buffer
----               - name (string): Only return clients with the given name
----@return boolean # Whether or not any of the clients provide the capability
-function M.has_capability(capability, filter)
-  for _, client in ipairs(vim.lsp.get_clients(filter)) do
-    if client:supports_method(capability) then return true end
-  end
-  return false
-end
-
 -- local function add_buffer_autocmd(augroup, bufnr, autocmds)
 --   if not vim.tbl_islist(autocmds) then autocmds = { autocmds } end
 --   local cmds_found, cmds = pcall(vim.api.nvim_get_autocmds, { group = augroup, buffer = bufnr })
@@ -114,12 +66,10 @@ end
 --- The `on_attach` function used by AstroNvim
 ---@param client vim.lsp.Client The LSP client details when attaching
 ---@param bufnr integer The buffer that the LSP client is attaching to
-M.on_attach = function(client, bufnr)
+function M.on_attach(client, bufnr)
   local lsp_mappings = require("utils").empty_map_table()
 
   lsp_mappings.n["<leader>ld"] = { function() vim.diagnostic.open_float() end, desc = "Hover diagnostics" }
-  lsp_mappings.n["[d"] = { function() vim.diagnostic.goto_prev() end, desc = "Previous diagnostic" }
-  lsp_mappings.n["]d"] = { function() vim.diagnostic.goto_next() end, desc = "Next diagnostic" }
   lsp_mappings.n["gl"] = { function() vim.diagnostic.open_float() end, desc = "Hover diagnostics" }
 
   if is_available "telescope.nvim" then
@@ -143,7 +93,7 @@ M.on_attach = function(client, bufnr)
     lsp_mappings.v["<leader>la"] = lsp_mappings.n["<leader>la"]
   end
 
-  if client:supports_method "textDocument/codeLens" then
+  if client:supports_method("textDocument/codeLens", bufnr) then
     vim.lsp.codelens.refresh { bufnr = bufnr }
   end
 

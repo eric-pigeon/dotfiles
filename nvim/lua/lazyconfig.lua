@@ -23,6 +23,7 @@ require("lazy").setup({
     { import = "plugins" }
   },
   install = { colorscheme = { "catppuccin" } },
+  ui = { backdrop = 100 },
   performance = {
     rtp = {
        disabled_plugins = {

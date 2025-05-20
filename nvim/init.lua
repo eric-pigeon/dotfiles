@@ -8,4 +8,3 @@ for _, source in ipairs {
 end
 
 vim.cmd.colorscheme "catppuccin"
-vim.o.foldexpr = "v:lua.require'folding'.foldexpr()" -- set function for calculating folds

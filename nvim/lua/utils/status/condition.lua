@@ -78,7 +78,8 @@ end
 -- @usage local heirline_component = { provider = "Example Provider", condition = require("astronvim.utils.status").condition.has_diagnostics }
 function M.has_diagnostics(bufnr)
   if type(bufnr) == "table" then bufnr = bufnr.bufnr end
-  return vim.g.diagnostics_mode > 0 and #vim.diagnostic.get(bufnr or 0) > 0
+  if not bufnr then bufnr = 0 end
+  return vim.tbl_contains(vim.diagnostic.count(bufnr), function(v) return v > 0 end, { predicate = true })
 end
 
 --- A condition function if there is a defined filetype

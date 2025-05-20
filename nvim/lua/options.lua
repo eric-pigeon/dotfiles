@@ -116,7 +116,6 @@ vim.g.mapleader = "\\"
 --     codelens_enabled = true, -- enable or disable automatic codelens refreshing for lsp that support it
 vim.g.cmp_enabled = true -- enable completion at start
 vim.g.autopairs_enabled = true -- enable autopairs at start
-vim.g.diagnostics_mode = 3 -- set the visibility of diagnostics in the UI (0=off, 1=only show in status line, 2=virtual text off, 3=all on)
 vim.g.icons_enabled = true -- disable icons in the UI (disable if no nerd font is available)
 vim.g.ui_notifications_enabled = true -- disable notifications when toggling UI elements
 vim.g.max_file = { size = 1024 * 100, lines = 10000 } -- set global limits for large files
@@ -124,3 +123,10 @@ vim.g.max_file = { size = 1024 * 100, lines = 10000 } -- set global limits for l
 --   },
 --   t = { bufs = vim.api.nvim_list_bufs() }, -- initialize buffers for the current tab
 -- })
+
+vim.diagnostic.enable(true)
+vim.diagnostic.config({
+  virtual_text = true,
+  virtual_lines = true,
+})
+

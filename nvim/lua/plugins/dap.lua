@@ -1,16 +1,17 @@
 return {
   "mfussenegger/nvim-dap",
-  enabled = vim.fn.has "win32" == 0,
+  lazy = true,
   dependencies = {
     {
       "jay-babu/mason-nvim-dap.nvim",
-      dependencies = { "nvim-dap" },
+      dependencies = { "nvim-dap", "williamboman/mason.nvim" },
       cmd = { "DapInstall", "DapUninstall" },
       opts = { handlers = {} },
     },
     {
       "rcarriga/nvim-dap-ui",
-      dependencies = { "nvim-neotest/nvim-nio" },
+      lazy = true,
+      dependencies = { { "nvim-neotest/nvim-nio", lazy = true } },
       opts = { floating = { border = "rounded" } },
       config = function(_, opts)
         local dap, dapui = require "dap", require "dapui"
@@ -21,5 +22,4 @@ return {
       end
     },
   },
-  event = "User File",
 }

@@ -1,12 +1,44 @@
-
-
 return {
   "Saghen/blink.cmp",
   version = "^1", -- make sure to always set version to v1 even on development
   event = { "InsertEnter", "CmdlineEnter" },
+   opts_extend = {
+     "sources.completion.enabled_providers",
+     "sources.compat",
+     "sources.default",
+   },
   opts = {
     sources = {
       default = { "lsp", "path", "snippets", "buffer" },
+    },
+    keymap = {
+      ["<C-Space>"] = { "show", "show_documentation", "hide_documentation" },
+      ["<Up>"] = { "select_prev", "fallback" },
+      ["<Down>"] = { "select_next", "fallback" },
+      ["<C-N>"] = { "select_next", "show" },
+      ["<C-P>"] = { "select_prev", "show" },
+      ["<C-J>"] = { "select_next", "fallback" },
+      ["<C-K>"] = { "select_prev", "fallback" },
+      ["<C-U>"] = { "scroll_documentation_up", "fallback" },
+      ["<C-D>"] = { "scroll_documentation_down", "fallback" },
+      ["<C-e>"] = { "hide", "fallback" },
+      ["<CR>"] = { "accept", "fallback" },
+      ["<Tab>"] = {
+        "select_next",
+        "snippet_forward",
+        --function(cmp)
+        --  if has_words_before() or vim.api.nvim_get_mode().mode == "c" then return cmp.show() end
+        --end,
+        "fallback",
+      },
+      ["<S-Tab>"] = {
+        "select_prev",
+        "snippet_backward",
+        function(cmp)
+          if vim.api.nvim_get_mode().mode == "c" then return cmp.show() end
+        end,
+        "fallback",
+      },
     },
     fuzzy = { implementation = "prefer_rust" },
     completion = {
@@ -37,7 +69,6 @@ return {
         },
       },
     },
-    cmdline = { completion = { ghost_text = { enabled = false } } },
     signature = {
       window = {
         border = "rounded",

@@ -1,6 +1,9 @@
 return {
   { "b0o/SchemaStore.nvim", lazy = true },
-  "RRethy/vim-illuminate",
+  {
+    "windwp/nvim-ts-autotag",
+    event = "User File",
+  },
   {
     "chrisgrieser/nvim-spider",
     event = "User File",
@@ -19,8 +22,4 @@ return {
       end,
     }
   },
-  {
-    "windwp/nvim-ts-autotag",
-    event = "User File",
-  }
 }
