@@ -35,5 +35,10 @@ return {
       },
     }
   end,
-  config = require "plugins.configs.telescope",
+  config = function(_, opts)
+    local telescope = require "telescope"
+    telescope.setup(opts)
+    telescope.load_extension("aerial")
+    telescope.load_extension('fzf')
+  end
 }

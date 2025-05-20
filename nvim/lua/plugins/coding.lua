@@ -1,4 +1,5 @@
 return {
+  { "b0o/SchemaStore.nvim", lazy = true },
   "RRethy/vim-illuminate",
   {
     "chrisgrieser/nvim-spider",
@@ -10,6 +11,13 @@ return {
         mode = { "n", "o", "x" },
       },
     },
+    opts = {
+      min_count_to_highlight = 2,
+      should_enable = function(bufnr)
+        local buf_utils = require "utils.buffer"
+        return buf_utils.is_valid(bufnr) and not buf_utils.is_large(bufnr)
+      end,
+    }
   },
   {
     "windwp/nvim-ts-autotag",

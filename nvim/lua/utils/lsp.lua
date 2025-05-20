@@ -1,14 +1,3 @@
---- ### AstroNvim LSP Utils
---
--- LSP related utility functions to use within AstroNvim and user configurations.
---
--- This module can be loaded with `local lsp_utils = require("astronvim.utils.lsp")`
---
--- @module astronvim.utils.lsp
--- @see astronvim.utils
--- @copyright 2022
--- @license GNU General Public License v3.0
-
 local M = {}
 local tbl_contains = vim.tbl_contains
 -- local tbl_isempty = vim.tbl_isempty
@@ -97,7 +86,7 @@ end
 ---@return boolean # Whether or not any of the clients provide the capability
 function M.has_capability(capability, filter)
   for _, client in ipairs(vim.lsp.get_clients(filter)) do
-    if client.supports_method(capability) then return true end
+    if client:supports_method(capability) then return true end
   end
   return false
 end
@@ -123,8 +112,8 @@ local function del_buffer_autocmd(augroup, bufnr)
 end
 
 --- The `on_attach` function used by AstroNvim
----@param client table The LSP client details when attaching
----@param bufnr number The buffer that the LSP client is attaching to
+---@param client vim.lsp.Client The LSP client details when attaching
+---@param bufnr integer The buffer that the LSP client is attaching to
 M.on_attach = function(client, bufnr)
   local lsp_mappings = require("utils").empty_map_table()
 
@@ -146,7 +135,7 @@ M.on_attach = function(client, bufnr)
     lsp_mappings.n["<leader>lI"] = { "<cmd>NullLsInfo<cr>", desc = "Null-ls information" }
   end
 
-  if client.supports_method "textDocument/codeAction" then
+  if client:supports_method "textDocument/codeAction" then
     lsp_mappings.n["<leader>la"] = {
       function() vim.lsp.buf.code_action() end,
       desc = "LSP code action",
@@ -154,25 +143,25 @@ M.on_attach = function(client, bufnr)
     lsp_mappings.v["<leader>la"] = lsp_mappings.n["<leader>la"]
   end
 
-  if client.supports_method "textDocument/codeLens" then
+  if client:supports_method "textDocument/codeLens" then
     vim.lsp.codelens.refresh { bufnr = bufnr }
   end
 
-  if client.supports_method "textDocument/declaration" then
+  if client:supports_method "textDocument/declaration" then
     lsp_mappings.n["gD"] = {
       function() vim.lsp.buf.declaration() end,
       desc = "Declaration of current symbol",
     }
   end
 
-  if client.supports_method "textDocument/definition" then
+  if client:supports_method "textDocument/definition" then
     lsp_mappings.n["gd"] = {
       function() vim.lsp.buf.definition() end,
       desc = "Show the definition of current symbol",
     }
   end
 
-  if client.supports_method "textDocument/formatting" and not tbl_contains(M.formatting.disabled, client.name) then
+  if client:supports_method "textDocument/formatting" and not tbl_contains(M.formatting.disabled, client.name) then
     lsp_mappings.n["<leader>lf"] = {
       function() vim.lsp.buf.format(M.format_opts) end,
       desc = "Format buffer",
@@ -218,26 +207,24 @@ M.on_attach = function(client, bufnr)
     -- end
   end
 
-  if client.supports_method "textDocument/implementation" then
+  if client:supports_method "textDocument/implementation" then
     lsp_mappings.n["gI"] = {
       function() vim.lsp.buf.implementation() end,
       desc = "Implementation of current symbol",
     }
   end
 
-  if client.supports_method "textDocument/inlayHint" then
+  if client:supports_method "textDocument/inlayHint" then
     if vim.b.inlay_hints_enabled == nil then vim.b.inlay_hints_enabled = vim.g.inlay_hints_enabled end
-    -- TODO: remove check after dropping support for Neovim v0.9
-    if vim.lsp.inlay_hint then
-      if vim.b.inlay_hints_enabled then vim.lsp.inlay_hint.enable(bufnr, true) end
-      lsp_mappings.n["<leader>uH"] = {
-        function() require("astronvim.utils.ui").toggle_buffer_inlay_hints(bufnr) end,
-        desc = "Toggle LSP inlay hints (buffer)",
-      }
-    end
+
+    if vim.b.inlay_hints_enabled then vim.lsp.inlay_hint.enable(bufnr, true) end
+    lsp_mappings.n["<leader>uH"] = {
+      function() require("astronvim.utils.ui").toggle_buffer_inlay_hints(bufnr) end,
+      desc = "Toggle LSP inlay hints (buffer)",
+    }
   end
 
-  if client.supports_method "textDocument/references" then
+  if client:supports_method "textDocument/references" then
     lsp_mappings.n["gr"] = {
       function() vim.lsp.buf.references() end,
       desc = "References of current symbol",
@@ -248,32 +235,32 @@ M.on_attach = function(client, bufnr)
     }
   end
 
-  if client.supports_method "textDocument/rename" then
+  if client:supports_method "textDocument/rename" then
     lsp_mappings.n["<leader>lr"] = {
       function() vim.lsp.buf.rename() end,
       desc = "Rename current symbol",
     }
   end
 
-  if client.supports_method "textDocument/signatureHelp" then
+  if client:supports_method "textDocument/signatureHelp" then
     lsp_mappings.n["<leader>lh"] = {
       function() vim.lsp.buf.signature_help() end,
       desc = "Signature help",
     }
   end
 
-  if client.supports_method "textDocument/typeDefinition" then
+  if client:supports_method "textDocument/typeDefinition" then
     lsp_mappings.n["gT"] = {
       function() vim.lsp.buf.type_definition() end,
       desc = "Definition of current type",
     }
   end
 
-  if client.supports_method "workspace/symbol" then
+  if client:supports_method "workspace/symbol" then
     lsp_mappings.n["<leader>lG"] = { function() vim.lsp.buf.workspace_symbol() end, desc = "Search workspace symbols" }
   end
 
-  if client.supports_method "textDocument/semanticTokens/full" and vim.lsp.semantic_tokens then
+  if client:supports_method "textDocument/semanticTokens/full" and vim.lsp.semantic_tokens then
     if vim.g.semantic_tokens_enabled then
       vim.b[bufnr].semantic_tokens_enabled = true
       lsp_mappings.n["<leader>uY"] = {

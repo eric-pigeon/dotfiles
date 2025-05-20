@@ -88,7 +88,6 @@ autocmd("BufWinEnter", {
   end,
 })
 
-
 autocmd({ "BufReadPost", "BufNewFile" }, {
   desc = "User events for file detection (File and GitFile)",
   group = augroup("file_user_events", { clear = true }),
@@ -96,13 +95,13 @@ autocmd({ "BufReadPost", "BufNewFile" }, {
     local current_file = vim.fn.resolve(vim.fn.expand "%")
     if not (current_file == "" or vim.api.nvim_get_option_value("buftype", { buf = args.buf }) == "nofile") then
       event "File"
-      -- if
-      --   require("utils.git").file_worktree()
-      --   or utils.cmd({ "git", "-C", vim.fn.fnamemodify(current_file, ":p:h"), "rev-parse" }, false)
-      -- then
-      --   -- utils.event "GitFile"
-      --   vim.api.nvim_del_augroup_by_name "file_user_events"
-      -- end
+      if
+        require("utils.git").file_worktree()
+        or utils.cmd({ "git", "-C", vim.fn.fnamemodify(current_file, ":p:h"), "rev-parse" }, false)
+      then
+        utils.event "GitFile"
+        vim.api.nvim_del_augroup_by_name "file_user_events"
+      end
     end
   end,
 })

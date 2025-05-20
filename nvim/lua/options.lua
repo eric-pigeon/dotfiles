@@ -114,7 +114,6 @@ vim.g.mapleader = "\\"
 --     highlighturl_enabled = true, -- highlight URLs by default
 --     mapleader = " ", -- set leader key
 --     codelens_enabled = true, -- enable or disable automatic codelens refreshing for lsp that support it
-vim.g.lsp_handlers_enabled = true -- enable or disable default vim.lsp.handlers (hover and signatureHelp)
 vim.g.cmp_enabled = true -- enable completion at start
 vim.g.autopairs_enabled = true -- enable autopairs at start
 vim.g.diagnostics_mode = 3 -- set the visibility of diagnostics in the UI (0=off, 1=only show in status line, 2=virtual text off, 3=all on)
