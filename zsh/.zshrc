@@ -1,15 +1,6 @@
 #!/bin/zsh
 # vim: set foldlevel=0 foldmethod=marker:
 
-# p10k start {{{
-# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.config/zsh/.zshrc.
-# Initialization code that may require console input (password prompts, [y/n]
-# confirmations, etc.) must go above this block; everything else may go below.
-if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
-  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
-fi
-# }}}
-
 if (( $+commands[brew] )); then
   # If you're using macOS, you'll want this enabled
   eval "$(brew shellenv)"
@@ -38,11 +29,9 @@ zinit light-mode for \
 
 ### End of Zinit's installer chunk }}}
 
-zinit ice depth=1; zinit light romkatv/powerlevel10k
 zinit light zsh-users/zsh-syntax-highlighting
 zinit light zsh-users/zsh-completions
 zinit light zsh-users/zsh-autosuggestions
-# zinit light Aloxaf/fzf-tab
 
 # General Settings {{{
 # Autoload tab completion {{{
@@ -124,12 +113,6 @@ setopt hist_save_no_dups
 setopt hist_ignore_dups
 setopt hist_find_no_dups
 # }}}
-# utf-8 in the terminal, will break stuff if your term isn't utf aware {{{
-#-------------------------------------------------------------------------------
-export LANG=en_US.UTF-8
-export LC_ALL=$LANG
-export LC_COLLATE=C
-# }}}
 # Set grepoptions {{{
 #-------------------------------------------------------------------------------
 export GREP_OPTIONS='--color=auto'
@@ -143,11 +126,6 @@ export LESS='-imJMWR'
 export PAGER="less $LESS"
 export MANPAGER=$PAGER
 export GIT_PAGER=$PAGER
-# }}}
-# Eliminate lag between transition from normal/insert mode {{{
-#-------------------------------------------------------------------------------
-# If this causes issue with other shell commands it can be raised default is 4
-export KEYTIMEOUT=1
 # }}}
 # }}}
 
@@ -176,15 +154,6 @@ if [ -f ~/.env ]; then
 fi
 # }}}
 
-# path {{{
-# TODO: clean this up
-# export PATH="${PATH}:${HOME}/.krew/bin"
-# export PATH=$PATH:/usr/local/kubebuilder/bin
-# export PATH=$PATH:/usr/local/kubectx/bin
-# export PATH=$PATH:/usr/local/opt/llvm/bin
-# export PATH="/usr/local/opt/openjdk@8/bin:$PATH"
-# }}}
-
 # ruby settings {{{
 if (( $+commands[rbenv] )); then
   export RBENV_ROOT="$XDG_DATA_HOME/rbenv"
@@ -206,9 +175,6 @@ export PATH="$CARGO/bin:$PATH"
 # }}}
 
 # go settings {{{
-# TODO
-# export GOPATH=$HOME/go
-# export PATH=$PATH:~/go/bin
 export GOENV_ROOT="$XDG_DATA_HOME/goenv"
 export GOENV_GOPATH_PREFIX="$XDG_DATA_HOME/goenv/modules"
 # }}}
@@ -252,19 +218,10 @@ if (( $+commands[fzf] )); then
 fi
 # }}}
 
-# source p10k prompt {{{
-# To customize prompt, run `p10k configure` or edit ~/.config/zsh/.p10k.zsh.
-[[ ! -f ~/.config/zsh/.p10k.zsh ]] || source ~/.config/zsh/.p10k.zsh
-# }}}
-
-# asdf {{{
-export ASDF_CONFIG_FILE="${XDG_CONFIG_HOME}/asdf/asdfrc"
-# . /usr/local/opt/asdf/asdf.sh
-# . /usr/local/opt/asdf/libexec/asdf.sh
-# }}}
-
 # zoxide {{{
 if (( $+commands[zoxide] )); then
   eval "$(zoxide init zsh)"
 fi
 # }}}
+
+eval "$(starship init zsh)"
