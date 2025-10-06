@@ -16,7 +16,9 @@ local fold_methods = {
   end,
   treesitter = function(lnum, bufnr)
     if ts_bufs[bufnr] == nil then
-      ts_bufs[bufnr] = vim.bo.filetype and pcall(vim.treesitter.get_parser, bufnr)
+      if package.loaded["nvim-treesitter"] then
+        ts_bufs[bufnr] = vim.bo.filetype and pcall(vim.treesitter.get_parser, bufnr)
+      end
     end
     if ts_bufs[bufnr] then return vim.treesitter.foldexpr(lnum) end
   end,
