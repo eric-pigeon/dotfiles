@@ -1,3 +1,4 @@
+[general]
 import = ["~/.config/alacritty/alacritty-master/dracula.toml", "~/.config/alacritty/xdg_env.toml"]
 
 [colors]
